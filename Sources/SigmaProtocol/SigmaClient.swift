@@ -764,19 +764,21 @@ private func makeNmg(
     let hasTimeTokens = safeText.contains("{hour}") || safeText.contains("{minute}") ||
                        safeText.contains("{second}") || safeText.contains("{hhmm24}") ||
                        safeText.contains("{hhmm12}")
-    let autoTypesetCode: UInt8 = hasTimeTokens ? UInt8(ascii: "b") : UInt8(ascii: "a")
-    // 'b' mode uses 3-digit hold (e.g. "000"); 'a' mode uses 4-digit hold (e.g. "0002")
-    let hold = hasTimeTokens ? String(format: "%03d", options.holdSeconds) : String(format: "%04d", options.holdSeconds)
     let formattedText = formatText(safeText, font: font, wrapsText: options.wrapsText)
     let rows = formattedText.split(separator: "\r", omittingEmptySubsequences: false).map(String.init)
-    let renderedText = renderMultiRowBytes(rows: rows, defaultFont: font)
+    let isMultiRow = rows.count > 1
+    // Use 'b' mode for time tokens or multi-row (Editor uses 'b' for all multi-row)
+    let autoTypesetCode: UInt8 = (hasTimeTokens || isMultiRow) ? UInt8(ascii: "b") : UInt8(ascii: "a")
+    // 'b' mode uses 3-digit hold; 'a' mode uses 4-digit hold
+    let hold = (hasTimeTokens || isMultiRow) ? String(format: "%03d", options.holdSeconds) : String(format: "%04d", options.holdSeconds)
+    let renderedText = renderMultiRowBytes(rows: rows, defaultFont: font, options: options, isMultiRow: isMultiRow)
 
     var header = Data([
         0x01, 0x5a, 0x30, 0x30,
         0x02, 0x41, 0x0f, 0x18, 0x05, 0x31, 0x31, 0x30,
         0x30, 0x31, 0x1b, 0x30, autoTypesetCode
     ])
-    // Both 'a' and 'b' modes require initialization bytes 18 01 09 (verified in mixed_font.pcap)
+    // Both 'a' and 'b' modes require initialization bytes 18 01 09
     header.append(contentsOf: [0x18, 0x01, 0x09])
     header.append(contentsOf: [0x08, 0x31, 0x0e, options.speedCode])
     header.append(contentsOf: hold.utf8)
@@ -1006,7 +1008,7 @@ private func renderMessageBytes(_ text: String) -> Data {
     return rendered
 }
 
-private func renderMultiRowBytes(rows: [String], defaultFont: SigmaFont) -> Data {
+private func renderMultiRowBytes(rows: [String], defaultFont: SigmaFont, options: SigmaTextOptions? = nil, isMultiRow: Bool = false) -> Data {
     var rendered = Data()
     for (rowIndex, rowText) in rows.enumerated() {
         // Check if this is a countdown row
@@ -1034,14 +1036,20 @@ private func renderMultiRowBytes(rows: [String], defaultFont: SigmaFont) -> Data
         }
 
         if rowIndex > 0 {
-            // Row separator: 0x0D 0x0E followed by "2" + 4-digit param and font override
-            // Format verified in mixed_font.pcap: "20000" for row 1, "20002" for row 2
-            rendered.append(contentsOf: [0x0d, 0x0e])
-            let param = String(format: "2%04d", (rowIndex - 1) * 2)
-            rendered.append(contentsOf: param.utf8)
-            // Detect inline font token to set row font
-            let rowFont = detectRowFont(rowText, defaultFont: defaultFont)
-            rendered.append(contentsOf: [0x1a, rowFont.sizeCode])
+            if isMultiRow, let opts = options {
+                // Editor multi-row separator format for simultaneous display
+                // Format: 0d 18 03 0b 40 <row_ascii> 0a 49 <in> 0a 4f <out>
+                rendered.append(contentsOf: [0x0d, 0x18, 0x03, 0x0b, 0x40])
+                rendered.append(UInt8(ascii: "0") + UInt8(rowIndex))
+                rendered.append(contentsOf: [0x0a, 0x49, opts.inEffectCode, 0x0a, 0x4f, opts.outEffectCode])
+            } else {
+                // Single-row or mid-scroll font change: 0x0D 0x0E followed by param and font override
+                rendered.append(contentsOf: [0x0d, 0x0e])
+                let param = String(format: "2%04d", (rowIndex - 1) * 2)
+                rendered.append(contentsOf: param.utf8)
+                let rowFont = detectRowFont(rowText, defaultFont: defaultFont)
+                rendered.append(contentsOf: [0x1a, rowFont.sizeCode])
+            }
         }
         // Render row text, stripping the font token since we already emitted the override
         let cleanedRow = stripLeadingFontToken(rowText)
