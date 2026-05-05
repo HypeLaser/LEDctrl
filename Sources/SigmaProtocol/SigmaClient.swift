@@ -1,0 +1,1486 @@
+import Foundation
+import Network
+
+public struct SigmaClient {
+    public let host: String
+    public let port: UInt16
+    private var sequence: UInt16 = 0x100
+
+    public init(host: String, port: UInt16 = 9520) {
+        self.host = host
+        self.port = port
+    }
+
+    public mutating func sendText(
+        _ text: String,
+        font: SigmaFont = .normal7,
+        color: SigmaColor = .red,
+        options: SigmaTextOptions = .default,
+        editorFontCompat: Bool = false
+    ) throws -> [String] {
+        var steps: [String] = []
+        steps.append(try simpleCommand(major: 0x04, minor: 0x01))
+        let message = makeNmg(text: text, font: font, color: color, options: options, editorFontCompat: editorFontCompat)
+        debugDump(message, filename: editorFontCompat ? "last-send-editor-font.Nmg" : "last-send-stable.Nmg")
+        steps.append(try sendFile(name: "D\0temp.Nmg", content: message, command: 0x04))
+        steps.append(try commit(path: "D:\\T\\temp.Nmg", content: message))
+
+        let sequenceFile = makeSequenceFile(messageLength: message.count)
+        steps.append(try sendSequenceFile(sequenceFile))
+        steps.append(try simpleCommand(major: 0x04, minor: 0x02))
+        return steps
+    }
+
+    public mutating func sendEditorText(
+        _ text: String,
+        font: SigmaFont = .normal7,
+        color: SigmaColor = .red,
+        options: SigmaTextOptions = .default
+    ) throws -> [String] {
+        var steps: [String] = []
+        steps.append(try simpleCommand(major: 0x04, minor: 0x01))
+        let message = makeEditorNmg(text: text, font: font, color: color, options: options)
+        steps.append(try sendFile(name: "D\0temp.Nmg", content: message, command: 0x04))
+        steps.append(try commit(path: "D:\\T\\temp.Nmg", content: message))
+        steps.append(try sendSequenceFile(makeEditorSequenceFile()))
+        steps.append(try simpleCommand(major: 0x04, minor: 0x02))
+        return steps
+    }
+
+    public mutating func sendTextProgram(
+        _ entries: [SigmaTextProgramEntry],
+        editorFontCompat: Bool = false
+    ) throws -> [String] {
+        let validEntries = entries.filter { !$0.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        guard !validEntries.isEmpty else { return [] }
+
+        var steps: [String] = []
+        steps.append(try simpleCommand(major: 0x04, minor: 0x01))
+
+        var sequenceEntries: [SigmaSequenceEntry] = []
+        for (index, entry) in validEntries.enumerated() {
+            let filename = String(format: "ROW%03d.Nmg", index + 1)
+            let message = makeNmg(
+                text: entry.text,
+                font: entry.font,
+                color: entry.color,
+                options: entry.options,
+                editorFontCompat: editorFontCompat
+            )
+            steps.append(try sendFile(name: "D\0\(filename)", content: message, command: 0x04))
+            steps.append(try commit(path: "D:\\T\\\(filename)", content: message))
+            sequenceEntries.append(
+                SigmaSequenceEntry(
+                    filename: filename,
+                    length: message.count,
+                    fileType: .text,
+                    driveCode: UInt8(ascii: "D")
+                )
+            )
+        }
+
+        let sequenceFile = makeSequenceFile(entries: sequenceEntries)
+        steps.append(try sendSequenceFile(sequenceFile))
+        steps.append(try simpleCommand(major: 0x04, minor: 0x02))
+        return steps
+    }
+
+    public mutating func sendNmg(
+        _ content: Data,
+        filename: String = "temp.Nmg",
+        fileType: SigmaProgramFileType = .text
+    ) throws -> [String] {
+        let placement = filePlacement(for: fileType)
+        let uploadDrive = (fileType == .flw) ? "D" : placement.drive
+        var steps: [String] = []
+        steps.append(
+            "program routing: type=\(fileType.rawValue) upload=\(uploadDrive):\\0\(filename) commit=\(placement.drive):\\\(placement.folder)\\\(filename) seq=\(Character(UnicodeScalar(placement.driveCode)))/\(Character(UnicodeScalar(fileType.code)))"
+        )
+        steps.append("payload header: \(payloadHeaderSummary(content))")
+        steps.append(try simpleCommand(major: 0x04, minor: 0x01))
+        steps.append(try sendFile(name: "\(uploadDrive)\0\(filename)", content: content, command: 0x04))
+        steps.append(try commit(path: "\(placement.drive):\\\(placement.folder)\\\(filename)", content: content))
+
+        let sequenceFile = makeSequenceFile(
+            messageLength: content.count,
+            filename: filename,
+            fileType: fileType,
+            driveCode: placement.driveCode
+        )
+        debugDump(sequenceFile, filename: "last-send-sequence.sys")
+        steps.append("sequence header: \(sequenceHeaderSummary(sequenceFile))")
+        steps.append(try sendSequenceFile(sequenceFile))
+        steps.append(try simpleCommand(major: 0x04, minor: 0x02))
+        return steps
+    }
+
+    public mutating func sendEditorProgramNmg(
+        _ content: Data,
+        filename: String = "temp.Nmg",
+        sequenceFileOverride: Data? = nil,
+        payloadLengthOverride: Int? = nil
+    ) throws -> [String] {
+        var steps: [String] = []
+        let sequenceFile = sequenceFileOverride ?? makeEditorSequenceFile()
+        let payload: Data
+        if let payloadLengthOverride, payloadLengthOverride > 0, payloadLengthOverride <= content.count {
+            payload = content.prefix(payloadLengthOverride)
+        } else {
+            payload = content
+        }
+
+        steps.append(try simpleCommand(major: 0x04, minor: 0x01))
+        steps.append(try sendFile(name: "D\0\(filename)", content: payload, command: 0x04))
+        steps.append(try commit(path: "D:\\T\\\(filename)", content: payload))
+        debugDump(sequenceFile, filename: "last-send-editor-sequence.sys")
+        steps.append(try sendSequenceFile(sequenceFile))
+        steps.append(try simpleCommand(major: 0x04, minor: 0x02))
+        return steps
+    }
+
+    public mutating func sendEditorProgramEntries(
+        _ entries: [SigmaBinaryProgramEntry],
+        sequenceTimingCode: UInt8? = nil
+    ) throws -> [String] {
+        let validEntries = entries.filter { !$0.content.isEmpty }
+        guard !validEntries.isEmpty else { return [] }
+
+        var steps: [String] = []
+        steps.append(try simpleCommand(major: 0x04, minor: 0x01))
+
+        var sequenceEntries: [SigmaSequenceEntry] = []
+        for entry in validEntries {
+            let payload: Data
+            if let payloadLength = entry.payloadLengthOverride,
+               payloadLength > 0,
+               payloadLength <= entry.content.count {
+                payload = entry.content.prefix(payloadLength)
+            } else {
+                payload = entry.content
+            }
+            steps.append(try sendFile(name: "D\0\(entry.filename)", content: payload, command: 0x04))
+            steps.append(try commit(path: "D:\\T\\\(entry.filename)", content: payload))
+            sequenceEntries.append(
+                SigmaSequenceEntry(
+                    filename: entry.filename,
+                    length: payload.count,
+                    fileType: entry.fileType,
+                    driveCode: UInt8(ascii: "D")
+                )
+            )
+        }
+
+        var sequenceFile = makeSequenceFile(entries: sequenceEntries)
+        if let sequenceTimingCode {
+            sequenceFile = patchSequenceTimingCode(in: sequenceFile, timingCode: sequenceTimingCode)
+        }
+        debugDump(sequenceFile, filename: "last-send-editor-program-sequence.sys")
+        steps.append(try sendSequenceFile(sequenceFile))
+        steps.append(try simpleCommand(major: 0x04, minor: 0x02))
+        return steps
+    }
+
+    public mutating func sendSystemFile(
+        name: String,
+        content: Data
+    ) throws -> [String] {
+        [
+            try sendChunkedFile(
+                name: name,
+                content: content,
+                command: 0x02,
+                descriptorNameLength: 12,
+                descriptorTail: [0x00, 0x00]
+            )
+        ]
+    }
+
+    public mutating func deleteFile(path: String) throws -> String {
+        var pathData = Data(path.utf8)
+        if pathData.last != 0x00 {
+            pathData.append(0x00)
+        }
+        let argWords = UInt8((pathData.count + 3) / 4)
+
+        var payload = Data()
+        payload.append(contentsOf: [0x00, 0x00, 0x00, 0x00, 0x01, 0x01])
+        payload.append(contentsOf: le16(nextSequence()))
+        payload.append(contentsOf: [0x07, 0x06, argWords, 0x00])
+        payload.append(pathData)
+
+        let context = "delete \(path)"
+        try requireOK(try transact(payload), context: context)
+        return "\(context): OK"
+    }
+
+    private mutating func sendFile(name: String, content: Data, command: UInt8) throws -> String {
+        try sendChunkedFile(
+            name: name,
+            content: content,
+            command: command,
+            descriptorNameLength: 14,
+            descriptorTail: []
+        )
+    }
+
+    private mutating func sendChunkedFile(
+        name: String,
+        content: Data,
+        command: UInt8,
+        descriptorNameLength: Int,
+        descriptorTail: [UInt8],
+        maxChunkSize: Int = 768
+    ) throws -> String {
+        let chunks = content.chunked(maxSize: maxChunkSize)
+        let totalPackets = chunks.count
+        if totalPackets > 1 {
+            let socket = try openUDPSocket()
+            defer { close(socket) }
+            for (index, chunk) in chunks.enumerated() {
+                try sendFileChunk(
+                    name: name,
+                    totalContentSize: content.count,
+                    chunk: chunk,
+                    command: command,
+                    descriptorNameLength: descriptorNameLength,
+                    descriptorTail: descriptorTail,
+                    maxChunkSize: maxChunkSize,
+                    totalPackets: totalPackets,
+                    currentPacket: index + 1,
+                    socketFD: socket
+                )
+            }
+        } else {
+            for (index, chunk) in chunks.enumerated() {
+                try sendFileChunk(
+                    name: name,
+                    totalContentSize: content.count,
+                    chunk: chunk,
+                    command: command,
+                    descriptorNameLength: descriptorNameLength,
+                    descriptorTail: descriptorTail,
+                    maxChunkSize: maxChunkSize,
+                    totalPackets: totalPackets,
+                    currentPacket: index + 1,
+                    socketFD: nil
+                )
+            }
+        }
+
+        let context = "send \(printableName(name))"
+        if totalPackets == 1 {
+            return "\(context): OK"
+        }
+        return "\(context): OK (\(totalPackets) chunks)"
+    }
+
+    private mutating func sendFileChunk(
+        name: String,
+        totalContentSize: Int,
+        chunk: Data,
+        command: UInt8,
+        descriptorNameLength: Int,
+        descriptorTail: [UInt8],
+        maxChunkSize: Int,
+        totalPackets: Int,
+        currentPacket: Int,
+        socketFD: Int32?
+    ) throws {
+        var descriptor = fixedBytes(name, count: 14)
+        if descriptorNameLength != 14 {
+            descriptor = fixedBytes(name, count: descriptorNameLength)
+        }
+        descriptor += le32(UInt32(totalContentSize))
+        descriptor += le16(UInt16(maxChunkSize))
+        descriptor += le16(UInt16(totalPackets))
+        descriptor += le16(UInt16(currentPacket))
+        descriptor += descriptorTail
+
+        var payload = Data()
+        payload.append(contentsOf: le32(UInt32(chunk.count)))
+        payload.append(contentsOf: [0x01, 0x01])
+        payload.append(contentsOf: le16(nextSequence()))
+        payload.append(contentsOf: [0x02, command])
+        payload.append(contentsOf: le16(UInt16(descriptor.count / 4)))
+        payload.append(contentsOf: descriptor)
+        payload.append(chunk)
+
+        let context = "send \(printableName(name)) chunk \(currentPacket)/\(totalPackets)"
+        let maxAttempts = 3
+        var lastError: Error?
+        for attempt in 1...maxAttempts {
+            do {
+                if let socketFD {
+                    try requireOK(try transact(payload, using: socketFD), context: context)
+                } else {
+                    try requireOK(try transact(payload), context: context)
+                }
+                return
+            } catch {
+                lastError = error
+                let isTimeout: Bool
+                if case SigmaError.timeout = error {
+                    isTimeout = true
+                } else {
+                    isTimeout = false
+                }
+                if !isTimeout || attempt == maxAttempts {
+                    throw error
+                }
+                // Sign occasionally acks chunk/control packets just after the default timeout.
+                // Retry the same idempotent packet.
+                usleep(150_000)
+            }
+        }
+        if let lastError {
+            throw lastError
+        }
+    }
+
+    private mutating func sendSequenceFile(_ content: Data) throws -> String {
+        try sendChunkedFile(
+            name: "SEQUENT.SYS",
+            content: content,
+            command: 0x02,
+            descriptorNameLength: 12,
+            descriptorTail: [0x00, 0x00]
+        )
+    }
+
+    private mutating func commit(path: String, content: Data) throws -> String {
+        var body = fixedBytes(path, count: 32)
+        body += le32(UInt32(content.count))
+        body += le32(UInt32(sigmaX25(content)))
+
+        var payload = Data()
+        payload.append(contentsOf: [0x00, 0x00, 0x00, 0x00, 0x01, 0x01])
+        payload.append(contentsOf: le16(nextSequence()))
+        payload.append(contentsOf: [0x02, 0x0e])
+        payload.append(contentsOf: le16(UInt16(body.count / 4)))
+        payload.append(contentsOf: body)
+
+        let context = "commit \(path)"
+        try requireOK(try transact(payload), context: context)
+        return "\(context): OK"
+    }
+
+    private mutating func simpleCommand(major: UInt8, minor: UInt8) throws -> String {
+        var payload = Data()
+        payload.append(contentsOf: [0x00, 0x00, 0x00, 0x00, 0x01, 0x01])
+        payload.append(contentsOf: le16(nextSequence()))
+        payload.append(contentsOf: [major, minor, 0x00, 0x00])
+
+        let context = "command \(String(format: "%02X:%02X", major, minor))"
+        try requireOK(try transact(payload), context: context)
+        return "\(context): OK"
+    }
+
+    private mutating func nextSequence() -> UInt16 {
+        defer { sequence &+= 1 }
+        return sequence
+    }
+
+    public mutating func replayCapturedPackets(_ packets: [SigmaReplayPacket]) throws -> [String] {
+        guard !packets.isEmpty else { return [] }
+        var sockets: [UInt16: Int32] = [:]
+        defer {
+            for socketFD in sockets.values {
+                close(socketFD)
+            }
+        }
+
+        var steps: [String] = []
+        var remote = sockaddr_in()
+        remote.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        remote.sin_family = sa_family_t(AF_INET)
+        remote.sin_port = port.bigEndian
+        let ipResult = host.withCString { cString in
+            inet_pton(AF_INET, cString, &remote.sin_addr)
+        }
+        guard ipResult == 1 else {
+            throw SigmaError.socket("inet_pton failed for host \(host)")
+        }
+
+        for (index, packet) in packets.enumerated() {
+            if packet.delayMilliseconds > 0 {
+                usleep(useconds_t(packet.delayMilliseconds * 1_000))
+            }
+            let socketFD: Int32
+            if let existing = sockets[packet.sourcePort] {
+                socketFD = existing
+            } else {
+                let created = try openReplaySocket(sourcePort: packet.sourcePort)
+                sockets[packet.sourcePort] = created
+                socketFD = created
+            }
+
+            let sent = packet.payload.withUnsafeBytes { bytes in
+                withUnsafePointer(to: &remote) { pointer in
+                    pointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockAddr in
+                        sendto(socketFD, bytes.baseAddress, packet.payload.count, 0, sockAddr, socklen_t(MemoryLayout<sockaddr_in>.size))
+                    }
+                }
+            }
+            guard sent == packet.payload.count else {
+                throw SigmaError.socket("replay send failed on port \(packet.sourcePort): \(String(cString: strerror(errno)))")
+            }
+            steps.append("replay packet \(index + 1)/\(packets.count): src \(packet.sourcePort), \(packet.payload.count) bytes")
+        }
+        return steps
+    }
+
+    private func openReplaySocket(sourcePort: UInt16) throws -> Int32 {
+        let fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)
+        guard fd >= 0 else {
+            throw SigmaError.socket("replay socket() failed: \(String(cString: strerror(errno)))")
+        }
+
+        var reuse: Int32 = 1
+        _ = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &reuse, socklen_t(MemoryLayout<Int32>.size))
+
+        var local = sockaddr_in()
+        local.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        local.sin_family = sa_family_t(AF_INET)
+        local.sin_port = sourcePort.bigEndian
+        local.sin_addr = in_addr(s_addr: INADDR_ANY)
+
+        // Best-effort bind to the captured source port to mirror Editor.
+        // If this port is unavailable, continue unbound like the manual replay script.
+        _ = withUnsafePointer(to: &local) { pointer in
+            pointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockAddr in
+                bind(fd, sockAddr, socklen_t(MemoryLayout<sockaddr_in>.size))
+            }
+        }
+        return fd
+    }
+
+    private func openUDPSocket() throws -> Int32 {
+        try openUDPSocket(sourcePort: nil)
+    }
+
+    private func openUDPSocket(sourcePort: UInt16?) throws -> Int32 {
+        let fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)
+        guard fd >= 0 else {
+            throw SigmaError.socket("socket() failed: \(String(cString: strerror(errno)))")
+        }
+
+        if let sourcePort {
+            var reuse: Int32 = 1
+            _ = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &reuse, socklen_t(MemoryLayout<Int32>.size))
+
+            var local = sockaddr_in()
+            local.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+            local.sin_family = sa_family_t(AF_INET)
+            local.sin_port = sourcePort.bigEndian
+            local.sin_addr = in_addr(s_addr: INADDR_ANY)
+            let bindResult = withUnsafePointer(to: &local) { pointer in
+                pointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockAddr in
+                    bind(fd, sockAddr, socklen_t(MemoryLayout<sockaddr_in>.size))
+                }
+            }
+            if bindResult != 0 {
+                close(fd)
+                throw SigmaError.socket("bind(\(sourcePort)) failed: \(String(cString: strerror(errno)))")
+            }
+        }
+
+        var timeout = timeval(tv_sec: 8, tv_usec: 0)
+        var timeoutCopy = timeout
+        let setRecv = withUnsafePointer(to: &timeoutCopy) {
+            setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, $0, socklen_t(MemoryLayout<timeval>.size))
+        }
+        if setRecv != 0 {
+            close(fd)
+            throw SigmaError.socket("setsockopt(SO_RCVTIMEO) failed: \(String(cString: strerror(errno)))")
+        }
+
+        var addr = sockaddr_in()
+        addr.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        addr.sin_family = sa_family_t(AF_INET)
+        addr.sin_port = port.bigEndian
+        let ipResult = host.withCString { cString in
+            inet_pton(AF_INET, cString, &addr.sin_addr)
+        }
+        guard ipResult == 1 else {
+            close(fd)
+            throw SigmaError.socket("inet_pton failed for host \(host)")
+        }
+
+        let connectResult = withUnsafePointer(to: &addr) { pointer in
+            pointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockAddr in
+                connect(fd, sockAddr, socklen_t(MemoryLayout<sockaddr_in>.size))
+            }
+        }
+        if connectResult != 0 {
+            close(fd)
+            throw SigmaError.socket("connect() failed: \(String(cString: strerror(errno)))")
+        }
+        return fd
+    }
+
+    private func transact(_ payload: Data, using socketFD: Int32) throws -> Data {
+        let frame = makeFrame(payload)
+        let sendResult = frame.withUnsafeBytes { bytes in
+            send(socketFD, bytes.baseAddress, frame.count, 0)
+        }
+        guard sendResult == frame.count else {
+            throw SigmaError.socket("send() failed: \(String(cString: strerror(errno)))")
+        }
+
+        var buffer = [UInt8](repeating: 0, count: 4096)
+        let recvCount = recv(socketFD, &buffer, buffer.count, 0)
+        if recvCount > 0 {
+            return Data(buffer.prefix(recvCount))
+        }
+        if recvCount == 0 {
+            throw SigmaError.noResponse
+        }
+        if errno == EAGAIN || errno == EWOULDBLOCK {
+            throw SigmaError.timeout
+        }
+        throw SigmaError.socket("recv() failed: \(String(cString: strerror(errno)))")
+    }
+
+    private func transact(_ payload: Data) throws -> Data {
+        let frame = makeFrame(payload)
+        let endpointPort = NWEndpoint.Port(rawValue: port)!
+        let connection = NWConnection(host: NWEndpoint.Host(host), port: endpointPort, using: .udp)
+        let semaphore = DispatchSemaphore(value: 0)
+        let gate = ResumeGate()
+        let result = ResultBox<Data>(.failure(SigmaError.timeout))
+
+        @Sendable func finish(_ value: Result<Data, Error>) {
+            guard gate.claim() else { return }
+            result.value = value
+            connection.cancel()
+            semaphore.signal()
+        }
+
+        connection.stateUpdateHandler = { state in
+            switch state {
+            case .ready:
+                connection.send(content: frame, completion: .contentProcessed { error in
+                    if let error {
+                        finish(.failure(error))
+                        return
+                    }
+                    connection.receiveMessage { data, _, _, error in
+                        if let data, !data.isEmpty {
+                            finish(.success(data))
+                        } else if let error {
+                            finish(.failure(error))
+                        } else {
+                            finish(.failure(SigmaError.noResponse))
+                        }
+                    }
+                })
+            case .failed(let error):
+                finish(.failure(error))
+            default:
+                break
+            }
+        }
+
+        connection.start(queue: .global(qos: .userInitiated))
+        DispatchQueue.global().asyncAfter(deadline: .now() + 8) {
+            finish(.failure(SigmaError.timeout))
+        }
+        semaphore.wait()
+        return try result.value.get()
+    }
+}
+
+public struct SigmaTextProgramEntry: Sendable {
+    public var text: String
+    public var font: SigmaFont
+    public var color: SigmaColor
+    public var options: SigmaTextOptions
+
+    public init(
+        text: String,
+        font: SigmaFont = .normal7,
+        color: SigmaColor = .red,
+        options: SigmaTextOptions = .default
+    ) {
+        self.text = text
+        self.font = font
+        self.color = color
+        self.options = options
+    }
+}
+
+public struct SigmaReplayPacket: Sendable {
+    public var delayMilliseconds: Int
+    public var sourcePort: UInt16
+    public var payload: Data
+
+    public init(delayMilliseconds: Int, sourcePort: UInt16, payload: Data) {
+        self.delayMilliseconds = max(0, delayMilliseconds)
+        self.sourcePort = sourcePort
+        self.payload = payload
+    }
+}
+
+public struct SigmaBinaryProgramEntry: Sendable {
+    public var filename: String
+    public var content: Data
+    public var fileType: SigmaProgramFileType
+    public var payloadLengthOverride: Int?
+
+    public init(
+        filename: String,
+        content: Data,
+        fileType: SigmaProgramFileType = .text,
+        payloadLengthOverride: Int? = nil
+    ) {
+        self.filename = filename
+        self.content = content
+        self.fileType = fileType
+        self.payloadLengthOverride = payloadLengthOverride
+    }
+}
+
+public struct SigmaTextOptions: Sendable {
+    public static let `default` = SigmaTextOptions()
+
+    public var inEffectCode: UInt8
+    public var outEffectCode: UInt8
+    public var speedCode: UInt8
+    public var horizontalAlignCode: UInt8
+    public var verticalAligns: Bool
+    public var holdSeconds: Int
+    public var wrapsText: Bool
+
+    public init(
+        inEffectCode: UInt8 = UInt8(ascii: "0"),
+        outEffectCode: UInt8 = UInt8(ascii: "0"),
+        speedCode: UInt8 = UInt8(ascii: "2"),
+        horizontalAlignCode: UInt8 = UInt8(ascii: "0"),
+        verticalAligns: Bool = true,
+        holdSeconds: Int = 2,
+        wrapsText: Bool = true
+    ) {
+        self.inEffectCode = inEffectCode
+        self.outEffectCode = outEffectCode
+        self.speedCode = speedCode
+        self.horizontalAlignCode = horizontalAlignCode
+        self.verticalAligns = verticalAligns
+        self.holdSeconds = max(0, min(9999, holdSeconds))
+        self.wrapsText = wrapsText
+    }
+}
+
+public enum SigmaFont: String, CaseIterable, Sendable {
+    case tiny3
+    case normal5
+    case normal7
+    case normal14
+    case normal15
+    case normal16
+
+    var code: UInt8 {
+        switch self {
+        case .tiny3: return UInt8(ascii: "0")
+        case .normal5: return UInt8(ascii: "0")
+        case .normal7: return UInt8(ascii: "0")
+        case .normal14: return UInt8(ascii: "3")
+        case .normal15: return UInt8(ascii: "4")
+        case .normal16: return UInt8(ascii: "5")
+        }
+    }
+
+    var sizeCode: UInt8 {
+        switch self {
+        case .tiny3: return UInt8(ascii: "2")
+        case .normal5: return UInt8(ascii: "0")
+        case .normal7: return UInt8(ascii: "1")
+        case .normal14: return UInt8(ascii: "1")
+        case .normal15: return UInt8(ascii: "1")
+        case .normal16: return UInt8(ascii: "1")
+        }
+    }
+
+    public var maxCharactersPerLine: Int {
+        switch self {
+        case .tiny3:
+            return 26
+        case .normal5:
+            return 16
+        case .normal7:
+            return 11
+        case .normal14:
+            return 5
+        case .normal15, .normal16:
+            return 4
+        }
+    }
+}
+
+public enum SigmaColor: String, CaseIterable, Sendable {
+    case red
+    case green
+    case orange
+    case mixedBands
+    case mixedCharacters
+    case mixedDiagonalDown
+    case mixedDiagonalUp
+
+    var code: UInt8 {
+        switch self {
+        case .red: return UInt8(ascii: "1")
+        case .green: return UInt8(ascii: "2")
+        case .orange: return UInt8(ascii: "3")
+        case .mixedBands: return UInt8(ascii: "4")
+        case .mixedCharacters: return UInt8(ascii: "5")
+        case .mixedDiagonalDown: return UInt8(ascii: "6")
+        case .mixedDiagonalUp: return UInt8(ascii: "7")
+        }
+    }
+}
+
+public enum SigmaProgramFileType: String, Sendable {
+    case text
+    case picture
+    case flw
+
+    var code: UInt8 {
+        switch self {
+        case .text: return UInt8(ascii: "T")
+        case .picture: return UInt8(ascii: "A")
+        case .flw: return UInt8(ascii: "F")
+        }
+    }
+}
+
+private func makeNmg(
+    text: String,
+    font: SigmaFont,
+    color: SigmaColor,
+    options: SigmaTextOptions,
+    editorFontCompat: Bool
+) -> Data {
+    let safeText = sanitizeSigmaText(text)
+    // Detect time tokens to enable dynamic update mode ('b')
+    let hasTimeTokens = safeText.contains("{hour}") || safeText.contains("{minute}") ||
+                       safeText.contains("{second}") || safeText.contains("{hhmm24}") ||
+                       safeText.contains("{hhmm12}")
+    let autoTypesetCode: UInt8 = hasTimeTokens ? UInt8(ascii: "b") : UInt8(ascii: "a")
+    // 'b' mode uses 3-digit hold (e.g. "000"); 'a' mode uses 4-digit hold (e.g. "0002")
+    let hold = hasTimeTokens ? String(format: "%03d", options.holdSeconds) : String(format: "%04d", options.holdSeconds)
+    let formattedText = formatText(safeText, font: font, wrapsText: options.wrapsText)
+    let rows = formattedText.split(separator: "\r", omittingEmptySubsequences: false).map(String.init)
+    let renderedText = renderMultiRowBytes(rows: rows, defaultFont: font)
+
+    var header = Data([
+        0x01, 0x5a, 0x30, 0x30,
+        0x02, 0x41, 0x0f, 0x18, 0x05, 0x31, 0x31, 0x30,
+        0x30, 0x31, 0x1b, 0x30, autoTypesetCode
+    ])
+    // Both 'a' and 'b' modes require initialization bytes 18 01 09 (verified in mixed_font.pcap)
+    header.append(contentsOf: [0x18, 0x01, 0x09])
+    header.append(contentsOf: [0x08, 0x31, 0x0e, options.speedCode])
+    header.append(contentsOf: hold.utf8)
+    header.append(contentsOf: [
+        0x1f, editorFontCompat ? editorFontSelector(for: font) : nmgFontCode(for: font), 0x1e,
+        options.horizontalAlignCode, 0x0a, 0x49, options.inEffectCode, 0x0a, 0x4f, options.outEffectCode, 0x0f,
+        options.speedCode, 0x1c, color.code, 0x1d, 0x30, 0x1a, font.sizeCode, 0x07,
+        0x30
+    ])
+    header.append(renderedText)
+    header.append(0x0d)
+    header.append(0x04)
+    header.append(contentsOf: "NoteNmg file version:v3.99".utf8)
+    if header.count < 195 {
+        header.append(contentsOf: repeatElement(UInt8(ascii: " "), count: 195 - header.count))
+    }
+    header.append(0x04)
+    return header
+}
+
+/// Font code for NMG header. Vendor captures show Normal7 uses '0'.
+private func nmgFontCode(for font: SigmaFont) -> UInt8 {
+    switch font {
+    case .normal7: return UInt8(ascii: "0")
+    case .normal5: return UInt8(ascii: "9") // Normal5 is last in font list
+    default: return font.code
+    }
+}
+
+private func makeEditorNmg(text: String, font: SigmaFont, color: SigmaColor, options: SigmaTextOptions) -> Data {
+    let safeText = sanitizeSigmaText(text)
+    let hold = String(format: "%04d", options.holdSeconds)
+    let autoTypesetCode = options.wrapsText ? UInt8(ascii: "b") : UInt8(ascii: "a")
+    let formattedText = formatText(safeText, font: font, wrapsText: options.wrapsText)
+    let renderedText = renderMessageBytes(formattedText)
+    let displayLength = UInt16(clamping: editorDisplayLength(formattedText))
+
+    var body = Data([
+        0x13, 0x18, 0x05, 0x31, 0x31, 0x30, 0x30, 0x31,
+        0x1b, 0x30, autoTypesetCode, 0x08, 0x31, 0x0e, 0x32
+    ])
+    body.append(contentsOf: hold.utf8)
+    body.append(contentsOf: [
+        0x1f, editorFontSelector(for: font), 0x1e, options.horizontalAlignCode,
+        0x0a, 0x49, options.inEffectCode, 0x0a, 0x4f, options.outEffectCode, 0x0f, options.speedCode,
+        0x1c, color.code, 0x1d, 0x30, 0x1a, font.sizeCode, 0x07, 0x30
+    ])
+    body.append(renderedText)
+    body.append(0x0d)
+    body.append(0x04)
+    body.append(contentsOf: "NoteNmg file version:v3.99".utf8)
+
+    let table = editorPostTextTableTemplate()
+    let tableStart = body.count + 16 + 102
+    let tableOffset = UInt16(clamping: tableStart - 18)
+
+    var data = Data()
+    data.append(contentsOf: [0x4e, 0x47, 0x50, 0x00])
+    data.append(contentsOf: le16(7))
+    data.append(contentsOf: le16(tableOffset))
+    data.append(contentsOf: [0x00, 0x00])
+    data.append(contentsOf: le16(displayLength))
+    data.append(contentsOf: [0x00, 0x00, 0x00, 0x00])
+    data.append(body)
+    if data.count < tableStart {
+        data.append(contentsOf: repeatElement(UInt8(ascii: " "), count: tableStart - data.count))
+    }
+    data.append(table)
+    return data
+}
+
+private func editorFontSelector(for font: SigmaFont) -> UInt8 {
+    switch font {
+    case .normal5:
+        return UInt8(ascii: "0")
+    case .normal7:
+        return UInt8(ascii: "3")
+    default:
+        return font.code
+    }
+}
+
+private func editorDisplayLength(_ text: String) -> Int {
+    var length = 0
+    var index = text.startIndex
+    while index < text.endIndex {
+        if text[index] == "{", let end = text[index...].firstIndex(of: "}") {
+            let token = String(text[text.index(after: index)..<end]).lowercased()
+            if sigmaMarkup[token] != nil {
+                length += tokenDisplayWidth[token] ?? 0
+                index = text.index(after: end)
+                continue
+            }
+        }
+        length += 1
+        index = text.index(after: index)
+    }
+    return length
+}
+
+private func editorPostTextTableTemplate() -> Data {
+    let path = Paths.editorNmg.path()
+    if let source = try? Data(contentsOf: URL(fileURLWithPath: path)), source.count > 18 {
+        let tableStart = Int(UInt16(source[6]) | (UInt16(source[7]) << 8)) + 18
+        if tableStart > 0, tableStart < source.count {
+            return source[tableStart...]
+        }
+    }
+    return Data(repeating: 0, count: 1024)
+}
+
+private func sanitizeSigmaText(_ value: String) -> String {
+    let normalized = normalizeSigmaText(value)
+    let allowed = Set("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 -/:.{}_\n\r!@#$%^&*()_+=?,<>[]'")
+    var result = ""
+    for character in normalized {
+        if allowed.contains(character) {
+            result.append(character)
+        } else {
+            result.append(" ")
+        }
+    }
+    while result.contains("  ") {
+        result = result.replacingOccurrences(of: "  ", with: " ")
+    }
+    return result.trimmingCharacters(in: .whitespacesAndNewlines)
+}
+
+private func normalizeSigmaText(_ value: String) -> String {
+    var normalized = value
+    let replacements: [(String, String)] = [
+        ("\u{201c}", ""),
+        ("\u{201d}", ""),
+        ("\u{201e}", ""),
+        ("\u{00ab}", ""),
+        ("\u{00bb}", ""),
+        ("\u{2018}", "'"),
+        ("\u{2019}", "'"),
+        ("\u{201a}", "'"),
+        ("\u{201b}", "'"),
+        ("\u{2026}", "..."),
+        ("\u{2013}", "-"),
+        ("\u{2014}", "-"),
+        ("\u{2212}", "-"),
+        ("\u{00a3}", "{pound}"),
+        ("\u{00a0}", " "),
+        (";", ",")
+    ]
+    for (source, target) in replacements {
+        normalized = normalized.replacingOccurrences(of: source, with: target)
+    }
+
+    var result = ""
+    for scalar in normalized.unicodeScalars {
+        switch scalar.value {
+        case 10, 13:
+            result.unicodeScalars.append(scalar)
+        case 32...126:
+            result.unicodeScalars.append(scalar)
+        default:
+            result.append(" ")
+        }
+    }
+    while result.contains("  ") {
+        result = result.replacingOccurrences(of: "  ", with: " ")
+    }
+    return result
+}
+
+private func formatText(_ text: String, font: SigmaFont, wrapsText: Bool) -> String {
+    if !wrapsText {
+        return text
+            .replacingOccurrences(of: "\r\n", with: " ")
+            .replacingOccurrences(of: "\r", with: " ")
+            .replacingOccurrences(of: "\n", with: " ")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    let maxCharacters = font.maxCharactersPerLine
+    let requestedLines = text
+        .replacingOccurrences(of: "\r\n", with: "\n")
+        .replacingOccurrences(of: "\r", with: "\n")
+        .split(separator: "\n", omittingEmptySubsequences: false)
+        .map(String.init)
+
+    var lines: [String] = []
+    for requestedLine in requestedLines {
+        let words = requestedLine
+            .split(separator: " ", omittingEmptySubsequences: true)
+            .map(String.init)
+        var current = ""
+        for word in words {
+            let displayWidth = messageDisplayWidth(word)
+            if current.isEmpty {
+                current = clipMessageWord(word, maxWidth: maxCharacters)
+            } else if messageDisplayWidth(current) + 1 + displayWidth <= maxCharacters {
+                current += " " + word
+            } else {
+                lines.append(current + " ")
+                current = clipMessageWord(word, maxWidth: maxCharacters)
+            }
+        }
+        if !current.isEmpty {
+            lines.append(current)
+        } else if lines.isEmpty || requestedLine.isEmpty {
+            lines.append("")
+        }
+    }
+    return lines.prefix(7).joined(separator: "\r")
+}
+
+private func renderMessageBytes(_ text: String) -> Data {
+    var rendered = Data()
+    var index = text.startIndex
+    while index < text.endIndex {
+        if text[index] == "{", let end = text[index...].firstIndex(of: "}") {
+            let token = String(text[text.index(after: index)..<end]).lowercased()
+            if let bytes = sigmaMarkup[token] {
+                rendered.append(contentsOf: bytes)
+                index = text.index(after: end)
+                continue
+            }
+        }
+        rendered.append(contentsOf: String(text[index]).utf8)
+        index = text.index(after: index)
+    }
+    return rendered
+}
+
+private func renderMultiRowBytes(rows: [String], defaultFont: SigmaFont) -> Data {
+    var rendered = Data()
+    for (rowIndex, rowText) in rows.enumerated() {
+        // Check if this is a countdown row
+        if let cdInfo = extractCountdownInfo(rowText) {
+            let prefix = encodeCountdownPrefix(
+                month: cdInfo.month, day: cdInfo.day, year: cdInfo.year,
+                hour: cdInfo.hour, minute: cdInfo.minute, second: cdInfo.second
+            )
+            if rowIndex > 0 {
+                // Countdown row separator: 0x0D 0x18 0x30 0x0A 0x33 <prefix>
+                rendered.append(contentsOf: [0x0d, 0x18, 0x30, 0x0a, 0x33])
+            } else {
+                // First countdown row prefix: 0x0A 0x33
+                rendered.append(contentsOf: [0x0a, 0x33])
+            }
+            rendered.append(contentsOf: prefix)
+            // Direction suffix
+            let dirCode = cdInfo.dir == "up" ? "00100000" : "00101000"
+            rendered.append(contentsOf: cdInfo.label.utf8)
+            rendered.append(contentsOf: dirCode.utf8)
+            // Render remaining text (tokens like %d, %h, %m, %s)
+            let remainingText = stripCountdownMarker(rowText)
+            rendered.append(renderMessageBytes(remainingText))
+            continue
+        }
+
+        if rowIndex > 0 {
+            // Row separator: 0x0D 0x0E followed by "2" + 4-digit param and font override
+            // Format verified in mixed_font.pcap: "20000" for row 1, "20002" for row 2
+            rendered.append(contentsOf: [0x0d, 0x0e])
+            let param = String(format: "2%04d", (rowIndex - 1) * 2)
+            rendered.append(contentsOf: param.utf8)
+            // Detect inline font token to set row font
+            let rowFont = detectRowFont(rowText, defaultFont: defaultFont)
+            rendered.append(contentsOf: [0x1a, rowFont.sizeCode])
+        }
+        // Render row text, stripping the font token since we already emitted the override
+        let cleanedRow = stripLeadingFontToken(rowText)
+        rendered.append(renderMessageBytes(cleanedRow))
+    }
+    return rendered
+}
+
+private func extractCountdownInfo(_ text: String) -> (month: Int, day: Int, year: Int, hour: Int, minute: Int, second: Int, dir: String, label: String)? {
+    guard let start = text.firstIndex(of: "{"),
+          let end = text[start...].firstIndex(of: "}") else { return nil }
+    let token = String(text[start...end])
+    return parseCountdownMarker(token)
+}
+
+private func stripCountdownMarker(_ text: String) -> String {
+    guard let start = text.firstIndex(of: "{"),
+          let end = text[start...].firstIndex(of: "}") else { return text }
+    let token = String(text[start...end])
+    if parseCountdownMarker(token) != nil {
+        let afterEnd = text.index(after: end)
+        return String(text[afterEnd...])
+    }
+    return text
+}
+
+private func detectRowFont(_ text: String, defaultFont: SigmaFont) -> SigmaFont {
+    // Find the first font token in the row
+    var index = text.startIndex
+    while index < text.endIndex {
+        if text[index] == "{", let end = text[index...].firstIndex(of: "}") {
+            let token = String(text[text.index(after: index)..<end]).lowercased()
+            if token == "font5" { return .normal5 }
+            if token == "font7" { return .normal7 }
+        }
+        index = text.index(after: index)
+    }
+    return defaultFont
+}
+
+private func stripLeadingFontToken(_ text: String) -> String {
+    // Strip only the first font token if it appears at the very beginning
+    if text.hasPrefix("{font5}") {
+        return String(text.dropFirst(7))
+    }
+    if text.hasPrefix("{font7}") {
+        return String(text.dropFirst(7))
+    }
+    return text
+}
+
+private func messageDisplayWidth(_ text: String) -> Int {
+    var width = 0
+    var index = text.startIndex
+    while index < text.endIndex {
+        if text[index] == "{", let end = text[index...].firstIndex(of: "}") {
+            let token = String(text[text.index(after: index)..<end]).lowercased()
+            if sigmaMarkup[token] != nil {
+                width += tokenDisplayWidth[token] ?? 2
+                index = text.index(after: end)
+                continue
+            }
+        }
+        width += 1
+        index = text.index(after: index)
+    }
+    return width
+}
+
+private func clipMessageWord(_ word: String, maxWidth: Int) -> String {
+    var result = ""
+    var width = 0
+    var index = word.startIndex
+    while index < word.endIndex && width < maxWidth {
+        if word[index] == "{", let end = word[index...].firstIndex(of: "}") {
+            let token = String(word[word.index(after: index)..<end]).lowercased()
+            if sigmaMarkup[token] != nil {
+                let tokenWidth = tokenDisplayWidth[token] ?? 2
+                if width + tokenWidth > maxWidth { break }
+                result += String(word[index...end])
+                width += tokenWidth
+                index = word.index(after: end)
+                continue
+            }
+        }
+        result.append(word[index])
+        width += 1
+        index = word.index(after: index)
+    }
+    return result
+}
+
+/// Encode a countdown target date/time into the vendor NMG prefix bytes.
+/// Reverse-engineered from Sigma Editor 3.99 wire captures (counter3/4/5.pcap).
+///
+/// Format: [dateByte, yearByte, byte4, timeByte]
+/// - dateByte  = month * 32 + day
+/// - yearByte  = 0x5c + 2 * (year - 2026)
+/// - byte4     = (minute % 8) * 32 + (second / 2)
+/// - timeByte  = hour * 8 + (minute / 10)
+private func encodeCountdownPrefix(month: Int, day: Int, year: Int, hour: Int, minute: Int = 0, second: Int = 0) -> [UInt8] {
+    let dateByte = UInt8(month * 32 + day)
+    let yearByte = UInt8(0x5c + 2 * (year - 2026))
+    let byte4 = UInt8((minute % 8) * 32 + (second / 2))
+    let timeByte = UInt8(hour * 8 + (minute / 10))
+    return [dateByte, yearByte, byte4, timeByte]
+}
+
+/// Parse a countdown marker token of the form:
+///   {cd:M:D:Y:h:m:s:dir:label}
+/// e.g. {cd:6:15:2026:14:30:45:down:Time Remaining}
+private func parseCountdownMarker(_ text: String) -> (month: Int, day: Int, year: Int, hour: Int, minute: Int, second: Int, dir: String, label: String)? {
+    guard text.hasPrefix("{cd:") && text.hasSuffix("}") else { return nil }
+    let inner = String(text.dropFirst(4).dropLast())
+    let parts = inner.split(separator: ":", omittingEmptySubsequences: false)
+    guard parts.count >= 9 else { return nil }
+    guard let month = Int(parts[0]),
+          let day = Int(parts[1]),
+          let year = Int(parts[2]),
+          let hour = Int(parts[3]),
+          let minute = Int(parts[4]),
+          let second = Int(parts[5]) else { return nil }
+    let dir = String(parts[6])
+    let label = parts[7...].joined(separator: ":")
+    return (month, day, year, hour, minute, second, dir, label)
+}
+
+private let sigmaMarkup: [String: [UInt8]] = [
+    "hour": [0x0b, 0x2c],
+    "minute": [0x0b, 0x2d],
+    "second": [0x0b, 0x2e],
+    "hhmm24": [0x0b, 0x2f],
+    "hhmm12": [0x0b, 0x30],
+    "date_us": [0x0b, 0x20],
+    "date_uk": [0x0b, 0x21],
+    "pound": [0xa3],
+    "red": [0x1c, UInt8(ascii: "1")],
+    "green": [0x1c, UInt8(ascii: "2")],
+    "orange": [0x1c, UInt8(ascii: "3")],
+    "yellow": [0x1c, UInt8(ascii: "3")],
+    "bands": [0x1c, UInt8(ascii: "4")],
+    "characters": [0x1c, UInt8(ascii: "5")],
+    "diagonal_down": [0x1c, UInt8(ascii: "6")],
+    "diagonal_up": [0x1c, UInt8(ascii: "7")],
+    "font5": [0x1a, UInt8(ascii: "0")],
+    "font7": [0x1a, UInt8(ascii: "1")],
+    "blk": [0xdb],
+    // Counter/countdown tokens (sign firmware replaces these live)
+    "countdown_days": [0x25, UInt8(ascii: "d")],
+    "countdown_hours": [0x25, UInt8(ascii: "h")],
+    "countdown_minutes": [0x25, UInt8(ascii: "m")],
+    "countdown_seconds": [0x25, UInt8(ascii: "s")],
+]
+
+private let tokenDisplayWidth: [String: Int] = [
+    "hour": 2,
+    "minute": 2,
+    "second": 2,
+    "hhmm24": 5,
+    "hhmm12": 8,
+    "date_us": 8,
+    "date_uk": 8,
+    "pound": 1,
+    "red": 0,
+    "green": 0,
+    "orange": 0,
+    "yellow": 0,
+    "bands": 0,
+    "characters": 0,
+    "diagonal_down": 0,
+    "diagonal_up": 0,
+    "font5": 0,
+    "font7": 0,
+    "blk": 0,
+    "countdown_days": 2,
+    "countdown_hours": 2,
+    "countdown_minutes": 2,
+    "countdown_seconds": 2,
+]
+
+private struct SigmaSequenceEntry {
+    let filename: String
+    let length: Int
+    let fileType: SigmaProgramFileType
+    let driveCode: UInt8
+}
+
+private func makeSequenceFile(
+    messageLength: Int,
+    filename: String = "temp.Nmg",
+    fileType: SigmaProgramFileType = .text,
+    driveCode: UInt8 = UInt8(ascii: "D")
+) -> Data {
+    makeSequenceFile(
+        entries: [SigmaSequenceEntry(filename: filename, length: messageLength, fileType: fileType, driveCode: driveCode)]
+    )
+}
+
+private func makeSequenceFile(entries: [SigmaSequenceEntry]) -> Data {
+    precondition(!entries.isEmpty)
+    precondition(entries.count <= UInt16.max)
+
+    // Sigma Play writes FLW playlist rows with a different compact 44-byte shape.
+    // Using that wire-compatible shape improves movie playback vs. the text/picture template.
+    if entries.count == 1, entries[0].fileType == .flw {
+        var data = Data([
+            0x53, 0x51, 0x04, 0x00, // "SQ" header
+            0x01, 0x00, 0x00, 0x00,
+            0x44, 0x53, 0x0f, 0x7f, 0x08, 0x20, 0x01, 0x01,
+            0x01, 0x01, 0x01, 0x01, 0x08, 0x20, 0x01, 0x01,
+            0x23, 0x59, 0x01, 0x01,
+            0xff, 0x09, 0x00, 0x00
+        ])
+        data.append(contentsOf: fixedBytes(entries[0].filename, count: 12))
+        return data
+    }
+
+    var data = Data([
+        0x53, 0x51, 0x04, 0x00
+    ])
+    data.append(contentsOf: le16(UInt16(entries.count)))
+    data.append(contentsOf: [
+        0x00, 0x00,
+        entries[0].driveCode, entries[0].fileType.code, 0x0f, 0x7f, 0x26, 0x20, 0x05, 0x00,
+        0x01, 0x01, 0x01, 0x01, 0x26, 0x20, 0x05, 0x00,
+        0x01, 0x01, 0x01, 0x01
+    ])
+    for entry in entries {
+        data.append(contentsOf: [0xf8, 0x00])
+        data.append(contentsOf: le16(UInt16(clamping: entry.length)))
+        data.append(contentsOf: fixedBytes(entry.filename, count: 12))
+    }
+    return data
+}
+
+private func filePlacement(for fileType: SigmaProgramFileType) -> (drive: String, folder: String, driveCode: UInt8) {
+    switch fileType {
+    case .text:
+        return ("D", "T", UInt8(ascii: "D"))
+    case .picture:
+        return ("D", "T", UInt8(ascii: "D"))
+    case .flw:
+        return ("F", "F", UInt8(ascii: "F"))
+    }
+}
+
+private func makeEditorSequenceFile() -> Data {
+    let candidates = [
+        // Prefer whatever the legacy Editor most recently wrote.
+        Paths.editorSequence.path()
+        ,
+        // Fallback to known-good historical capture from Editor v3.99 image send.
+        Paths.capturesDirectory.appendingPathComponent("editor-image-seq-A-20260503-004225/SequentList.tmps").path()
+    ]
+    for path in candidates {
+        if let source = try? Data(contentsOf: URL(fileURLWithPath: path)), !source.isEmpty {
+            return source
+        }
+    }
+    return makeSequenceFile(messageLength: 0)
+}
+
+private func patchSequenceTimingCode(in sequenceFile: Data, timingCode: UInt8) -> Data {
+    var output = sequenceFile
+    var i = 0
+    while i + 3 < output.count {
+        if output[i] == 0x26, output[i + 1] == 0x20, output[i + 2] == 0x05 {
+            output[i + 3] = timingCode
+        }
+        i += 1
+    }
+    return output
+}
+
+private func sequenceEntryLength(for filename: String, in sequenceFile: Data) -> Int? {
+    let nameData = Data(filename.utf8)
+    guard !nameData.isEmpty else { return nil }
+    guard let range = sequenceFile.firstRange(of: nameData) else { return nil }
+    let index = range.lowerBound
+    guard index >= 2 else { return nil }
+    let lo = Int(sequenceFile[index - 2])
+    let hi = Int(sequenceFile[index - 1])
+    let length = lo | (hi << 8)
+    return length > 0 ? length : nil
+}
+
+private func makeFrame(_ payload: Data) -> Data {
+    let crc = sigmaX25(payload)
+    var frame = Data([0x55, 0xa3, UInt8((crc >> 8) & 0xff), UInt8(crc & 0xff)])
+    frame.append(payload)
+    return frame
+}
+
+private func debugDump(_ data: Data, filename: String) {
+    let buildDir = Paths.buildDirectory
+    let target = buildDir.appendingPathComponent(filename)
+    try? FileManager.default.createDirectory(at: buildDir, withIntermediateDirectories: true)
+    try? data.write(to: target)
+}
+
+private func payloadHeaderSummary(_ data: Data) -> String {
+    guard !data.isEmpty else { return "empty" }
+    let head = data.prefix(16)
+    let hexHead = head.map { String(format: "%02X", $0) }.joined(separator: " ")
+    if data.count >= 3,
+       let ascii = String(data: data.prefix(3), encoding: .ascii),
+       ascii == "FLV" {
+        return "FLV (\(data.count) bytes), head=\(hexHead)"
+    }
+    if data.count >= 2,
+       data[0] == 0x53,
+       data[1] == 0x51 {
+        return "SQ sequence-like (\(data.count) bytes), head=\(hexHead)"
+    }
+    if data.count >= 2,
+       data[0] == 0x4E,
+       data[1] == 0x47 {
+        return "NGP/NMG (\(data.count) bytes), head=\(hexHead)"
+    }
+    return "unknown (\(data.count) bytes), head=\(hexHead)"
+}
+
+private func sequenceHeaderSummary(_ data: Data) -> String {
+    guard data.count >= 18 else {
+        return "short (\(data.count) bytes)"
+    }
+    let fileCount = Int(data[4]) | (Int(data[5]) << 8)
+    let drive = Character(UnicodeScalar(data[8]))
+    let fileType = Character(UnicodeScalar(data[9]))
+    let timingA = data.count > 23 ? data[23] : 0
+    let timingB = data.count > 31 ? data[31] : 0
+    return String(
+        format: "SQ entries=%d drive=%C type=%C timingA=0x%02X timingB=0x%02X len=%d",
+        fileCount, drive.unicodeScalars.first!.value, fileType.unicodeScalars.first!.value, timingA, timingB, data.count
+    )
+}
+
+private func requireOK(_ response: Data, context: String) throws {
+    guard response.count >= 18 else {
+        throw SigmaError.shortResponse(context, hex(response))
+    }
+    let status = UInt16(response[16]) | (UInt16(response[17]) << 8)
+    guard status == 0x9000 else {
+        throw SigmaError.status(context, status, hex(response))
+    }
+}
+
+private func fixedBytes(_ string: String, count: Int) -> [UInt8] {
+    var bytes = Array(string.utf8.prefix(count))
+    if bytes.count < count {
+        bytes.append(contentsOf: repeatElement(0, count: count - bytes.count))
+    }
+    return bytes
+}
+
+
+
+private func hex(_ data: Data) -> String {
+    data.map { String(format: "%02X", $0) }.joined(separator: " ")
+}
+
+private func printableName(_ name: String) -> String {
+    name.replacingOccurrences(of: "\0", with: "\\0")
+}
+
+public enum SigmaError: Error, CustomStringConvertible {
+    case timeout
+    case noResponse
+    case socket(String)
+    case shortResponse(String, String)
+    case status(String, UInt16, String)
+
+    public var description: String {
+        switch self {
+        case .timeout:
+            return "Timed out waiting for the sign"
+        case .noResponse:
+            return "No response from the sign"
+        case .socket(let message):
+            return "Socket error: \(message)"
+        case .shortResponse(let context, let bytes):
+            return "\(context): short response \(bytes)"
+        case .status(let context, let status, let bytes):
+            if let decoded = sigmaStatusMeaning(status) {
+                return "\(context): status 0x\(String(format: "%04X", status)) (\(decoded)); response \(bytes)"
+            }
+            return "\(context): status 0x\(String(format: "%04X", status)); response \(bytes)"
+        }
+    }
+}
+
+private func sigmaStatusMeaning(_ status: UInt16) -> String? {
+    switch status {
+    case 0x2102:
+        return "No enough disk space"
+    case 0x2103:
+        return "C drive left space not enough"
+    case 0x2104:
+        return "D drive left space not enough"
+    case 0x2105:
+        return "E drive left space not enough"
+    case 0x2106:
+        return "F drive left space not enough"
+    default:
+        return nil
+    }
+}
+
+private final class ResumeGate: @unchecked Sendable {
+    private let lock = NSLock()
+    private var didClaim = false
+
+    func claim() -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        guard !didClaim else { return false }
+        didClaim = true
+        return true
+    }
+}
+
+private final class ResultBox<Value>: @unchecked Sendable {
+    private let lock = NSLock()
+    private var storage: Result<Value, Error>
+
+    init(_ value: Result<Value, Error>) {
+        storage = value
+    }
+
+    var value: Result<Value, Error> {
+        get {
+            lock.lock()
+            defer { lock.unlock() }
+            return storage
+        }
+        set {
+            lock.lock()
+            storage = newValue
+            lock.unlock()
+        }
+    }
+}

@@ -1,0 +1,28 @@
+# Build artifacts
+.build/
+build/
+*.app/
+
+# Xcode/DerivedData
+DerivedData/
+*.xcodeproj/
+*.xcworkspace/
+
+# Swift Package Manager
+Package.resolved
+.swiftpm/
+
+# Capture files (large binaries)
+*.pcap
+*.pcapng
+analysis/captures/**/*.pcap
+analysis/captures/**/*.pcapng
+analysis/captures/**/*_hex.txt
+analysis/captures/**/*.replay.tsv
+
+# OS files
+.DS_Store
+
+# Debug dumps
+*.Nmg
+*.nmg
