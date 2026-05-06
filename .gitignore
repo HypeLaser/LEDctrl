@@ -26,3 +26,12 @@ analysis/captures/**/*.replay.tsv
 # Debug dumps
 *.Nmg
 *.nmg
+
+# Firmware extracts (large, derived)
+sigma3000_extracted/
+
+# Scratch files
+test_nmg.swift
+verify_nmg.swift
+todays-headlines.txt
+demo/todays-headlines.txt

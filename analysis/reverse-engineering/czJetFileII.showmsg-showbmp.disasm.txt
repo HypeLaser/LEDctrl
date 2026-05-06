@@ -1,0 +1,1093 @@
+┌ 519: sym.czJetFileII.dll__czShowMsgToNmg_28 (int32_t arg_8h, int32_t arg_ch, int32_t arg_10h, int32_t arg_14h, int32_t arg_18h, int32_t arg_1ch, int32_t arg_20h);
+│ `- args(sp[0x4..0x1c]) vars(12:sp[0x8..0x4c])
+│           0x1000c520      55             push ebp
+│           0x1000c521      8bec           mov ebp, esp
+│           0x1000c523      83ec48         sub esp, 0x48
+│           0x1000c526      a128200610     mov eax, dword [0x10062028] ; [0x10062028:4]=0xbb40e64e
+│           0x1000c52b      33c5           xor eax, ebp
+│           0x1000c52d      8945fc         mov dword [var_4h], eax
+│           0x1000c530      8b4d08         mov ecx, dword [arg_8h]
+│           0x1000c533      8b4510         mov eax, dword [arg_10h]
+│           0x1000c536      894db8         mov dword [var_48h], ecx
+│           0x1000c539      85c9           test ecx, ecx
+│       ┌─< 0x1000c53b      0f84d1010000   je 0x1000c712
+│       │   0x1000c541      85c0           test eax, eax
+│      ┌──< 0x1000c543      0f84c9010000   je 0x1000c712
+│      ││   0x1000c549      837d0c00       cmp dword [arg_ch], 0
+│     ┌───< 0x1000c54d      0f84bf010000   je 0x1000c712
+│     │││   0x1000c553      57             push edi
+│     │││   0x1000c554      6854bd0510     push 0x1005bd54             ; "wb"
+│     │││   0x1000c559      50             push eax
+│     │││   0x1000c55a      ff1510810510   call dword [sym.imp.MSVCR100.dll_fopen] ; 0x10058110 ; file*fopen(const char *filename, const char *mode)
+│     │││   0x1000c560      8bf8           mov edi, eax
+│     │││   0x1000c562      83c408         add esp, 8
+│     │││   0x1000c565      85ff           test edi, edi
+│    ┌────< 0x1000c567      7516           jne 0x1000c57f
+│    ││││   0x1000c569      b801510000     mov eax, 0x5101
+│    ││││   0x1000c56e      5f             pop edi
+│    ││││   0x1000c56f      8b4dfc         mov ecx, dword [var_4h]
+│    ││││   0x1000c572      33cd           xor ecx, ebp
+│    ││││   0x1000c574      e819900400     call fcn.10055592
+│    ││││   0x1000c579      8be5           mov esp, ebp
+│    ││││   0x1000c57b      5d             pop ebp
+│    ││││   0x1000c57c      c21c00         ret 0x1c
+│    └────> 0x1000c57f      6a40           push 0x40                   ; '@' ; 64
+│     │││   0x1000c581      8d45bc         lea eax, [var_44h]
+│     │││   0x1000c584      6a00           push 0
+│     │││   0x1000c586      50             push eax
+│     │││   0x1000c587      e810950400     call sub.MSVCR100.dll_memset ; void *memset(void *s, int c, size_t n)
+│     │││   0x1000c58c      a006be0510     mov al, byte [0x1005be06]   ; [0x1005be06:1]=88 ; "X"
+│     │││   0x1000c591      8b0d00be0510   mov ecx, dword [str.QZ00SAX] ; [0x1005be00:4]=0x30305a51 ; "QZ00SAX"
+│     │││   0x1000c597      668b1504be..   mov dx, word [0x1005be04]   ; [0x1005be04:2]=0x4153 ; "SAX"
+│     │││   0x1000c59e      8845c2         mov byte [var_3eh], al
+│     │││   0x1000c5a1      8b4514         mov eax, dword [arg_14h]
+│     │││   0x1000c5a4      894dbc         mov dword [var_44h], ecx
+│     │││   0x1000c5a7      8d48d0         lea ecx, [eax - 0x30]
+│     │││   0x1000c5aa      83c40c         add esp, 0xc
+│     │││   0x1000c5ad      668955c0       mov word [var_40h], dx
+│     │││   0x1000c5b1      c645c31a       mov byte [var_3dh], 0x1a    ; 26
+│     │││   0x1000c5b5      83f939         cmp ecx, 0x39               ; '9' ; 57
+│    ┌────< 0x1000c5b8      7605           jbe 0x1000c5bf
+│    ││││   0x1000c5ba      b831000000     mov eax, 0x31               ; '1' ; 49
+│    └────> 0x1000c5bf      8845c4         mov byte [var_3ch], al
+│     │││   0x1000c5c2      8b4518         mov eax, dword [arg_18h]
+│     │││   0x1000c5c5      c645c51c       mov byte [var_3bh], 0x1c    ; 28
+│     │││   0x1000c5c9      3c2f           cmp al, 0x2f                ; '/' ; 47
+│    ┌────< 0x1000c5cb      7520           jne 0x1000c5ed
+│    ││││   0x1000c5cd      8bd0           mov edx, eax
+│    ││││   0x1000c5cf      8bc8           mov ecx, eax
+│    ││││   0x1000c5d1      c1e910         shr ecx, 0x10
+│    ││││   0x1000c5d4      c1ea08         shr edx, 8
+│    ││││   0x1000c5d7      8845c6         mov byte [var_3ah], al
+│    ││││   0x1000c5da      c1e818         shr eax, 0x18
+│    ││││   0x1000c5dd      884dc8         mov byte [var_38h], cl
+│    ││││   0x1000c5e0      8855c7         mov byte [var_39h], dl
+│    ││││   0x1000c5e3      8845c9         mov byte [var_37h], al
+│    ││││   0x1000c5e6      b90e000000     mov ecx, 0xe                ; 14
+│   ┌─────< 0x1000c5eb      eb12           jmp 0x1000c5ff
+│   │└────> 0x1000c5ed      83f82f         cmp eax, 0x2f               ; '/' ; 47
+│   │┌────< 0x1000c5f0      7705           ja 0x1000c5f7
+│   │││││   0x1000c5f2      b831000000     mov eax, 0x31               ; '1' ; 49
+│   │└────> 0x1000c5f7      8845c6         mov byte [var_3ah], al
+│   │ │││   0x1000c5fa      b90b000000     mov ecx, 0xb                ; 11
+│   │ │││   ; CODE XREF from sym.czJetFileII.dll__czShowMsgToNmg_28 @ 0x1000c5eb(x)
+│   └─────> 0x1000c5ff      8b451c         mov eax, dword [arg_1ch]
+│     │││   0x1000c602      53             push ebx
+│     │││   0x1000c603      56             push esi
+│     │││   0x1000c604      b30a           mov bl, 0xa
+│     │││   0x1000c606      66c7440dbc..   mov word [ebp + ecx - 0x44], 0x490a ; '\nI'
+│     │││   0x1000c60d      8bd0           mov edx, eax
+│     │││   0x1000c60f      83f82e         cmp eax, 0x2e               ; '.' ; 46
+│    ┌────< 0x1000c612      7705           ja 0x1000c619
+│    ││││   0x1000c614      ba30000000     mov edx, 0x30               ; '0' ; 48
+│    └────> 0x1000c619      88540dbe       mov byte [ebp + ecx - 0x42], dl
+│     │││   0x1000c61d      885c0dbf       mov byte [ebp + ecx - 0x41], bl
+│     │││   0x1000c621      c6440dc04f     mov byte [ebp + ecx - 0x40], 0x4f ; 'O' ; 79
+│     │││   0x1000c626      83f82e         cmp eax, 0x2e               ; '.' ; 46
+│    ┌────< 0x1000c629      7705           ja 0x1000c630
+│    ││││   0x1000c62b      b830000000     mov eax, 0x30               ; '0' ; 48
+│    └────> 0x1000c630      8b5d20         mov ebx, dword [arg_20h]
+│     │││   0x1000c633      88440dc1       mov byte [ebp + ecx - 0x3f], al
+│     │││   0x1000c637      b85917b7d1     mov eax, 0xd1b71759
+│     │││   0x1000c63c      f7e3           mul ebx
+│     │││   0x1000c63e      c1ea0d         shr edx, 0xd
+│     │││   0x1000c641      69d210270000   imul edx, edx, 0x2710
+│     │││   0x1000c647      8bf3           mov esi, ebx
+│     │││   0x1000c649      2bf2           sub esi, edx
+│     │││   0x1000c64b      b8d34d6210     mov eax, 0x10624dd3
+│     │││   0x1000c650      f7e6           mul esi
+│     │││   0x1000c652      c1ea06         shr edx, 6
+│     │││   0x1000c655      80c230         add dl, 0x30                ; 48
+│     │││   0x1000c658      66c7440dc2..   mov word [ebp + ecx - 0x3e], 0x320e ; '\x0e2'
+│     │││   0x1000c65f      88540dc4       mov byte [ebp + ecx - 0x3c], dl
+│     │││   0x1000c663      b8d34d6210     mov eax, 0x10624dd3
+│     │││   0x1000c668      f7e3           mul ebx
+│     │││   0x1000c66a      c1ea06         shr edx, 6
+│     │││   0x1000c66d      69d2e8030000   imul edx, edx, 0x3e8        ; 1000
+│     │││   0x1000c673      8bf3           mov esi, ebx
+│     │││   0x1000c675      2bf2           sub esi, edx
+│     │││   0x1000c677      b81f85eb51     mov eax, 0x51eb851f
+│     │││   0x1000c67c      f7e6           mul esi
+│     │││   0x1000c67e      c1ea05         shr edx, 5
+│     │││   0x1000c681      80c230         add dl, 0x30                ; 48
+│     │││   0x1000c684      88540dc5       mov byte [ebp + ecx - 0x3b], dl
+│     │││   0x1000c688      b81f85eb51     mov eax, 0x51eb851f
+│     │││   0x1000c68d      f7e3           mul ebx
+│     │││   0x1000c68f      c1ea05         shr edx, 5
+│     │││   0x1000c692      6bd264         imul edx, edx, 0x64         ; 100
+│     │││   0x1000c695      8bf3           mov esi, ebx
+│     │││   0x1000c697      2bf2           sub esi, edx
+│     │││   0x1000c699      b8cdcccccc     mov eax, 0xcccccccd
+│     │││   0x1000c69e      f7e6           mul esi
+│     │││   0x1000c6a0      c1ea03         shr edx, 3
+│     │││   0x1000c6a3      80c230         add dl, 0x30                ; 48
+│     │││   0x1000c6a6      88540dc6       mov byte [ebp + ecx - 0x3a], dl
+│     │││   0x1000c6aa      b8cdcccccc     mov eax, 0xcccccccd
+│     │││   0x1000c6af      f7e3           mul ebx
+│     │││   0x1000c6b1      8b3578810510   mov esi, dword [sym.imp.MSVCR100.dll_fwrite] ; [0x10058178:4]=0x5fab2 reloc.MSVCR100.dll_fwrite
+│     │││   0x1000c6b7      c1ea03         shr edx, 3
+│     │││   0x1000c6ba      8ac2           mov al, dl
+│     │││   0x1000c6bc      02d2           add dl, dl
+│     │││   0x1000c6be      02d2           add dl, dl
+│     │││   0x1000c6c0      02c2           add al, dl
+│     │││   0x1000c6c2      02c0           add al, al
+│     │││   0x1000c6c4      2ad8           sub bl, al
+│     │││   0x1000c6c6      57             push edi
+│     │││   0x1000c6c7      80c330         add bl, 0x30                ; 48
+│     │││   0x1000c6ca      885c0dc7       mov byte [ebp + ecx - 0x39], bl
+│     │││   0x1000c6ce      6a01           push 1                      ; 1
+│     │││   0x1000c6d0      83c10c         add ecx, 0xc                ; 12
+│     │││   0x1000c6d3      51             push ecx
+│     │││   0x1000c6d4      8d45bc         lea eax, [var_44h]
+│     │││   0x1000c6d7      50             push eax
+│     │││   0x1000c6d8      ffd6           call esi
+│     │││   0x1000c6da      8b4d0c         mov ecx, dword [arg_ch]
+│     │││   0x1000c6dd      8b55b8         mov edx, dword [var_48h]
+│     │││   0x1000c6e0      57             push edi
+│     │││   0x1000c6e1      6a01           push 1                      ; 1
+│     │││   0x1000c6e3      51             push ecx
+│     │││   0x1000c6e4      52             push edx
+│     │││   0x1000c6e5      ffd6           call esi
+│     │││   0x1000c6e7      57             push edi
+│     │││   0x1000c6e8      6a01           push 1                      ; 1
+│     │││   0x1000c6ea      6a01           push 1                      ; 1
+│     │││   0x1000c6ec      68c0bd0510     push 0x1005bdc0
+│     │││   0x1000c6f1      ffd6           call esi
+│     │││   0x1000c6f3      57             push edi
+│     │││   0x1000c6f4      ff1520810510   call dword [sym.imp.MSVCR100.dll_fclose] ; 0x10058120 ; int fclose(FILE *stream)
+│     │││   0x1000c6fa      83c434         add esp, 0x34
+│     │││   0x1000c6fd      5e             pop esi
+│     │││   0x1000c6fe      5b             pop ebx
+│     │││   0x1000c6ff      33c0           xor eax, eax
+│     │││   0x1000c701      5f             pop edi
+│     │││   0x1000c702      8b4dfc         mov ecx, dword [var_4h]
+│     │││   0x1000c705      33cd           xor ecx, ebp
+│     │││   0x1000c707      e8868e0400     call fcn.10055592
+│     │││   0x1000c70c      8be5           mov esp, ebp
+│     │││   0x1000c70e      5d             pop ebp
+│     │││   0x1000c70f      c21c00         ret 0x1c
+│     └└└─> 0x1000c712      8b4dfc         mov ecx, dword [var_4h]
+│           0x1000c715      33cd           xor ecx, ebp
+│           0x1000c717      b802000000     mov eax, 2
+│           0x1000c71c      e8718e0400     call fcn.10055592
+│           0x1000c721      8be5           mov esp, ebp
+│           0x1000c723      5d             pop ebp
+└           0x1000c724      c21c00         ret 0x1c
+┌ 1661: sym.czJetFileII.dll_czShowMsg (int32_t arg_8h, int32_t arg_ch, int32_t arg_14h, int32_t arg_18h, int32_t arg_1ch, int32_t arg_20h, int32_t arg_24h, int32_t arg_28h, int32_t arg_2ch, int32_t arg_374h);
+│ `- args(sp[0x4..0x28]) vars(57:sp[0x8..0x3a0])
+│           0x1000bea0      55             push ebp
+│           0x1000bea1      8bec           mov ebp, esp
+│           0x1000bea3      83e4f8         and esp, 0xfffffff8
+│           0x1000bea6      81ec6c030000   sub esp, 0x36c
+│           0x1000beac      a128200610     mov eax, dword [0x10062028] ; [0x10062028:4]=0xbb40e64e
+│           0x1000beb1      33c4           xor eax, esp
+│           0x1000beb3      8984246803..   mov dword [var_368h], eax
+│           0x1000beba      8b4520         mov eax, dword [arg_20h]
+│           0x1000bebd      53             push ebx
+│           0x1000bebe      56             push esi
+│           0x1000bebf      57             push edi
+│           0x1000bec0      8b7d08         mov edi, dword [arg_8h]
+│           0x1000bec3      89442414       mov dword [var_14h], eax
+│           0x1000bec7      85ff           test edi, edi
+│       ┌─< 0x1000bec9      0f8432060000   je 0x1000c501
+│       │   0x1000becf      85c0           test eax, eax
+│      ┌──< 0x1000bed1      0f842a060000   je 0x1000c501
+│      ││   0x1000bed7      68b4bd0510     push 0x1005bdb4             ; "nmg"
+│      ││   0x1000bedc      6800010000     push 0x100                  ; 256
+│      ││   0x1000bee1      8d84247801..   lea eax, [var_178h]
+│      ││   0x1000bee8      50             push eax
+│      ││   0x1000bee9      e8425fffff     call sym.czJetFileII.dll__czGetPCTempFilename_12
+│      ││   0x1000beee      68c4b40510     push 0x1005b4c4             ; "sys"
+│      ││   0x1000bef3      6800010000     push 0x100                  ; 256
+│      ││   0x1000bef8      8d8c247802..   lea ecx, [var_278h]
+│      ││   0x1000beff      51             push ecx
+│      ││   0x1000bf00      e82b5fffff     call sym.czJetFileII.dll__czGetPCTempFilename_12
+│      ││   0x1000bf05      8d94247001..   lea edx, [var_170h]
+│      ││   0x1000bf0c      6854bd0510     push 0x1005bd54             ; "wb"
+│      ││   0x1000bf11      52             push edx
+│      ││   0x1000bf12      ff1510810510   call dword [sym.imp.MSVCR100.dll_fopen] ; 0x10058110 ; file*fopen(const char *filename, const char *mode)
+│      ││   0x1000bf18      8bf0           mov esi, eax
+│      ││   0x1000bf1a      83c408         add esp, 8
+│      ││   0x1000bf1d      85f6           test esi, esi
+│     ┌───< 0x1000bf1f      0f848f040000   je 0x1000c3b4
+│     │││   0x1000bf25      6a40           push 0x40                   ; '@' ; 64
+│     │││   0x1000bf27      8d84243401..   lea eax, [var_134h]
+│     │││   0x1000bf2e      6a00           push 0
+│     │││   0x1000bf30      50             push eax
+│     │││   0x1000bf31      e8669b0400     call sub.MSVCR100.dll_memset ; void *memset(void *s, int c, size_t n)
+│     │││   0x1000bf36      a0bebd0510     mov al, byte [0x1005bdbe]   ; [0x1005bdbe:1]=65 ; "A\x04"
+│     │││   0x1000bf3b      8b0db8bd0510   mov ecx, dword [0x1005bdb8] ; [0x1005bdb8:4]=0x30305a01
+│     │││   0x1000bf41      668b15bcbd..   mov dx, word [0x1005bdbc]   ; [0x1005bdbc:2]=0x4102
+│     │││   0x1000bf48      8884244201..   mov byte [var_142h], al
+│     │││   0x1000bf4f      8b4510         mov eax, dword [arg_374h]
+│     │││   0x1000bf52      898c243c01..   mov dword [var_134h], ecx
+│     │││   0x1000bf59      8d48d0         lea ecx, [eax - 0x30]
+│     │││   0x1000bf5c      83c40c         add esp, 0xc
+│     │││   0x1000bf5f      6689942434..   mov word [var_134h_2], dx
+│     │││   0x1000bf67      c684243701..   mov byte [var_137h], 0x1a   ; [0x1a:1]=255 ; 26
+│     │││   0x1000bf6f      83f939         cmp ecx, 0x39               ; '9' ; 57
+│    ┌────< 0x1000bf72      7605           jbe 0x1000bf79
+│    ││││   0x1000bf74      b831000000     mov eax, 0x31               ; '1' ; 49
+│    └────> 0x1000bf79      8884243801..   mov byte [var_138h], al
+│     │││   0x1000bf80      8b4514         mov eax, dword [arg_14h]
+│     │││   0x1000bf83      c684243901..   mov byte [var_139h], 0x1c   ; [0x1c:1]=255 ; 28
+│     │││   0x1000bf8b      3c2f           cmp al, 0x2f                ; '/' ; 47
+│    ┌────< 0x1000bf8d      7530           jne 0x1000bfbf
+│    ││││   0x1000bf8f      8bd0           mov edx, eax
+│    ││││   0x1000bf91      8bc8           mov ecx, eax
+│    ││││   0x1000bf93      c1e910         shr ecx, 0x10
+│    ││││   0x1000bf96      c1ea08         shr edx, 8
+│    ││││   0x1000bf99      8884243a01..   mov byte [var_13ah], al
+│    ││││   0x1000bfa0      c1e818         shr eax, 0x18
+│    ││││   0x1000bfa3      888c243c01..   mov byte [var_13ch], cl
+│    ││││   0x1000bfaa      8894243b01..   mov byte [var_13bh], dl
+│    ││││   0x1000bfb1      8884243d01..   mov byte [var_13dh], al
+│    ││││   0x1000bfb8      b90e000000     mov ecx, 0xe                ; 14
+│   ┌─────< 0x1000bfbd      eb16           jmp 0x1000bfd5
+│   │└────> 0x1000bfbf      83f82f         cmp eax, 0x2f               ; '/' ; 47
+│   │┌────< 0x1000bfc2      7705           ja 0x1000bfc9
+│   │││││   0x1000bfc4      b831000000     mov eax, 0x31               ; '1' ; 49
+│   │└────> 0x1000bfc9      8884243a01..   mov byte [var_13ah], al
+│   │ │││   0x1000bfd0      b90b000000     mov ecx, 0xb                ; 11
+│   │ │││   ; CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000bfbd(x)
+│   └─────> 0x1000bfd5      8b4518         mov eax, dword [arg_18h]
+│     │││   0x1000bfd8      b30a           mov bl, 0xa
+│     │││   0x1000bfda      66c7840c30..   mov word [esp + ecx + 0x130], 0x490a ; '\nI'
+│     │││                                                              ; [0x490a:2]=0xffff
+│     │││   0x1000bfe4      8bd0           mov edx, eax
+│     │││   0x1000bfe6      83f82e         cmp eax, 0x2e               ; '.' ; 46
+│    ┌────< 0x1000bfe9      7705           ja 0x1000bff0
+│    ││││   0x1000bfeb      ba30000000     mov edx, 0x30               ; '0' ; 48
+│    └────> 0x1000bff0      88940c3201..   mov byte [esp + ecx + 0x132], dl
+│     │││   0x1000bff7      889c0c3301..   mov byte [esp + ecx + 0x133], bl
+│     │││   0x1000bffe      c6840c3401..   mov byte [esp + ecx + 0x134], 0x4f ; 'O'
+│     │││                                                              ; [0x4f:1]=255 ; 79
+│     │││   0x1000c006      83f82e         cmp eax, 0x2e               ; '.' ; 46
+│    ┌────< 0x1000c009      7705           ja 0x1000c010
+│    ││││   0x1000c00b      b830000000     mov eax, 0x30               ; '0' ; 48
+│    └────> 0x1000c010      8b5d1c         mov ebx, dword [arg_1ch]
+│     │││   0x1000c013      88840c3501..   mov byte [esp + ecx + 0x135], al
+│     │││   0x1000c01a      b85917b7d1     mov eax, 0xd1b71759
+│     │││   0x1000c01f      f7e3           mul ebx
+│     │││   0x1000c021      c1ea0d         shr edx, 0xd
+│     │││   0x1000c024      69d210270000   imul edx, edx, 0x2710
+│     │││   0x1000c02a      8bc3           mov eax, ebx
+│     │││   0x1000c02c      2bc2           sub eax, edx
+│     │││   0x1000c02e      89442410       mov dword [var_10h], eax
+│     │││   0x1000c032      b8d34d6210     mov eax, 0x10624dd3
+│     │││   0x1000c037      f7642410       mul dword [var_10h]
+│     │││   0x1000c03b      c1ea06         shr edx, 6
+│     │││   0x1000c03e      80c230         add dl, 0x30                ; 48
+│     │││   0x1000c041      66c7840c36..   mov word [esp + ecx + 0x136], 0x320e ; '\x0e2'
+│     │││                                                              ; [0x320e:2]=0xffff
+│     │││   0x1000c04b      88940c3801..   mov byte [esp + ecx + 0x138], dl
+│     │││   0x1000c052      b8d34d6210     mov eax, 0x10624dd3
+│     │││   0x1000c057      f7e3           mul ebx
+│     │││   0x1000c059      c1ea06         shr edx, 6
+│     │││   0x1000c05c      69d2e8030000   imul edx, edx, 0x3e8        ; 1000
+│     │││   0x1000c062      8bc3           mov eax, ebx
+│     │││   0x1000c064      2bc2           sub eax, edx
+│     │││   0x1000c066      89442410       mov dword [var_10h], eax
+│     │││   0x1000c06a      b81f85eb51     mov eax, 0x51eb851f
+│     │││   0x1000c06f      f7642410       mul dword [var_10h]
+│     │││   0x1000c073      c1ea05         shr edx, 5
+│     │││   0x1000c076      80c230         add dl, 0x30                ; 48
+│     │││   0x1000c079      88940c3901..   mov byte [esp + ecx + 0x139], dl
+│     │││   0x1000c080      b81f85eb51     mov eax, 0x51eb851f
+│     │││   0x1000c085      f7e3           mul ebx
+│     │││   0x1000c087      c1ea05         shr edx, 5
+│     │││   0x1000c08a      6bd264         imul edx, edx, 0x64         ; 100
+│     │││   0x1000c08d      8bc3           mov eax, ebx
+│     │││   0x1000c08f      2bc2           sub eax, edx
+│     │││   0x1000c091      89442410       mov dword [var_10h], eax
+│     │││   0x1000c095      b8cdcccccc     mov eax, 0xcccccccd
+│     │││   0x1000c09a      f7642410       mul dword [var_10h]
+│     │││   0x1000c09e      c1ea03         shr edx, 3
+│     │││   0x1000c0a1      80c230         add dl, 0x30                ; 48
+│     │││   0x1000c0a4      88940c3a01..   mov byte [esp + ecx + 0x13a], dl
+│     │││   0x1000c0ab      b8cdcccccc     mov eax, 0xcccccccd
+│     │││   0x1000c0b0      f7e3           mul ebx
+│     │││   0x1000c0b2      c1ea03         shr edx, 3
+│     │││   0x1000c0b5      8ac2           mov al, dl
+│     │││   0x1000c0b7      02d2           add dl, dl
+│     │││   0x1000c0b9      02d2           add dl, dl
+│     │││   0x1000c0bb      02c2           add al, dl
+│     │││   0x1000c0bd      02c0           add al, al
+│     │││   0x1000c0bf      2ad8           sub bl, al
+│     │││   0x1000c0c1      80c330         add bl, 0x30                ; 48
+│     │││   0x1000c0c4      56             push esi
+│     │││   0x1000c0c5      889c0c3f01..   mov byte [esp + ecx + 0x13f], bl
+│     │││   0x1000c0cc      8b1d78810510   mov ebx, dword [sym.imp.MSVCR100.dll_fwrite] ; [0x10058178:4]=0x5fab2 reloc.MSVCR100.dll_fwrite
+│     │││   0x1000c0d2      6a01           push 1                      ; 1
+│     │││   0x1000c0d4      83c10c         add ecx, 0xc                ; 12
+│     │││   0x1000c0d7      51             push ecx
+│     │││   0x1000c0d8      8d84243c01..   lea eax, [var_134h]
+│     │││   0x1000c0df      50             push eax
+│     │││   0x1000c0e0      ffd3           call ebx
+│     │││   0x1000c0e2      8b4d0c         mov ecx, dword [arg_ch]
+│     │││   0x1000c0e5      56             push esi
+│     │││   0x1000c0e6      6a01           push 1                      ; 1
+│     │││   0x1000c0e8      51             push ecx
+│     │││   0x1000c0e9      57             push edi
+│     │││   0x1000c0ea      ffd3           call ebx
+│     │││   0x1000c0ec      56             push esi
+│     │││   0x1000c0ed      6a01           push 1                      ; 1
+│     │││   0x1000c0ef      6a01           push 1                      ; 1
+│     │││   0x1000c0f1      68c0bd0510     push 0x1005bdc0
+│     │││   0x1000c0f6      ffd3           call ebx
+│     │││   0x1000c0f8      56             push esi
+│     │││   0x1000c0f9      ff1520810510   call dword [sym.imp.MSVCR100.dll_fclose] ; 0x10058120 ; int fclose(FILE *stream)
+│     │││   0x1000c0ff      83c434         add esp, 0x34
+│     │││   0x1000c102      6898000000     push 0x98                   ; 152
+│     │││   0x1000c107      33ff           xor edi, edi
+│     │││   0x1000c109      8d542444       lea edx, [var_44h]
+│     │││   0x1000c10d      57             push edi
+│     │││   0x1000c10e      52             push edx
+│     │││   0x1000c10f      e888990400     call sub.MSVCR100.dll_memset ; void *memset(void *s, int c, size_t n)
+│     │││   0x1000c114      83c40c         add esp, 0xc
+│     │││   0x1000c117      897c2440       mov dword [var_44h], edi
+│     │││   0x1000c11b      89bc24c400..   mov dword [var_c4h], edi
+│     │││   0x1000c122      8b4c2414       mov ecx, dword [var_14h_2]
+│     │││   0x1000c126      8bc1           mov eax, ecx
+│     │││   0x1000c128      89bc24c800..   mov dword [var_c8h], edi
+│     │││   0x1000c12f      c784249000..   mov dword [var_90h], 0xbb8  ; [0xbb8:4]=-1 ; 3000
+│     │││   0x1000c13a      8d7001         lea esi, [eax + 1]
+│     │││   0x1000c13d      8d4900         lea ecx, [ecx]
+│    ┌────> 0x1000c140      8a10           mov dl, byte [eax]
+│    ╎│││   0x1000c142      40             inc eax
+│    ╎│││   0x1000c143      84d2           test dl, dl
+│    └────< 0x1000c145      75f9           jne 0x1000c140
+│     │││   0x1000c147      2bc6           sub eax, esi
+│     │││   0x1000c149      83f820         cmp eax, 0x20               ; 32
+│    ┌────< 0x1000c14c      7310           jae 0x1000c15e
+│    ││││   0x1000c14e      8bc1           mov eax, ecx
+│    ││││   0x1000c150      8d7001         lea esi, [eax + 1]
+│   ┌─────> 0x1000c153      8a10           mov dl, byte [eax]
+│   ╎││││   0x1000c155      40             inc eax
+│   ╎││││   0x1000c156      84d2           test dl, dl
+│   └─────< 0x1000c158      75f9           jne 0x1000c153
+│    ││││   0x1000c15a      2bc6           sub eax, esi
+│   ┌─────< 0x1000c15c      eb05           jmp 0x1000c163
+│   │└────> 0x1000c15e      b820000000     mov eax, 0x20               ; 32
+│   │ │││   ; CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c15c(x)
+│   └─────> 0x1000c163      50             push eax
+│     │││   0x1000c164      51             push ecx
+│     │││   0x1000c165      8d442450       lea eax, [var_50h]
+│     │││   0x1000c169      50             push eax
+│     │││   0x1000c16a      e8df980400     call sub.MSVCR100.dll_memcpy ; void *memcpy(void *s1, const void *s2, size_t n)
+│     │││   0x1000c16f      8b4d24         mov ecx, dword [arg_24h]
+│     │││   0x1000c172      83c40c         add esp, 0xc
+│     │││   0x1000c175      8d442440       lea eax, [var_40h]
+│     │││   0x1000c179      33d2           xor edx, edx
+│     │││   0x1000c17b      50             push eax
+│     │││   0x1000c17c      894c247c       mov dword [var_7ch], ecx
+│     │││   0x1000c180      8994248c00..   mov dword [var_8ch], edx
+│     │││   0x1000c187      c784249000..   mov dword [var_90h_2], 3
+│     │││   0x1000c192      89bc24bc00..   mov dword [var_bch], edi
+│     │││   0x1000c199      89bc24c000..   mov dword [var_c0h], edi
+│     │││   0x1000c1a0      89bc24c400..   mov dword [var_c4h_2], edi
+│     │││   0x1000c1a7      89bc24d000..   mov dword [var_c8h], edi
+│     │││   0x1000c1ae      89bc24d400..   mov dword [var_d4h], edi
+│     │││   0x1000c1b5      c784249c00..   mov dword [var_9ch], 0x10001 ; [0x10001:4]=-1
+│     │││   0x1000c1c0      e86ba8ffff     call sym.czJetFileII.dll_czInitAPI
+│     │││   0x1000c1c5      e836a9ffff     call sym.czJetFileII.dll_czInitProperty
+│     │││   0x1000c1ca      3bc7           cmp eax, edi
+│    ┌────< 0x1000c1cc      0f8534030000   jne 0x1000c506
+│    ││││   0x1000c1d2      6a01           push 1                      ; 1
+│    ││││   0x1000c1d4      6a04           push 4                      ; 4
+│    ││││   0x1000c1d6      8d4c2418       lea ecx, [var_18h]
+│    ││││   0x1000c1da      51             push ecx
+│    ││││   0x1000c1db      e890aaffff     call sym.czJetFileII.dll_czGetProperty
+│    ││││   0x1000c1e0      85c0           test eax, eax
+│   ┌─────< 0x1000c1e2      7419           je 0x1000c1fd
+│   │││││   ; CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c318(x)
+│ ┌┌──────> 0x1000c1e4      33c0           xor eax, eax
+│ ╎╎│││││   0x1000c1e6      5f             pop edi
+│ ╎╎│││││   0x1000c1e7      5e             pop esi
+│ ╎╎│││││   0x1000c1e8      5b             pop ebx
+│ ╎╎│││││   0x1000c1e9      8b8c246803..   mov ecx, dword [var_368h_3]
+│ ╎╎│││││   0x1000c1f0      33cc           xor ecx, esp
+│ ╎╎│││││   0x1000c1f2      e89b930400     call fcn.10055592
+│ ╎╎│││││   0x1000c1f7      8be5           mov esp, ebp
+│ ╎╎│││││   0x1000c1f9      5d             pop ebp
+│ ╎╎│││││   0x1000c1fa      c22800         ret 0x28
+│ ╎╎└─────> 0x1000c1fd      8b7528         mov esi, dword [arg_28h]
+│ ╎╎ ││││   0x1000c200      33c0           xor eax, eax
+│ ╎╎ ││││   0x1000c202      89442420       mov dword [var_10h], eax
+│ ╎╎ ││││   0x1000c206      89442424       mov dword [var_14h_2], eax
+│ ╎╎ ││││   0x1000c20a      89442428       mov dword [var_28h], eax
+│ ╎╎ ││││   0x1000c20e      8944242c       mov dword [var_2ch], eax
+│ ╎╎ ││││   0x1000c212      89442430       mov dword [var_30h], eax
+│ ╎╎ ││││   0x1000c216      89442434       mov dword [var_34h], eax
+│ ╎╎ ││││   0x1000c21a      89442438       mov dword [var_38h], eax
+│ ╎╎ ││││   0x1000c21e      8944243c       mov dword [var_14h], eax
+│ ╎╎ ││││   0x1000c222      3bf7           cmp esi, edi
+│ ╎╎┌─────< 0x1000c224      7429           je 0x1000c24f
+│ ╎╎│││││   0x1000c226      8b15c4bd0510   mov edx, dword [str.E:TQMSG.Nmg] ; [0x1005bdc4:4]=0x545c3a45 ; "E:\\T\\QMSG.Nmg"
+│ ╎╎│││││   0x1000c22c      a1c8bd0510     mov eax, dword [0x1005bdc8] ; [0x1005bdc8:4]=0x534d515c ; "\QMSG.Nmg"
+│ ╎╎│││││   0x1000c231      8b0dccbd0510   mov ecx, dword [0x1005bdcc] ; [0x1005bdcc:4]=0x6d4e2e47 ; "G.Nmg"
+│ ╎╎│││││   0x1000c237      89542420       mov dword [var_10h], edx
+│ ╎╎│││││   0x1000c23b      8a15d0bd0510   mov dl, byte [0x1005bdd0]   ; [0x1005bdd0:1]=103 ; "g"
+│ ╎╎│││││   0x1000c241      89442424       mov dword [var_14h_2], eax
+│ ╎╎│││││   0x1000c245      894c2428       mov dword [var_28h], ecx
+│ ╎╎│││││   0x1000c249      8854242c       mov byte [var_2ch], dl
+│ ────────< 0x1000c24d      eb55           jmp 0x1000c2a4
+│ ╎╎└─────> 0x1000c24f      397c2410       cmp dword [var_10h_2], edi
+│ ╎╎┌─────< 0x1000c253      7428           je 0x1000c27d
+│ ╎╎│││││   0x1000c255      a1d4bd0510     mov eax, dword [str.F:TQMSG.Nmg] ; [0x1005bdd4:4]=0x545c3a46 ; "F:\\T\\QMSG.Nmg"
+│ ╎╎│││││   0x1000c25a      8b0dd8bd0510   mov ecx, dword [0x1005bdd8] ; [0x1005bdd8:4]=0x534d515c ; "\QMSG.Nmg"
+│ ╎╎│││││   0x1000c260      8b15dcbd0510   mov edx, dword [0x1005bddc] ; [0x1005bddc:4]=0x6d4e2e47 ; "G.Nmg"
+│ ╎╎│││││   0x1000c266      89442420       mov dword [var_10h], eax
+│ ╎╎│││││   0x1000c26a      a0e0bd0510     mov al, byte [0x1005bde0]   ; [0x1005bde0:1]=103 ; "g"
+│ ╎╎│││││   0x1000c26f      894c2424       mov dword [var_14h_2], ecx
+│ ╎╎│││││   0x1000c273      89542428       mov dword [var_28h], edx
+│ ╎╎│││││   0x1000c277      8844242c       mov byte [var_2ch], al
+│ ────────< 0x1000c27b      eb27           jmp 0x1000c2a4
+│ ╎╎└─────> 0x1000c27d      8b0de4bd0510   mov ecx, dword [str.D:TQMSG.Nmg] ; [0x1005bde4:4]=0x545c3a44 ; "D:\\T\\QMSG.Nmg"
+│ ╎╎ ││││   0x1000c283      8b15e8bd0510   mov edx, dword [0x1005bde8] ; [0x1005bde8:4]=0x534d515c ; "\QMSG.Nmg"
+│ ╎╎ ││││   0x1000c289      a1ecbd0510     mov eax, dword [0x1005bdec] ; [0x1005bdec:4]=0x6d4e2e47 ; "G.Nmg"
+│ ╎╎ ││││   0x1000c28e      894c2420       mov dword [var_10h], ecx
+│ ╎╎ ││││   0x1000c292      8a0df0bd0510   mov cl, byte [0x1005bdf0]   ; [0x1005bdf0:1]=103 ; "g"
+│ ╎╎ ││││   0x1000c298      89542424       mov dword [var_14h_2], edx
+│ ╎╎ ││││   0x1000c29c      89442428       mov dword [var_28h], eax
+│ ╎╎ ││││   0x1000c2a0      884c242c       mov byte [var_2ch], cl
+│ ╎╎ ││││   ; CODE XREFS from sym.czJetFileII.dll_czShowMsg @ 0x1000c24d(x), 0x1000c27b(x)
+│ ────────> 0x1000c2a4      8b15002c0610   mov edx, dword [0x10062c00] ; [0x10062c00:4]=0
+│ ╎╎ ││││   0x1000c2aa      52             push edx
+│ ╎╎ ││││   0x1000c2ab      ff157c800510   call dword [sym.imp.KERNEL32.dll_TlsGetValue] ; 0x1005807c ; " \xf7\x05" ; LPVOID TlsGetValue(DWORD dwTlsIndex)
+│ ╎╎ ││││   0x1000c2b1      3bc7           cmp eax, edi
+│ ╎╎┌─────< 0x1000c2b3      7568           jne 0x1000c31d
+│ ╎╎│││││   0x1000c2b5      6870010000     push 0x170                  ; 368
+│ ╎╎│││││   0x1000c2ba      ff1504810510   call dword [sym.imp.MSVCR100.dll___2_YAPAXI_Z] ; 0x10058104
+│ ╎╎│││││   0x1000c2c0      8bf0           mov esi, eax
+│ ╎╎│││││   0x1000c2c2      83c404         add esp, 4
+│ ╎╎│││││   0x1000c2c5      3bf7           cmp esi, edi
+│ ────────< 0x1000c2c7      0f8417ffffff   je 0x1000c1e4
+│ ╎╎│││││   0x1000c2cd      a1002c0610     mov eax, dword [0x10062c00] ; [0x10062c00:4]=0
+│ ╎╎│││││   0x1000c2d2      56             push esi
+│ ╎╎│││││   0x1000c2d3      50             push eax
+│ ╎╎│││││   0x1000c2d4      ff1590800510   call dword [sym.imp.KERNEL32.dll_TlsSetValue] ; 0x10058090 ; BOOL TlsSetValue(DWORD dwTlsIndex, LPVOID lpTlsValue)
+│ ╎╎│││││   0x1000c2da      85c0           test eax, eax
+│ ────────< 0x1000c2dc      0f8402ffffff   je 0x1000c1e4
+│ ╎╎│││││   0x1000c2e2      33c0           xor eax, eax
+│ ╎╎│││││   0x1000c2e4      c60600         mov byte [esi], 0
+│ ╎╎│││││   0x1000c2e7      894601         mov dword [esi + 1], eax
+│ ╎╎│││││   0x1000c2ea      894605         mov dword [esi + 5], eax
+│ ╎╎│││││   0x1000c2ed      6a34           push 0x34                   ; '4' ; 52
+│ ╎╎│││││   0x1000c2ef      894609         mov dword [esi + 9], eax
+│ ╎╎│││││   0x1000c2f2      8d4e10         lea ecx, [esi + 0x10]
+│ ╎╎│││││   0x1000c2f5      57             push edi
+│ ╎╎│││││   0x1000c2f6      6689460d       mov word [esi + 0xd], ax
+│ ╎╎│││││   0x1000c2fa      51             push ecx
+│ ╎╎│││││   0x1000c2fb      88460f         mov byte [esi + 0xf], al
+│ ╎╎│││││   0x1000c2fe      e899970400     call sub.MSVCR100.dll_memset ; void *memset(void *s, int c, size_t n)
+│ ╎╎│││││   0x1000c303      83c40c         add esp, 0xc
+│ ╎╎│││││   0x1000c306      682c010000     push 0x12c                  ; 300
+│ ╎╎│││││   0x1000c30b      57             push edi
+│ ╎╎│││││   0x1000c30c      83c644         add esi, 0x44               ; 68
+│ ╎╎│││││   0x1000c30f      56             push esi
+│ ╎╎│││││   0x1000c310      e887970400     call sub.MSVCR100.dll_memset ; void *memset(void *s, int c, size_t n)
+│ ╎╎│││││   0x1000c315      83c40c         add esp, 0xc
+│ └───────< 0x1000c318      e9c7feffff     jmp 0x1000c1e4
+│  ╎└─────> 0x1000c31d      803800         cmp byte [eax], 0
+│  └──────< 0x1000c320      0f84befeffff   je 0x1000c1e4
+│    ││││   0x1000c326      6a34           push 0x34                   ; '4' ; 52
+│    ││││   0x1000c328      83c010         add eax, 0x10               ; 16
+│    ││││   0x1000c32b      50             push eax
+│    ││││   0x1000c32c      8d94240401..   lea edx, [var_104h]
+│    ││││   0x1000c333      52             push edx
+│    ││││   0x1000c334      e815970400     call sub.MSVCR100.dll_memcpy ; void *memcpy(void *s1, const void *s2, size_t n)
+│    ││││   0x1000c339      8a84240a01..   mov al, byte [var_10ah]
+│    ││││   0x1000c340      83c40c         add esp, 0xc
+│    ││││   0x1000c343      3c45           cmp al, 0x45                ; 'E' ; 69
+│   ┌─────< 0x1000c345      7408           je 0x1000c34f
+│   │││││   0x1000c347      3bf7           cmp esi, edi
+│  ┌──────< 0x1000c349      0f8581000000   jne 0x1000c3d0
+│  │└─────> 0x1000c34f      3c43           cmp al, 0x43                ; 'C' ; 67
+│  │┌─────< 0x1000c351      7419           je 0x1000c36c
+│  ││││││   0x1000c353      3bf7           cmp esi, edi
+│ ┌───────< 0x1000c355      7515           jne 0x1000c36c
+│ │││││││   0x1000c357      c68424fe00..   mov byte [var_10ah], 0x43   ; 'C'
+│ │││││││                                                              ; [0x43:1]=255 ; 67
+│ │││││││   ; CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c3d8(x)
+│ ────────> 0x1000c35f      8d8424fc00..   lea eax, [var_f8h]
+│ │││││││   0x1000c366      50             push eax
+│ │││││││   0x1000c367      e814ef0000     call sym.czJetFileII.dll_czWriteDefDisplayStyle
+│ └─└─────> 0x1000c36c      8d8c247001..   lea ecx, [var_170h_2]
+│  │ ││││   0x1000c373      51             push ecx
+│  │ ││││   0x1000c374      8d542424       lea edx, [var_18h]
+│  │ ││││   0x1000c378      52             push edx
+│  │ ││││   0x1000c379      e812eb0000     call sym.czJetFileII.dll_czWriteSpecFile
+│  │ ││││   0x1000c37e      89442414       mov dword [var_14h_3], eax
+│  │ ││││   0x1000c382      3bc7           cmp eax, edi
+│  │┌─────< 0x1000c384      0f857c010000   jne 0x1000c506
+│  ││││││   0x1000c38a      8d84247002..   lea eax, [var_270h]
+│  ││││││   0x1000c391      6854bd0510     push 0x1005bd54             ; "wb"
+│  ││││││   0x1000c396      50             push eax
+│  ││││││   0x1000c397      ff1510810510   call dword [sym.imp.MSVCR100.dll_fopen] ; 0x10058110 ; file*fopen(const char *filename, const char *mode)
+│  ││││││   0x1000c39d      8bf0           mov esi, eax
+│  ││││││   0x1000c39f      83c408         add esp, 8
+│  ││││││   0x1000c3a2      3bf7           cmp esi, edi
+│ ┌───────< 0x1000c3a4      7534           jne 0x1000c3da
+│ │││││││   0x1000c3a6      8d8c247001..   lea ecx, [var_170h_3]
+│ │││││││   0x1000c3ad      51             push ecx
+│ │││││││   0x1000c3ae      ff15b4800510   call dword [sym.imp.KERNEL32.dll_DeleteFileA] ; 0x100580b4 ; BOOL DeleteFileA(LPCSTR lpFileName)
+│ ││││└───> 0x1000c3b4      b801510000     mov eax, 0x5101
+│ ││││ ││   0x1000c3b9      5f             pop edi
+│ ││││ ││   0x1000c3ba      5e             pop esi
+│ ││││ ││   0x1000c3bb      5b             pop ebx
+│ ││││ ││   0x1000c3bc      8b8c246803..   mov ecx, dword [var_368h_2]
+│ ││││ ││   0x1000c3c3      33cc           xor ecx, esp
+│ ││││ ││   0x1000c3c5      e8c8910400     call fcn.10055592
+│ ││││ ││   0x1000c3ca      8be5           mov esp, ebp
+│ ││││ ││   0x1000c3cc      5d             pop ebp
+│ ││││ ││   0x1000c3cd      c22800         ret 0x28
+│ │└──────> 0x1000c3d0      c68424fe00..   mov byte [var_10ah], 0x45   ; 'E'
+│ │ ││ ││                                                              ; [0x45:1]=255 ; 69
+│ ────────< 0x1000c3d8      eb85           jmp 0x1000c35f
+│ └───────> 0x1000c3da      33c0           xor eax, eax
+│   ││ ││   0x1000c3dc      56             push esi
+│   ││ ││   0x1000c3dd      8944241c       mov dword [var_1ch], eax
+│   ││ ││   0x1000c3e1      89442420       mov dword [var_10h_2], eax
+│   ││ ││   0x1000c3e5      b801000000     mov eax, 1
+│   ││ ││   0x1000c3ea      6a08           push 8                      ; 8
+│   ││ ││   0x1000c3ec      50             push eax
+│   ││ ││   0x1000c3ed      8d4c2424       lea ecx, [var_1ch]
+│   ││ ││   0x1000c3f1      51             push ecx
+│   ││ ││   0x1000c3f2      ba53510000     mov edx, 0x5153             ; 'SQ'
+│   ││ ││   0x1000c3f7      c744242853..   mov dword [var_1ch], 0x45153 ; [0x45153:4]=-1
+│   ││ ││   0x1000c3ff      668944242c     mov word [var_10h_2], ax
+│   ││ ││   0x1000c404      ffd3           call ebx
+│   ││ ││   0x1000c406      33c0           xor eax, eax
+│   ││ ││   0x1000c408      83c410         add esp, 0x10
+│   ││ ││   0x1000c40b      898424d800..   mov dword [var_c4h_2], eax
+│   ││ ││   0x1000c412      898424dc00..   mov dword [var_dch], eax
+│   ││ ││   0x1000c419      898424e000..   mov dword [var_c4h], eax
+│   ││ ││   0x1000c420      898424e400..   mov dword [var_c8h], eax
+│   ││ ││   0x1000c427      898424e800..   mov dword [var_d4h], eax
+│   ││ ││   0x1000c42e      898424ec00..   mov dword [var_ech], eax
+│   ││ ││   0x1000c435      898424f000..   mov dword [var_f0h], eax
+│   ││ ││   0x1000c43c      898424f400..   mov dword [var_f4h], eax
+│   ││ ││   0x1000c443      898424f800..   mov dword [var_f8h], eax
+│   ││ ││   0x1000c44a      397d28         cmp dword [arg_28h], edi
+│   ││┌───< 0x1000c44d      740a           je 0x1000c459
+│   │││││   0x1000c44f      c68424d800..   mov byte [var_c4h_2], 0x45  ; 'E'
+│   │││││                                                              ; [0x45:1]=255 ; 69
+│  ┌──────< 0x1000c457      eb12           jmp 0x1000c46b
+│  │││└───> 0x1000c459      397c2410       cmp dword [var_10h_3], edi
+│  │││ ││   0x1000c45d      0f95c2         setne dl
+│  │││ ││   0x1000c460      8d541244       lea edx, [edx + edx + 0x44]
+│  │││ ││   0x1000c464      889424d800..   mov byte [var_c4h_2], dl
+│  │││ ││   ; CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c457(x)
+│  └──────> 0x1000c46b      a1f4bd0510     mov eax, dword [str.QMSG.Nmg] ; [0x1005bdf4:4]=0x47534d51 ; "QMSG.Nmg"
+│   ││ ││   0x1000c470      8b0df8bd0510   mov ecx, dword [0x1005bdf8] ; [0x1005bdf8:4]=0x676d4e2e ; ".Nmg"
+│   ││ ││   0x1000c476      56             push esi
+│   ││ ││   0x1000c477      6a24           push 0x24                   ; '$' ; 36
+│   ││ ││   0x1000c479      8d9424e000..   lea edx, [var_c4h_2]
+│   ││ ││   0x1000c480      6a01           push 1                      ; 1
+│   ││ ││   0x1000c482      52             push edx
+│   ││ ││   0x1000c483      66c78424e9..   mov word [var_e9h], 0xf54   ; 'T\x0f'
+│   ││ ││                                                              ; [0xf54:2]=0xffff ; 3924
+│   ││ ││   0x1000c48d      c68424eb00..   mov byte [var_ebh], 0xff    ; [0xff:1]=255 ; 255
+│   ││ ││   0x1000c495      8984240001..   mov dword [var_f0h], eax
+│   ││ ││   0x1000c49c      898c240401..   mov dword [var_f4h], ecx
+│   ││ ││   0x1000c4a3      ffd3           call ebx
+│   ││ ││   0x1000c4a5      56             push esi
+│   ││ ││   0x1000c4a6      ff1520810510   call dword [sym.imp.MSVCR100.dll_fclose] ; 0x10058120 ; int fclose(FILE *stream)
+│   ││ ││   0x1000c4ac      83c414         add esp, 0x14
+│   ││ ││   0x1000c4af      397d2c         cmp dword [arg_2ch], edi
+│   ││┌───< 0x1000c4b2      7416           je 0x1000c4ca
+│   │││││   0x1000c4b4      8d84247002..   lea eax, [var_270h]
+│   │││││   0x1000c4bb      50             push eax
+│   │││││   0x1000c4bc      6848bd0510     push str.SEQUENT.SYS        ; 0x1005bd48 ; "SEQUENT.SYS"
+│   │││││   0x1000c4c1      e88ae40000     call sym.czJetFileII.dll_czWriteSystemFile
+│   │││││   0x1000c4c6      8bf8           mov edi, eax
+│  ┌──────< 0x1000c4c8      eb04           jmp 0x1000c4ce
+│  │││└───> 0x1000c4ca      8b7c2414       mov edi, dword [var_14h_3]
+│  │││ ││   ; CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c4c8(x)
+│  └──────> 0x1000c4ce      8b35b4800510   mov esi, dword [sym.imp.KERNEL32.dll_DeleteFileA] ; [0x100580b4:4]=0x5f814 reloc.KERNEL32.dll_DeleteFileA
+│   ││ ││   0x1000c4d4      8d8c247002..   lea ecx, [var_270h_2]
+│   ││ ││   0x1000c4db      51             push ecx
+│   ││ ││   0x1000c4dc      ffd6           call esi
+│   ││ ││   0x1000c4de      8d94247001..   lea edx, [var_170h_2]
+│   ││ ││   0x1000c4e5      52             push edx
+│   ││ ││   0x1000c4e6      ffd6           call esi
+│   ││ ││   0x1000c4e8      8bc7           mov eax, edi
+│   ││ ││   0x1000c4ea      5f             pop edi
+│   ││ ││   0x1000c4eb      5e             pop esi
+│   ││ ││   0x1000c4ec      5b             pop ebx
+│   ││ ││   0x1000c4ed      8b8c246803..   mov ecx, dword [var_368h_4]
+│   ││ ││   0x1000c4f4      33cc           xor ecx, esp
+│   ││ ││   0x1000c4f6      e897900400     call fcn.10055592
+│   ││ ││   0x1000c4fb      8be5           mov esp, ebp
+│   ││ ││   0x1000c4fd      5d             pop ebp
+│   ││ ││   0x1000c4fe      c22800         ret 0x28
+│   ││ └└─> 0x1000c501      b802000000     mov eax, 2
+│   └└────> 0x1000c506      8b8c247403..   mov ecx, dword [arg_374h]
+│           0x1000c50d      5f             pop edi
+│           0x1000c50e      5e             pop esi
+│           0x1000c50f      5b             pop ebx
+│           0x1000c510      33cc           xor ecx, esp
+│           0x1000c512      e87b900400     call fcn.10055592
+│           0x1000c517      8be5           mov esp, ebp
+│           0x1000c519      5d             pop ebp
+└           0x1000c51a      c22800         ret 0x28
+┌ 1661: sym.czJetFileII.dll_czShowMsg (int32_t arg_8h, int32_t arg_ch, int32_t arg_14h, int32_t arg_18h, int32_t arg_1ch, int32_t arg_20h, int32_t arg_24h, int32_t arg_28h, int32_t arg_2ch, int32_t arg_374h);
+│ `- args(sp[0x4..0x28]) vars(57:sp[0x8..0x3a0])
+│           0x1000bea0      55             push ebp
+│           0x1000bea1      8bec           mov ebp, esp
+│           0x1000bea3      83e4f8         and esp, 0xfffffff8
+│           0x1000bea6      81ec6c030000   sub esp, 0x36c
+│           0x1000beac      a128200610     mov eax, dword [0x10062028] ; [0x10062028:4]=0xbb40e64e
+│           0x1000beb1      33c4           xor eax, esp
+│           0x1000beb3      8984246803..   mov dword [var_368h], eax
+│           0x1000beba      8b4520         mov eax, dword [arg_20h]
+│           0x1000bebd      53             push ebx
+│           0x1000bebe      56             push esi
+│           0x1000bebf      57             push edi
+│           0x1000bec0      8b7d08         mov edi, dword [arg_8h]
+│           0x1000bec3      89442414       mov dword [var_14h], eax
+│           0x1000bec7      85ff           test edi, edi
+│       ┌─< 0x1000bec9      0f8432060000   je 0x1000c501
+│       │   0x1000becf      85c0           test eax, eax
+│      ┌──< 0x1000bed1      0f842a060000   je 0x1000c501
+│      ││   0x1000bed7      68b4bd0510     push 0x1005bdb4             ; "nmg"
+│      ││   0x1000bedc      6800010000     push 0x100                  ; 256
+│      ││   0x1000bee1      8d84247801..   lea eax, [var_178h]
+│      ││   0x1000bee8      50             push eax
+│      ││   0x1000bee9      e8425fffff     call sym.czJetFileII.dll__czGetPCTempFilename_12
+│      ││   0x1000beee      68c4b40510     push 0x1005b4c4             ; "sys"
+│      ││   0x1000bef3      6800010000     push 0x100                  ; 256
+│      ││   0x1000bef8      8d8c247802..   lea ecx, [var_278h]
+│      ││   0x1000beff      51             push ecx
+│      ││   0x1000bf00      e82b5fffff     call sym.czJetFileII.dll__czGetPCTempFilename_12
+│      ││   0x1000bf05      8d94247001..   lea edx, [var_170h]
+│      ││   0x1000bf0c      6854bd0510     push 0x1005bd54             ; "wb"
+│      ││   0x1000bf11      52             push edx
+│      ││   0x1000bf12      ff1510810510   call dword [sym.imp.MSVCR100.dll_fopen] ; 0x10058110 ; file*fopen(const char *filename, const char *mode)
+│      ││   0x1000bf18      8bf0           mov esi, eax
+│      ││   0x1000bf1a      83c408         add esp, 8
+│      ││   0x1000bf1d      85f6           test esi, esi
+│     ┌───< 0x1000bf1f      0f848f040000   je 0x1000c3b4
+│     │││   0x1000bf25      6a40           push 0x40                   ; '@' ; 64
+│     │││   0x1000bf27      8d84243401..   lea eax, [var_134h]
+│     │││   0x1000bf2e      6a00           push 0
+│     │││   0x1000bf30      50             push eax
+│     │││   0x1000bf31      e8669b0400     call sub.MSVCR100.dll_memset ; void *memset(void *s, int c, size_t n)
+│     │││   0x1000bf36      a0bebd0510     mov al, byte [0x1005bdbe]   ; [0x1005bdbe:1]=65 ; "A\x04"
+│     │││   0x1000bf3b      8b0db8bd0510   mov ecx, dword [0x1005bdb8] ; [0x1005bdb8:4]=0x30305a01
+│     │││   0x1000bf41      668b15bcbd..   mov dx, word [0x1005bdbc]   ; [0x1005bdbc:2]=0x4102
+│     │││   0x1000bf48      8884244201..   mov byte [var_142h], al
+│     │││   0x1000bf4f      8b4510         mov eax, dword [arg_374h]
+│     │││   0x1000bf52      898c243c01..   mov dword [var_134h], ecx
+│     │││   0x1000bf59      8d48d0         lea ecx, [eax - 0x30]
+│     │││   0x1000bf5c      83c40c         add esp, 0xc
+│     │││   0x1000bf5f      6689942434..   mov word [var_134h_2], dx
+│     │││   0x1000bf67      c684243701..   mov byte [var_137h], 0x1a   ; [0x1a:1]=255 ; 26
+│     │││   0x1000bf6f      83f939         cmp ecx, 0x39               ; '9' ; 57
+│    ┌────< 0x1000bf72      7605           jbe 0x1000bf79
+│    ││││   0x1000bf74      b831000000     mov eax, 0x31               ; '1' ; 49
+│    └────> 0x1000bf79      8884243801..   mov byte [var_138h], al
+│     │││   0x1000bf80      8b4514         mov eax, dword [arg_14h]
+│     │││   0x1000bf83      c684243901..   mov byte [var_139h], 0x1c   ; [0x1c:1]=255 ; 28
+│     │││   0x1000bf8b      3c2f           cmp al, 0x2f                ; '/' ; 47
+│    ┌────< 0x1000bf8d      7530           jne 0x1000bfbf
+│    ││││   0x1000bf8f      8bd0           mov edx, eax
+│    ││││   0x1000bf91      8bc8           mov ecx, eax
+│    ││││   0x1000bf93      c1e910         shr ecx, 0x10
+│    ││││   0x1000bf96      c1ea08         shr edx, 8
+│    ││││   0x1000bf99      8884243a01..   mov byte [var_13ah], al
+│    ││││   0x1000bfa0      c1e818         shr eax, 0x18
+│    ││││   0x1000bfa3      888c243c01..   mov byte [var_13ch], cl
+│    ││││   0x1000bfaa      8894243b01..   mov byte [var_13bh], dl
+│    ││││   0x1000bfb1      8884243d01..   mov byte [var_13dh], al
+│    ││││   0x1000bfb8      b90e000000     mov ecx, 0xe                ; 14
+│   ┌─────< 0x1000bfbd      eb16           jmp 0x1000bfd5
+│   │└────> 0x1000bfbf      83f82f         cmp eax, 0x2f               ; '/' ; 47
+│   │┌────< 0x1000bfc2      7705           ja 0x1000bfc9
+│   │││││   0x1000bfc4      b831000000     mov eax, 0x31               ; '1' ; 49
+│   │└────> 0x1000bfc9      8884243a01..   mov byte [var_13ah], al
+│   │ │││   0x1000bfd0      b90b000000     mov ecx, 0xb                ; 11
+│   │ │││   ; CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000bfbd(x)
+│   └─────> 0x1000bfd5      8b4518         mov eax, dword [arg_18h]
+│     │││   0x1000bfd8      b30a           mov bl, 0xa
+│     │││   0x1000bfda      66c7840c30..   mov word [esp + ecx + 0x130], 0x490a ; '\nI'
+│     │││                                                              ; [0x490a:2]=0xffff
+│     │││   0x1000bfe4      8bd0           mov edx, eax
+│     │││   0x1000bfe6      83f82e         cmp eax, 0x2e               ; '.' ; 46
+│    ┌────< 0x1000bfe9      7705           ja 0x1000bff0
+│    ││││   0x1000bfeb      ba30000000     mov edx, 0x30               ; '0' ; 48
+│    └────> 0x1000bff0      88940c3201..   mov byte [esp + ecx + 0x132], dl
+│     │││   0x1000bff7      889c0c3301..   mov byte [esp + ecx + 0x133], bl
+│     │││   0x1000bffe      c6840c3401..   mov byte [esp + ecx + 0x134], 0x4f ; 'O'
+│     │││                                                              ; [0x4f:1]=255 ; 79
+│     │││   0x1000c006      83f82e         cmp eax, 0x2e               ; '.' ; 46
+│    ┌────< 0x1000c009      7705           ja 0x1000c010
+│    ││││   0x1000c00b      b830000000     mov eax, 0x30               ; '0' ; 48
+│    └────> 0x1000c010      8b5d1c         mov ebx, dword [arg_1ch]
+│     │││   0x1000c013      88840c3501..   mov byte [esp + ecx + 0x135], al
+│     │││   0x1000c01a      b85917b7d1     mov eax, 0xd1b71759
+│     │││   0x1000c01f      f7e3           mul ebx
+│     │││   0x1000c021      c1ea0d         shr edx, 0xd
+│     │││   0x1000c024      69d210270000   imul edx, edx, 0x2710
+│     │││   0x1000c02a      8bc3           mov eax, ebx
+│     │││   0x1000c02c      2bc2           sub eax, edx
+│     │││   0x1000c02e      89442410       mov dword [var_10h], eax
+│     │││   0x1000c032      b8d34d6210     mov eax, 0x10624dd3
+│     │││   0x1000c037      f7642410       mul dword [var_10h]
+│     │││   0x1000c03b      c1ea06         shr edx, 6
+│     │││   0x1000c03e      80c230         add dl, 0x30                ; 48
+│     │││   0x1000c041      66c7840c36..   mov word [esp + ecx + 0x136], 0x320e ; '\x0e2'
+│     │││                                                              ; [0x320e:2]=0xffff
+│     │││   0x1000c04b      88940c3801..   mov byte [esp + ecx + 0x138], dl
+│     │││   0x1000c052      b8d34d6210     mov eax, 0x10624dd3
+│     │││   0x1000c057      f7e3           mul ebx
+│     │││   0x1000c059      c1ea06         shr edx, 6
+│     │││   0x1000c05c      69d2e8030000   imul edx, edx, 0x3e8        ; 1000
+│     │││   0x1000c062      8bc3           mov eax, ebx
+│     │││   0x1000c064      2bc2           sub eax, edx
+│     │││   0x1000c066      89442410       mov dword [var_10h], eax
+│     │││   0x1000c06a      b81f85eb51     mov eax, 0x51eb851f
+│     │││   0x1000c06f      f7642410       mul dword [var_10h]
+│     │││   0x1000c073      c1ea05         shr edx, 5
+│     │││   0x1000c076      80c230         add dl, 0x30                ; 48
+│     │││   0x1000c079      88940c3901..   mov byte [esp + ecx + 0x139], dl
+│     │││   0x1000c080      b81f85eb51     mov eax, 0x51eb851f
+│     │││   0x1000c085      f7e3           mul ebx
+│     │││   0x1000c087      c1ea05         shr edx, 5
+│     │││   0x1000c08a      6bd264         imul edx, edx, 0x64         ; 100
+│     │││   0x1000c08d      8bc3           mov eax, ebx
+│     │││   0x1000c08f      2bc2           sub eax, edx
+│     │││   0x1000c091      89442410       mov dword [var_10h], eax
+│     │││   0x1000c095      b8cdcccccc     mov eax, 0xcccccccd
+│     │││   0x1000c09a      f7642410       mul dword [var_10h]
+│     │││   0x1000c09e      c1ea03         shr edx, 3
+│     │││   0x1000c0a1      80c230         add dl, 0x30                ; 48
+│     │││   0x1000c0a4      88940c3a01..   mov byte [esp + ecx + 0x13a], dl
+│     │││   0x1000c0ab      b8cdcccccc     mov eax, 0xcccccccd
+│     │││   0x1000c0b0      f7e3           mul ebx
+│     │││   0x1000c0b2      c1ea03         shr edx, 3
+│     │││   0x1000c0b5      8ac2           mov al, dl
+│     │││   0x1000c0b7      02d2           add dl, dl
+│     │││   0x1000c0b9      02d2           add dl, dl
+│     │││   0x1000c0bb      02c2           add al, dl
+│     │││   0x1000c0bd      02c0           add al, al
+│     │││   0x1000c0bf      2ad8           sub bl, al
+│     │││   0x1000c0c1      80c330         add bl, 0x30                ; 48
+│     │││   0x1000c0c4      56             push esi
+│     │││   0x1000c0c5      889c0c3f01..   mov byte [esp + ecx + 0x13f], bl
+│     │││   0x1000c0cc      8b1d78810510   mov ebx, dword [sym.imp.MSVCR100.dll_fwrite] ; [0x10058178:4]=0x5fab2 reloc.MSVCR100.dll_fwrite
+│     │││   0x1000c0d2      6a01           push 1                      ; 1
+│     │││   0x1000c0d4      83c10c         add ecx, 0xc                ; 12
+│     │││   0x1000c0d7      51             push ecx
+│     │││   0x1000c0d8      8d84243c01..   lea eax, [var_134h]
+│     │││   0x1000c0df      50             push eax
+│     │││   0x1000c0e0      ffd3           call ebx
+│     │││   0x1000c0e2      8b4d0c         mov ecx, dword [arg_ch]
+│     │││   0x1000c0e5      56             push esi
+│     │││   0x1000c0e6      6a01           push 1                      ; 1
+│     │││   0x1000c0e8      51             push ecx
+│     │││   0x1000c0e9      57             push edi
+│     │││   0x1000c0ea      ffd3           call ebx
+│     │││   0x1000c0ec      56             push esi
+│     │││   0x1000c0ed      6a01           push 1                      ; 1
+│     │││   0x1000c0ef      6a01           push 1                      ; 1
+│     │││   0x1000c0f1      68c0bd0510     push 0x1005bdc0
+│     │││   0x1000c0f6      ffd3           call ebx
+│     │││   0x1000c0f8      56             push esi
+│     │││   0x1000c0f9      ff1520810510   call dword [sym.imp.MSVCR100.dll_fclose] ; 0x10058120 ; int fclose(FILE *stream)
+│     │││   0x1000c0ff      83c434         add esp, 0x34
+│     │││   0x1000c102      6898000000     push 0x98                   ; 152
+│     │││   0x1000c107      33ff           xor edi, edi
+│     │││   0x1000c109      8d542444       lea edx, [var_44h]
+│     │││   0x1000c10d      57             push edi
+│     │││   0x1000c10e      52             push edx
+│     │││   0x1000c10f      e888990400     call sub.MSVCR100.dll_memset ; void *memset(void *s, int c, size_t n)
+│     │││   0x1000c114      83c40c         add esp, 0xc
+│     │││   0x1000c117      897c2440       mov dword [var_44h], edi
+│     │││   0x1000c11b      89bc24c400..   mov dword [var_c4h], edi
+│     │││   0x1000c122      8b4c2414       mov ecx, dword [var_14h_2]
+│     │││   0x1000c126      8bc1           mov eax, ecx
+│     │││   0x1000c128      89bc24c800..   mov dword [var_c8h], edi
+│     │││   0x1000c12f      c784249000..   mov dword [var_90h], 0xbb8  ; [0xbb8:4]=-1 ; 3000
+│     │││   0x1000c13a      8d7001         lea esi, [eax + 1]
+│     │││   0x1000c13d      8d4900         lea ecx, [ecx]
+│    ┌────> 0x1000c140      8a10           mov dl, byte [eax]
+│    ╎│││   0x1000c142      40             inc eax
+│    ╎│││   0x1000c143      84d2           test dl, dl
+│    └────< 0x1000c145      75f9           jne 0x1000c140
+│     │││   0x1000c147      2bc6           sub eax, esi
+│     │││   0x1000c149      83f820         cmp eax, 0x20               ; 32
+│    ┌────< 0x1000c14c      7310           jae 0x1000c15e
+│    ││││   0x1000c14e      8bc1           mov eax, ecx
+│    ││││   0x1000c150      8d7001         lea esi, [eax + 1]
+│   ┌─────> 0x1000c153      8a10           mov dl, byte [eax]
+│   ╎││││   0x1000c155      40             inc eax
+│   ╎││││   0x1000c156      84d2           test dl, dl
+│   └─────< 0x1000c158      75f9           jne 0x1000c153
+│    ││││   0x1000c15a      2bc6           sub eax, esi
+│   ┌─────< 0x1000c15c      eb05           jmp 0x1000c163
+│   │└────> 0x1000c15e      b820000000     mov eax, 0x20               ; 32
+│   │ │││   ; CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c15c(x)
+│   └─────> 0x1000c163      50             push eax
+│     │││   0x1000c164      51             push ecx
+│     │││   0x1000c165      8d442450       lea eax, [var_50h]
+│     │││   0x1000c169      50             push eax
+│     │││   0x1000c16a      e8df980400     call sub.MSVCR100.dll_memcpy ; void *memcpy(void *s1, const void *s2, size_t n)
+│     │││   0x1000c16f      8b4d24         mov ecx, dword [arg_24h]
+│     │││   0x1000c172      83c40c         add esp, 0xc
+│     │││   0x1000c175      8d442440       lea eax, [var_40h]
+│     │││   0x1000c179      33d2           xor edx, edx
+│     │││   0x1000c17b      50             push eax
+│     │││   0x1000c17c      894c247c       mov dword [var_7ch], ecx
+│     │││   0x1000c180      8994248c00..   mov dword [var_8ch], edx
+│     │││   0x1000c187      c784249000..   mov dword [var_90h_2], 3
+│     │││   0x1000c192      89bc24bc00..   mov dword [var_bch], edi
+│     │││   0x1000c199      89bc24c000..   mov dword [var_c0h], edi
+│     │││   0x1000c1a0      89bc24c400..   mov dword [var_c4h_2], edi
+│     │││   0x1000c1a7      89bc24d000..   mov dword [var_c8h], edi
+│     │││   0x1000c1ae      89bc24d400..   mov dword [var_d4h], edi
+│     │││   0x1000c1b5      c784249c00..   mov dword [var_9ch], 0x10001 ; [0x10001:4]=-1
+│     │││   0x1000c1c0      e86ba8ffff     call sym.czJetFileII.dll_czInitAPI
+│     │││   0x1000c1c5      e836a9ffff     call sym.czJetFileII.dll_czInitProperty
+│     │││   0x1000c1ca      3bc7           cmp eax, edi
+│    ┌────< 0x1000c1cc      0f8534030000   jne 0x1000c506
+│    ││││   0x1000c1d2      6a01           push 1                      ; 1
+│    ││││   0x1000c1d4      6a04           push 4                      ; 4
+│    ││││   0x1000c1d6      8d4c2418       lea ecx, [var_18h]
+│    ││││   0x1000c1da      51             push ecx
+│    ││││   0x1000c1db      e890aaffff     call sym.czJetFileII.dll_czGetProperty
+│    ││││   0x1000c1e0      85c0           test eax, eax
+│   ┌─────< 0x1000c1e2      7419           je 0x1000c1fd
+│   │││││   ; CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c318(x)
+│ ┌┌──────> 0x1000c1e4      33c0           xor eax, eax
+│ ╎╎│││││   0x1000c1e6      5f             pop edi
+│ ╎╎│││││   0x1000c1e7      5e             pop esi
+│ ╎╎│││││   0x1000c1e8      5b             pop ebx
+│ ╎╎│││││   0x1000c1e9      8b8c246803..   mov ecx, dword [var_368h_3]
+│ ╎╎│││││   0x1000c1f0      33cc           xor ecx, esp
+│ ╎╎│││││   0x1000c1f2      e89b930400     call fcn.10055592
+│ ╎╎│││││   0x1000c1f7      8be5           mov esp, ebp
+│ ╎╎│││││   0x1000c1f9      5d             pop ebp
+│ ╎╎│││││   0x1000c1fa      c22800         ret 0x28
+│ ╎╎└─────> 0x1000c1fd      8b7528         mov esi, dword [arg_28h]
+│ ╎╎ ││││   0x1000c200      33c0           xor eax, eax
+│ ╎╎ ││││   0x1000c202      89442420       mov dword [var_10h], eax
+│ ╎╎ ││││   0x1000c206      89442424       mov dword [var_14h_2], eax
+│ ╎╎ ││││   0x1000c20a      89442428       mov dword [var_28h], eax
+│ ╎╎ ││││   0x1000c20e      8944242c       mov dword [var_2ch], eax
+│ ╎╎ ││││   0x1000c212      89442430       mov dword [var_30h], eax
+│ ╎╎ ││││   0x1000c216      89442434       mov dword [var_34h], eax
+│ ╎╎ ││││   0x1000c21a      89442438       mov dword [var_38h], eax
+│ ╎╎ ││││   0x1000c21e      8944243c       mov dword [var_14h], eax
+│ ╎╎ ││││   0x1000c222      3bf7           cmp esi, edi
+│ ╎╎┌─────< 0x1000c224      7429           je 0x1000c24f
+│ ╎╎│││││   0x1000c226      8b15c4bd0510   mov edx, dword [str.E:TQMSG.Nmg] ; [0x1005bdc4:4]=0x545c3a45 ; "E:\\T\\QMSG.Nmg"
+│ ╎╎│││││   0x1000c22c      a1c8bd0510     mov eax, dword [0x1005bdc8] ; [0x1005bdc8:4]=0x534d515c ; "\QMSG.Nmg"
+│ ╎╎│││││   0x1000c231      8b0dccbd0510   mov ecx, dword [0x1005bdcc] ; [0x1005bdcc:4]=0x6d4e2e47 ; "G.Nmg"
+│ ╎╎│││││   0x1000c237      89542420       mov dword [var_10h], edx
+│ ╎╎│││││   0x1000c23b      8a15d0bd0510   mov dl, byte [0x1005bdd0]   ; [0x1005bdd0:1]=103 ; "g"
+│ ╎╎│││││   0x1000c241      89442424       mov dword [var_14h_2], eax
+│ ╎╎│││││   0x1000c245      894c2428       mov dword [var_28h], ecx
+│ ╎╎│││││   0x1000c249      8854242c       mov byte [var_2ch], dl
+│ ────────< 0x1000c24d      eb55           jmp 0x1000c2a4
+│ ╎╎└─────> 0x1000c24f      397c2410       cmp dword [var_10h_2], edi
+│ ╎╎┌─────< 0x1000c253      7428           je 0x1000c27d
+│ ╎╎│││││   0x1000c255      a1d4bd0510     mov eax, dword [str.F:TQMSG.Nmg] ; [0x1005bdd4:4]=0x545c3a46 ; "F:\\T\\QMSG.Nmg"
+│ ╎╎│││││   0x1000c25a      8b0dd8bd0510   mov ecx, dword [0x1005bdd8] ; [0x1005bdd8:4]=0x534d515c ; "\QMSG.Nmg"
+│ ╎╎│││││   0x1000c260      8b15dcbd0510   mov edx, dword [0x1005bddc] ; [0x1005bddc:4]=0x6d4e2e47 ; "G.Nmg"
+│ ╎╎│││││   0x1000c266      89442420       mov dword [var_10h], eax
+│ ╎╎│││││   0x1000c26a      a0e0bd0510     mov al, byte [0x1005bde0]   ; [0x1005bde0:1]=103 ; "g"
+│ ╎╎│││││   0x1000c26f      894c2424       mov dword [var_14h_2], ecx
+│ ╎╎│││││   0x1000c273      89542428       mov dword [var_28h], edx
+│ ╎╎│││││   0x1000c277      8844242c       mov byte [var_2ch], al
+│ ────────< 0x1000c27b      eb27           jmp 0x1000c2a4
+│ ╎╎└─────> 0x1000c27d      8b0de4bd0510   mov ecx, dword [str.D:TQMSG.Nmg] ; [0x1005bde4:4]=0x545c3a44 ; "D:\\T\\QMSG.Nmg"
+│ ╎╎ ││││   0x1000c283      8b15e8bd0510   mov edx, dword [0x1005bde8] ; [0x1005bde8:4]=0x534d515c ; "\QMSG.Nmg"
+│ ╎╎ ││││   0x1000c289      a1ecbd0510     mov eax, dword [0x1005bdec] ; [0x1005bdec:4]=0x6d4e2e47 ; "G.Nmg"
+│ ╎╎ ││││   0x1000c28e      894c2420       mov dword [var_10h], ecx
+│ ╎╎ ││││   0x1000c292      8a0df0bd0510   mov cl, byte [0x1005bdf0]   ; [0x1005bdf0:1]=103 ; "g"
+│ ╎╎ ││││   0x1000c298      89542424       mov dword [var_14h_2], edx
+│ ╎╎ ││││   0x1000c29c      89442428       mov dword [var_28h], eax
+│ ╎╎ ││││   0x1000c2a0      884c242c       mov byte [var_2ch], cl
+│ ╎╎ ││││   ; CODE XREFS from sym.czJetFileII.dll_czShowMsg @ 0x1000c24d(x), 0x1000c27b(x)
+│ ────────> 0x1000c2a4      8b15002c0610   mov edx, dword [0x10062c00] ; [0x10062c00:4]=0
+│ ╎╎ ││││   0x1000c2aa      52             push edx
+│ ╎╎ ││││   0x1000c2ab      ff157c800510   call dword [sym.imp.KERNEL32.dll_TlsGetValue] ; 0x1005807c ; " \xf7\x05" ; LPVOID TlsGetValue(DWORD dwTlsIndex)
+│ ╎╎ ││││   0x1000c2b1      3bc7           cmp eax, edi
+│ ╎╎┌─────< 0x1000c2b3      7568           jne 0x1000c31d
+│ ╎╎│││││   0x1000c2b5      6870010000     push 0x170                  ; 368
+│ ╎╎│││││   0x1000c2ba      ff1504810510   call dword [sym.imp.MSVCR100.dll___2_YAPAXI_Z] ; 0x10058104
+│ ╎╎│││││   0x1000c2c0      8bf0           mov esi, eax
+│ ╎╎│││││   0x1000c2c2      83c404         add esp, 4
+│ ╎╎│││││   0x1000c2c5      3bf7           cmp esi, edi
+│ ────────< 0x1000c2c7      0f8417ffffff   je 0x1000c1e4
+│ ╎╎│││││   0x1000c2cd      a1002c0610     mov eax, dword [0x10062c00] ; [0x10062c00:4]=0
+│ ╎╎│││││   0x1000c2d2      56             push esi
+│ ╎╎│││││   0x1000c2d3      50             push eax
+│ ╎╎│││││   0x1000c2d4      ff1590800510   call dword [sym.imp.KERNEL32.dll_TlsSetValue] ; 0x10058090 ; BOOL TlsSetValue(DWORD dwTlsIndex, LPVOID lpTlsValue)
+│ ╎╎│││││   0x1000c2da      85c0           test eax, eax
+│ ────────< 0x1000c2dc      0f8402ffffff   je 0x1000c1e4
+│ ╎╎│││││   0x1000c2e2      33c0           xor eax, eax
+│ ╎╎│││││   0x1000c2e4      c60600         mov byte [esi], 0
+│ ╎╎│││││   0x1000c2e7      894601         mov dword [esi + 1], eax
+│ ╎╎│││││   0x1000c2ea      894605         mov dword [esi + 5], eax
+│ ╎╎│││││   0x1000c2ed      6a34           push 0x34                   ; '4' ; 52
+│ ╎╎│││││   0x1000c2ef      894609         mov dword [esi + 9], eax
+│ ╎╎│││││   0x1000c2f2      8d4e10         lea ecx, [esi + 0x10]
+│ ╎╎│││││   0x1000c2f5      57             push edi
+│ ╎╎│││││   0x1000c2f6      6689460d       mov word [esi + 0xd], ax
+│ ╎╎│││││   0x1000c2fa      51             push ecx
+│ ╎╎│││││   0x1000c2fb      88460f         mov byte [esi + 0xf], al
+│ ╎╎│││││   0x1000c2fe      e899970400     call sub.MSVCR100.dll_memset ; void *memset(void *s, int c, size_t n)
+│ ╎╎│││││   0x1000c303      83c40c         add esp, 0xc
+│ ╎╎│││││   0x1000c306      682c010000     push 0x12c                  ; 300
+│ ╎╎│││││   0x1000c30b      57             push edi
+│ ╎╎│││││   0x1000c30c      83c644         add esi, 0x44               ; 68
+│ ╎╎│││││   0x1000c30f      56             push esi
+│ ╎╎│││││   0x1000c310      e887970400     call sub.MSVCR100.dll_memset ; void *memset(void *s, int c, size_t n)
+│ ╎╎│││││   0x1000c315      83c40c         add esp, 0xc
+│ └───────< 0x1000c318      e9c7feffff     jmp 0x1000c1e4
+│  ╎└─────> 0x1000c31d      803800         cmp byte [eax], 0
+│  └──────< 0x1000c320      0f84befeffff   je 0x1000c1e4
+│    ││││   0x1000c326      6a34           push 0x34                   ; '4' ; 52
+│    ││││   0x1000c328      83c010         add eax, 0x10               ; 16
+│    ││││   0x1000c32b      50             push eax
+│    ││││   0x1000c32c      8d94240401..   lea edx, [var_104h]
+│    ││││   0x1000c333      52             push edx
+│    ││││   0x1000c334      e815970400     call sub.MSVCR100.dll_memcpy ; void *memcpy(void *s1, const void *s2, size_t n)
+│    ││││   0x1000c339      8a84240a01..   mov al, byte [var_10ah]
+│    ││││   0x1000c340      83c40c         add esp, 0xc
+│    ││││   0x1000c343      3c45           cmp al, 0x45                ; 'E' ; 69
+│   ┌─────< 0x1000c345      7408           je 0x1000c34f
+│   │││││   0x1000c347      3bf7           cmp esi, edi
+│  ┌──────< 0x1000c349      0f8581000000   jne 0x1000c3d0
+│  │└─────> 0x1000c34f      3c43           cmp al, 0x43                ; 'C' ; 67
+│  │┌─────< 0x1000c351      7419           je 0x1000c36c
+│  ││││││   0x1000c353      3bf7           cmp esi, edi
+│ ┌───────< 0x1000c355      7515           jne 0x1000c36c
+│ │││││││   0x1000c357      c68424fe00..   mov byte [var_10ah], 0x43   ; 'C'
+│ │││││││                                                              ; [0x43:1]=255 ; 67
+│ │││││││   ; CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c3d8(x)
+│ ────────> 0x1000c35f      8d8424fc00..   lea eax, [var_f8h]
+│ │││││││   0x1000c366      50             push eax
+│ │││││││   0x1000c367      e814ef0000     call sym.czJetFileII.dll_czWriteDefDisplayStyle
+│ └─└─────> 0x1000c36c      8d8c247001..   lea ecx, [var_170h_2]
+│  │ ││││   0x1000c373      51             push ecx
+│  │ ││││   0x1000c374      8d542424       lea edx, [var_18h]
+│  │ ││││   0x1000c378      52             push edx
+│  │ ││││   0x1000c379      e812eb0000     call sym.czJetFileII.dll_czWriteSpecFile
+│  │ ││││   0x1000c37e      89442414       mov dword [var_14h_3], eax
+│  │ ││││   0x1000c382      3bc7           cmp eax, edi
+│  │┌─────< 0x1000c384      0f857c010000   jne 0x1000c506
+│  ││││││   0x1000c38a      8d84247002..   lea eax, [var_270h]
+│  ││││││   0x1000c391      6854bd0510     push 0x1005bd54             ; "wb"
+│  ││││││   0x1000c396      50             push eax
+│  ││││││   0x1000c397      ff1510810510   call dword [sym.imp.MSVCR100.dll_fopen] ; 0x10058110 ; file*fopen(const char *filename, const char *mode)
+│  ││││││   0x1000c39d      8bf0           mov esi, eax
+│  ││││││   0x1000c39f      83c408         add esp, 8
+│  ││││││   0x1000c3a2      3bf7           cmp esi, edi
+│ ┌───────< 0x1000c3a4      7534           jne 0x1000c3da
+│ │││││││   0x1000c3a6      8d8c247001..   lea ecx, [var_170h_3]
+│ │││││││   0x1000c3ad      51             push ecx
+│ │││││││   0x1000c3ae      ff15b4800510   call dword [sym.imp.KERNEL32.dll_DeleteFileA] ; 0x100580b4 ; BOOL DeleteFileA(LPCSTR lpFileName)
+│ ││││└───> 0x1000c3b4      b801510000     mov eax, 0x5101
+│ ││││ ││   0x1000c3b9      5f             pop edi
+│ ││││ ││   0x1000c3ba      5e             pop esi
+│ ││││ ││   0x1000c3bb      5b             pop ebx
+│ ││││ ││   0x1000c3bc      8b8c246803..   mov ecx, dword [var_368h_2]
+│ ││││ ││   0x1000c3c3      33cc           xor ecx, esp
+│ ││││ ││   0x1000c3c5      e8c8910400     call fcn.10055592
+│ ││││ ││   0x1000c3ca      8be5           mov esp, ebp
+│ ││││ ││   0x1000c3cc      5d             pop ebp
+│ ││││ ││   0x1000c3cd      c22800         ret 0x28
+│ │└──────> 0x1000c3d0      c68424fe00..   mov byte [var_10ah], 0x45   ; 'E'
+│ │ ││ ││                                                              ; [0x45:1]=255 ; 69
+│ ────────< 0x1000c3d8      eb85           jmp 0x1000c35f
+│ └───────> 0x1000c3da      33c0           xor eax, eax
+│   ││ ││   0x1000c3dc      56             push esi
+│   ││ ││   0x1000c3dd      8944241c       mov dword [var_1ch], eax
+│   ││ ││   0x1000c3e1      89442420       mov dword [var_10h_2], eax
+│   ││ ││   0x1000c3e5      b801000000     mov eax, 1
+│   ││ ││   0x1000c3ea      6a08           push 8                      ; 8
+│   ││ ││   0x1000c3ec      50             push eax
+│   ││ ││   0x1000c3ed      8d4c2424       lea ecx, [var_1ch]
+│   ││ ││   0x1000c3f1      51             push ecx
+│   ││ ││   0x1000c3f2      ba53510000     mov edx, 0x5153             ; 'SQ'
+│   ││ ││   0x1000c3f7      c744242853..   mov dword [var_1ch], 0x45153 ; [0x45153:4]=-1
+│   ││ ││   0x1000c3ff      668944242c     mov word [var_10h_2], ax
+│   ││ ││   0x1000c404      ffd3           call ebx
+│   ││ ││   0x1000c406      33c0           xor eax, eax
+│   ││ ││   0x1000c408      83c410         add esp, 0x10
+│   ││ ││   0x1000c40b      898424d800..   mov dword [var_c4h_2], eax
+│   ││ ││   0x1000c412      898424dc00..   mov dword [var_dch], eax
+│   ││ ││   0x1000c419      898424e000..   mov dword [var_c4h], eax
+│   ││ ││   0x1000c420      898424e400..   mov dword [var_c8h], eax
+│   ││ ││   0x1000c427      898424e800..   mov dword [var_d4h], eax
+│   ││ ││   0x1000c42e      898424ec00..   mov dword [var_ech], eax
+│   ││ ││   0x1000c435      898424f000..   mov dword [var_f0h], eax
+│   ││ ││   0x1000c43c      898424f400..   mov dword [var_f4h], eax
+│   ││ ││   0x1000c443      898424f800..   mov dword [var_f8h], eax
+│   ││ ││   0x1000c44a      397d28         cmp dword [arg_28h], edi
+│   ││┌───< 0x1000c44d      740a           je 0x1000c459
+│   │││││   0x1000c44f      c68424d800..   mov byte [var_c4h_2], 0x45  ; 'E'
+│   │││││                                                              ; [0x45:1]=255 ; 69
+│  ┌──────< 0x1000c457      eb12           jmp 0x1000c46b
+│  │││└───> 0x1000c459      397c2410       cmp dword [var_10h_3], edi
+│  │││ ││   0x1000c45d      0f95c2         setne dl
+│  │││ ││   0x1000c460      8d541244       lea edx, [edx + edx + 0x44]
+│  │││ ││   0x1000c464      889424d800..   mov byte [var_c4h_2], dl
+│  │││ ││   ; CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c457(x)
+│  └──────> 0x1000c46b      a1f4bd0510     mov eax, dword [str.QMSG.Nmg] ; [0x1005bdf4:4]=0x47534d51 ; "QMSG.Nmg"
+│   ││ ││   0x1000c470      8b0df8bd0510   mov ecx, dword [0x1005bdf8] ; [0x1005bdf8:4]=0x676d4e2e ; ".Nmg"
+│   ││ ││   0x1000c476      56             push esi
+│   ││ ││   0x1000c477      6a24           push 0x24                   ; '$' ; 36
+│   ││ ││   0x1000c479      8d9424e000..   lea edx, [var_c4h_2]
+│   ││ ││   0x1000c480      6a01           push 1                      ; 1
+│   ││ ││   0x1000c482      52             push edx
+│   ││ ││   0x1000c483      66c78424e9..   mov word [var_e9h], 0xf54   ; 'T\x0f'
+│   ││ ││                                                              ; [0xf54:2]=0xffff ; 3924
+│   ││ ││   0x1000c48d      c68424eb00..   mov byte [var_ebh], 0xff    ; [0xff:1]=255 ; 255
+│   ││ ││   0x1000c495      8984240001..   mov dword [var_f0h], eax
+│   ││ ││   0x1000c49c      898c240401..   mov dword [var_f4h], ecx
+│   ││ ││   0x1000c4a3      ffd3           call ebx
+│   ││ ││   0x1000c4a5      56             push esi
+│   ││ ││   0x1000c4a6      ff1520810510   call dword [sym.imp.MSVCR100.dll_fclose] ; 0x10058120 ; int fclose(FILE *stream)
+│   ││ ││   0x1000c4ac      83c414         add esp, 0x14
+│   ││ ││   0x1000c4af      397d2c         cmp dword [arg_2ch], edi
+│   ││┌───< 0x1000c4b2      7416           je 0x1000c4ca
+│   │││││   0x1000c4b4      8d84247002..   lea eax, [var_270h]
+│   │││││   0x1000c4bb      50             push eax
+│   │││││   0x1000c4bc      6848bd0510     push str.SEQUENT.SYS        ; 0x1005bd48 ; "SEQUENT.SYS"
+│   │││││   0x1000c4c1      e88ae40000     call sym.czJetFileII.dll_czWriteSystemFile
+│   │││││   0x1000c4c6      8bf8           mov edi, eax
+│  ┌──────< 0x1000c4c8      eb04           jmp 0x1000c4ce
+│  │││└───> 0x1000c4ca      8b7c2414       mov edi, dword [var_14h_3]
+│  │││ ││   ; CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c4c8(x)
+│  └──────> 0x1000c4ce      8b35b4800510   mov esi, dword [sym.imp.KERNEL32.dll_DeleteFileA] ; [0x100580b4:4]=0x5f814 reloc.KERNEL32.dll_DeleteFileA
+│   ││ ││   0x1000c4d4      8d8c247002..   lea ecx, [var_270h_2]
+│   ││ ││   0x1000c4db      51             push ecx
+│   ││ ││   0x1000c4dc      ffd6           call esi
+│   ││ ││   0x1000c4de      8d94247001..   lea edx, [var_170h_2]
+│   ││ ││   0x1000c4e5      52             push edx
+│   ││ ││   0x1000c4e6      ffd6           call esi
+│   ││ ││   0x1000c4e8      8bc7           mov eax, edi
+│   ││ ││   0x1000c4ea      5f             pop edi
+│   ││ ││   0x1000c4eb      5e             pop esi
+│   ││ ││   0x1000c4ec      5b             pop ebx
+│   ││ ││   0x1000c4ed      8b8c246803..   mov ecx, dword [var_368h_4]
+│   ││ ││   0x1000c4f4      33cc           xor ecx, esp
+│   ││ ││   0x1000c4f6      e897900400     call fcn.10055592
+│   ││ ││   0x1000c4fb      8be5           mov esp, ebp
+│   ││ ││   0x1000c4fd      5d             pop ebp
+│   ││ ││   0x1000c4fe      c22800         ret 0x28
+│   ││ └└─> 0x1000c501      b802000000     mov eax, 2
+│   └└────> 0x1000c506      8b8c247403..   mov ecx, dword [arg_374h]
+│           0x1000c50d      5f             pop edi
+│           0x1000c50e      5e             pop esi
+│           0x1000c50f      5b             pop ebx
+│           0x1000c510      33cc           xor ecx, esp
+│           0x1000c512      e87b900400     call fcn.10055592
+│           0x1000c517      8be5           mov esp, ebp
+│           0x1000c519      5d             pop ebp
+└           0x1000c51a      c22800         ret 0x28

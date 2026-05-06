@@ -1,0 +1,299 @@
+openjdk version "21.0.10" 2026-01-20
+OpenJDK Runtime Environment Homebrew (build 21.0.10)
+OpenJDK 64-Bit Server VM Homebrew (build 21.0.10, mixed mode)
+INFO  Using log config file: jar:file:/opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml (LoggingInitialization)  
+INFO  Using log file: /Users/alexscott/Library/ghidra/ghidra_12.0.4_PUBLIC/application.log (LoggingInitialization)  
+INFO  Loading user preferences: /Users/alexscott/Library/ghidra/ghidra_12.0.4_PUBLIC/preferences (Preferences)  
+INFO  Searching for classes... (ClassSearcher)  
+INFO  Class search complete (764 ms) (ClassSearcher)  
+INFO  Initializing SSL Context (DefaultSSLContextInitializer)  
+INFO  Initializing Random Number Generator... (SecureRandomFactory)  
+INFO  Random Number Generator initialization complete: NativePRNGNonBlocking (SecureRandomFactory)  
+INFO  Trust manager disabled, cacerts have not been set (DefaultTrustManagerFactory)  
+INFO  Headless startup complete (1629 ms) (AnalyzeHeadless)  
+INFO  Class searcher loaded 58 extension points (18 false positives) (ClassSearcher)  
+INFO  HEADLESS Script Paths:
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/Base/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/SystemEmulation/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/FileFormats/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/WildcardAssembler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/BSim/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/8051/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/BytePatterns/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/Atmel/ghidra_scripts
+    /Users/alexscott/Projects/LEDctrl/analysis/ghidra
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Debug/Debugger-rmi-trace/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/Jython/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/DATA/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/FunctionID/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/PyGhidra/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/MicrosoftCodeAnalyzer/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/SwiftDemangler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/PDB/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/JVM/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/Decompiler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/GnuDemangler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/VersionTracking/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/DecompilerDependent/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/PIC/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Debug/Debugger/ghidra_scripts (HeadlessAnalyzer)  
+INFO  HEADLESS: execution starts (HeadlessAnalyzer)  
+INFO  Opening existing project: /Users/alexscott/Projects/LEDctrl/analysis/ghidra/./proj/SigmaProj (HeadlessAnalyzer)  
+INFO  Opening project: /Users/alexscott/Projects/LEDctrl/analysis/ghidra/./proj/SigmaProj (HeadlessProject)  
+INFO  REPORT: Processing project file: /czJetFileII.dll (HeadlessAnalyzer)  
+INFO  REPORT: Execute script: DumpReadInner.java  (HeadlessAnalyzer)  
+INFO  SCRIPT: /Users/alexscott/Projects/LEDctrl/analysis/ghidra/DumpReadInner.java (HeadlessAnalyzer)  
+INFO  DumpReadInner.java> 
+=================== FUN_100190c0_PCBID_inner (0x100190c0) =================== (GhidraScript)  
+INFO  DumpReadInner.java> 
+uint FUN_100190c0(undefined4 *param_1)
+
+{
+  int in_EAX;
+  int iVar1;
+  uint uVar2;
+  undefined4 local_8;
+  
+  if (param_1 == (undefined4 *)0x0) {
+    return 2;
+  }
+  local_8 = 0;
+  FUN_1000f590((void *)0x4,1,0x1b,&local_8,(void *)0x0);
+  if (in_EAX + 0x652 == 0) {
+    iVar1 = 0;
+  }
+  else {
+    iVar1 = *(byte *)(in_EAX + 0x656) + 0x10 +
+            ((uint)*(byte *)(in_EAX + 0x657) * 0x40 + (uint)*(byte *)(in_EAX + 0x660)) * 4;
+  }
+  uVar2 = FUN_1000fdd0(in_EAX + 0x652,iVar1);
+  if (uVar2 == 0) {
+    if ((undefined4 *)(in_EAX + 0x62) == (undefined4 *)0x0) {
+      *param_1 = 0;
+      return 0;
+    }
+    *param_1 = *(undefined4 *)(in_EAX + 0x62);
+  }
+  return uVar2;
+}
+
+ (GhidraScript)  
+INFO  DumpReadInner.java> 
+=================== FUN_10019000_BrightInfo_inner (0x10019000) =================== (GhidraScript)  
+INFO  DumpReadInner.java> 
+uint FUN_10019000(void *param_1)
+
+{
+  int iVar1;
+  uint uVar2;
+  size_t _Size;
+  int unaff_EDI;
+  
+  if (param_1 == (void *)0x0) {
+    return 2;
+  }
+  FUN_1000f590((void *)0x0,1,0x16,(void *)0x0,(void *)0x0);
+  if (unaff_EDI + 0x652 == 0) {
+    iVar1 = 0;
+  }
+  else {
+    iVar1 = *(byte *)(unaff_EDI + 0x656) + 0x10 +
+            ((uint)*(byte *)(unaff_EDI + 0x657) * 0x40 + (uint)*(byte *)(unaff_EDI + 0x660)) * 4;
+  }
+  uVar2 = FUN_1000fdd0(unaff_EDI + 0x652,iVar1);
+  if (uVar2 != 0) {
+    return uVar2;
+  }
+  if (unaff_EDI != -0x52) {
+    if (8 < *(ushort *)(unaff_EDI + 0x56)) {
+      _Size = 8;
+      goto LAB_1001908c;
+    }
+    if (unaff_EDI != -0x52) {
+      _Size = (size_t)*(ushort *)(unaff_EDI + 0x56);
+      goto LAB_1001908c;
+    }
+  }
+  _Size = 0;
+LAB_1001908c:
+  if (unaff_EDI == -0x52) {
+    iVar1 = 0;
+  }
+  else {
+    iVar1 = (uint)*(byte *)(unaff_EDI + 0x60) * 4;
+  }
+  memcpy(param_1,(void *)(iVar1 + 0x62 + unaff_EDI),_Size);
+  return 0;
+}
+
+ (GhidraScript)  
+INFO  DumpReadInner.java> 
+=================== FUN_1000f3e0_base_setup (0x1000f3e0) =================== (GhidraScript)  
+INFO  DumpReadInner.java> 
+undefined4 * FUN_1000f3e0(undefined4 *param_1)
+
+{
+  ushort uVar1;
+  uint uVar2;
+  int *piVar3;
+  code *pcVar4;
+  DWORD dwTlsIndex;
+  LPVOID pvVar5;
+  LPVOID pvVar6;
+  undefined1 *lpTlsValue;
+  BOOL BVar7;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  
+  local_8 = 0xffffffff;
+  puStack_c = &LAB_10056b3b;
+  local_10 = ExceptionList;
+  ExceptionList = &local_10;
+  *param_1 = CBaseCMD::vftable;
+  FUN_10002d90();
+  dwTlsIndex = DAT_10062c08;
+  local_8 = 0;
+  *(undefined1 *)((int)param_1 + 0x51) = 0;
+  *(undefined2 *)((int)param_1 + 0x1252) = 0;
+  pvVar5 = TlsGetValue(dwTlsIndex);
+  if ((pvVar5 == (LPVOID)0x0) && (pvVar5 = LocalAlloc(0x40,0x98), pvVar5 != (HLOCAL)0x0)) {
+    TlsSetValue(DAT_10062c08,pvVar5);
+  }
+  param_1[0x12] = pvVar5;
+  if (pvVar5 != (LPVOID)0x0) {
+    pvVar6 = TlsGetValue(DAT_10062c00);
+    pvVar5 = pvVar6;
+    if (pvVar6 == (LPVOID)0x0) {
+      lpTlsValue = operator_new(0x170);
+      pvVar5 = (LPVOID)0x0;
+      if (lpTlsValue != (undefined1 *)0x0) {
+        BVar7 = TlsSetValue(DAT_10062c00,lpTlsValue);
+        pvVar5 = (LPVOID)0x0;
+        if (BVar7 != 0) {
+          *lpTlsValue = 0;
+          *(undefined4 *)(lpTlsValue + 1) = 0;
+          *(undefined4 *)(lpTlsValue + 5) = 0;
+          *(undefined4 *)(lpTlsValue + 9) = 0;
+          *(undefined2 *)(lpTlsValue + 0xd) = 0;
+          lpTlsValue[0xf] = 0;
+          memset(lpTlsValue + 0x10,0,0x34);
+          memset(lpTlsValue + 0x44,0,300);
+          pvVar5 = pvVar6;
+        }
+      }
+    }
+    param_1[0x13] = pvVar5;
+    if (pvVar5 != (LPVOID)0x0) {
+      uVar1 = *(ushort *)(param_1[0x12] + 0x5c);
+      if ((uVar1 < 0x40) || (0x500 < uVar1)) {
+        *(undefined2 *)(param_1[0x12] + 0x5c) = 0x300;
+      }
+      uVar2 = *(uint *)(param_1[0x12] + 0x4c);
+      if ((uVar2 == 0) || (100 < uVar2)) {
+        *(undefined4 *)(param_1[0x12] + 0x4c) = 3;
+      }
+      uVar2 = *(uint *)(param_1[0x12] + 0x50);
+      if ((uVar2 < 0x32) || (60000 < uVar2)) {
+        *(undefined4 *)(param_1[0x12] + 0x50) = 3000;
+      }
+      piVar3 = (int *)param_1[0x12];
+      if ((piVar3[0x21] == 0) || (piVar3[0x22] == 0)) {
+        FUN_10002e10(piVar3[0xf],piVar3[0xe],*piVar3,(char *)(piVar3 + 10));
+        *(undefined1 *)(param_1 + 0x14) = 1;
+      }
+      else {
+        *(undefined1 *)(param_1 + 0x14) = 0;
+      }
+      pcVar4 = *(code **)(param_1[0x12] + 0x78);
+      if (pcVar4 != (code *)0x0) {
+        (*pcVar4)(param_1[0x12]);
+      }
+    }
+  }
+  ExceptionList = local_10;
+  return param_1;
+}
+
+ (GhidraScript)  
+INFO  DumpReadInner.java> 
+=================== FUN_10002f60_gate (0x10002f60) =================== (GhidraScript)  
+INFO  DumpReadInner.java> 
+undefined4 __fastcall FUN_10002f60(void *param_1)
+
+{
+  int iVar1;
+  undefined4 uVar2;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  
+  puStack_c = &LAB_10056b90;
+  local_10 = ExceptionList;
+  uVar2 = 0;
+  if (*(int *)((int)param_1 + 0x40) == 0) {
+    return 0;
+  }
+  local_8 = 0;
+  iVar1 = *(int *)((int)param_1 + 0x3c);
+  ExceptionList = &local_10;
+  if (iVar1 == 0) {
+    uVar2 = FUN_100018d0(*(undefined2 *)((int)param_1 + 0x34),*(undefined2 *)((int)param_1 + 0x30));
+  }
+  else {
+    if (iVar1 == 1) {
+      uVar2 = FUN_100015a0(param_1,*(undefined2 *)((int)param_1 + 0x34),
+                           *(undefined2 *)((int)param_1 + 0x30));
+      ExceptionList = local_10;
+      return uVar2;
+    }
+    if (iVar1 == 2) {
+      uVar2 = FUN_10001250((void *)((int)param_1 + 0x20),*(DWORD *)((int)param_1 + 0x38));
+      ExceptionList = local_10;
+      return CONCAT31((int3)((uint)uVar2 >> 8),1);
+    }
+  }
+  ExceptionList = local_10;
+  return uVar2;
+}
+
+ (GhidraScript)  
+INFO  DumpReadInner.java> 
+=================== czReadCurrentState =================== (GhidraScript)  
+INFO  DumpReadInner.java> addr=10016aa0 (GhidraScript)  
+INFO  DumpReadInner.java> 
+/* WARNING: Function: __alloca_probe replaced with injection: alloca_probe */
+
+void czReadCurrentState(undefined4 *param_1,void *param_2,size_t param_3)
+
+{
+  undefined4 uVar1;
+  undefined **local_1264;
+  undefined1 local_1260 [64];
+  int *local_1220;
+  int local_121c;
+  char local_1214;
+  uint local_8;
+  
+                    /* 0x16aa0  20  czReadCurrentState */
+  local_8 = DAT_10062028 ^ (uint)&stack0xfffffffc;
+  FUN_1000f3e0(&local_1264);
+  local_1264 = czReadLED::vftable;
+  if ((((local_121c != 0) && (*(int *)(local_121c + 4) == 1)) &&
+      ((local_1214 == '\0' || (uVar1 = FUN_10002f60(local_1260), (char)uVar1 != '\0')))) &&
+     ((FUN_10018ae0(param_1,param_2,param_3), local_1214 != '\0' && (local_1220 != (int *)0x0)))) {
+    (**(code **)(*local_1220 + 0xc))();
+  }
+  local_1264 = CBaseCMD::vftable;
+  if (*(code **)(local_121c + 0x7c) != (code *)0x0) {
+    (**(code **)(local_121c + 0x7c))(local_121c);
+  }
+  if (local_1220 != (int *)0x0) {
+    (**(code **)*local_1220)(1);
+  }
+  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);
+  return;
+}
+
+ (GhidraScript)  
+INFO  REPORT: Save succeeded for processed file: /czJetFileII.dll (HeadlessAnalyzer)  

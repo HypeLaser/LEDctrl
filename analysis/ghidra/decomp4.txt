@@ -1,0 +1,16 @@
+=== Immediate operand hits for target addresses ===
+Total: 0
+addr 0x524510 : 0 hits
+addr 0x546238 : 0 hits
+addr 0x546234 : 0 hits
+addr 0x54624c : 0 hits
+addr 0x546248 : 0 hits
+
+=== Bytes 0x546228..0x546278 ===
+00546228: 79 73 46 69 6c 65 00 00 ff ff ff ff 08 00 00 00  |ysFile..........|
+00546238: 74 65 6d 70 2e 4e 6d 67 00 00 00 00 ff ff ff ff  |temp.Nmg........|
+00546248: 10 00 00 00 53 65 71 75 65 6e 74 4c 69 73 74 2e  |....SequentList.|
+00546258: 74 6d 70 73 00 00 00 00 ff ff ff ff 05 00 00 00  |tmps............|
+00546268: 53 69 67 6d 61 00 00 00 55 8b ec 83 c4 ec 89 55  |Sigma...U......U|
+
+=== Decompiled (0 funcs) ===

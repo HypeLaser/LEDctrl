@@ -5,10 +5,26 @@ public struct SigmaClient {
     public let host: String
     public let port: UInt16
     private var sequence: UInt16 = 0x100
+    private var clockHandshakeDone: Bool = false
+    public var autoSetClockOnSend: Bool = true
 
     public init(host: String, port: UInt16 = 9520) {
         self.host = host
         self.port = port
+    }
+
+    /// Sigma treats an invalid RTC as a render gate — playback engine refuses
+    /// to render until the clock is set. Called once per instance before the
+    /// first message-send, best-effort: a failure here is logged on stderr but
+    /// does not block the send.
+    private mutating func ensureClock() {
+        guard autoSetClockOnSend, !clockHandshakeDone else { return }
+        do {
+            try setSignTime()
+            clockHandshakeDone = true
+        } catch {
+            FileHandle.standardError.write(Data("warning: setSignTime handshake failed: \(error)\n".utf8))
+        }
     }
 
     public mutating func sendText(
@@ -18,6 +34,7 @@ public struct SigmaClient {
         options: SigmaTextOptions = .default,
         editorFontCompat: Bool = false
     ) throws -> [String] {
+        ensureClock()
         var steps: [String] = []
         steps.append(try simpleCommand(major: 0x04, minor: 0x01))
         let message = makeNmg(text: text, font: font, color: color, options: options, editorFontCompat: editorFontCompat)
@@ -25,7 +42,7 @@ public struct SigmaClient {
         steps.append(try sendFile(name: "D\0temp.Nmg", content: message, command: 0x04))
         steps.append(try commit(path: "D:\\T\\temp.Nmg", content: message))
 
-        let sequenceFile = makeSequenceFile(messageLength: message.count)
+        let sequenceFile = makeSequenceFile(messageLength: message.count, nmgPayload: message)
         steps.append(try sendSequenceFile(sequenceFile))
         steps.append(try simpleCommand(major: 0x04, minor: 0x02))
         return steps
@@ -37,6 +54,7 @@ public struct SigmaClient {
         color: SigmaColor = .red,
         options: SigmaTextOptions = .default
     ) throws -> [String] {
+        ensureClock()
         var steps: [String] = []
         steps.append(try simpleCommand(major: 0x04, minor: 0x01))
         let message = makeEditorNmg(text: text, font: font, color: color, options: options)
@@ -54,6 +72,7 @@ public struct SigmaClient {
         let validEntries = entries.filter { !$0.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
         guard !validEntries.isEmpty else { return [] }
 
+        ensureClock()
         var steps: [String] = []
         steps.append(try simpleCommand(major: 0x04, minor: 0x01))
 
@@ -74,7 +93,8 @@ public struct SigmaClient {
                     filename: filename,
                     length: message.count,
                     fileType: .text,
-                    driveCode: UInt8(ascii: "D")
+                    driveCode: UInt8(ascii: "D"),
+                    nmgPayload: message
                 )
             )
         }
@@ -92,6 +112,7 @@ public struct SigmaClient {
     ) throws -> [String] {
         let placement = filePlacement(for: fileType)
         let uploadDrive = (fileType == .flw) ? "D" : placement.drive
+        ensureClock()
         var steps: [String] = []
         steps.append(
             "program routing: type=\(fileType.rawValue) upload=\(uploadDrive):\\0\(filename) commit=\(placement.drive):\\\(placement.folder)\\\(filename) seq=\(Character(UnicodeScalar(placement.driveCode)))/\(Character(UnicodeScalar(fileType.code)))"
@@ -105,7 +126,8 @@ public struct SigmaClient {
             messageLength: content.count,
             filename: filename,
             fileType: fileType,
-            driveCode: placement.driveCode
+            driveCode: placement.driveCode,
+            nmgPayload: fileType == .flw ? nil : content
         )
         debugDump(sequenceFile, filename: "last-send-sequence.sys")
         steps.append("sequence header: \(sequenceHeaderSummary(sequenceFile))")
@@ -120,6 +142,7 @@ public struct SigmaClient {
         sequenceFileOverride: Data? = nil,
         payloadLengthOverride: Int? = nil
     ) throws -> [String] {
+        ensureClock()
         var steps: [String] = []
         let sequenceFile = sequenceFileOverride ?? makeEditorSequenceFile()
         let payload: Data
@@ -145,6 +168,7 @@ public struct SigmaClient {
         let validEntries = entries.filter { !$0.content.isEmpty }
         guard !validEntries.isEmpty else { return [] }
 
+        ensureClock()
         var steps: [String] = []
         steps.append(try simpleCommand(major: 0x04, minor: 0x01))
 
@@ -165,7 +189,8 @@ public struct SigmaClient {
                     filename: entry.filename,
                     length: payload.count,
                     fileType: entry.fileType,
-                    driveCode: UInt8(ascii: "D")
+                    driveCode: UInt8(ascii: "D"),
+                    nmgPayload: entry.fileType == .flw ? nil : payload
                 )
             )
         }
@@ -200,17 +225,122 @@ public struct SigmaClient {
         if pathData.last != 0x00 {
             pathData.append(0x00)
         }
-        let argWords = UInt8((pathData.count + 3) / 4)
+        while pathData.count % 4 != 0 {
+            pathData.append(0x00)
+        }
+        let argWords = UInt8(pathData.count / 4)
+
+        let context = "delete \(path)"
+        var lastError: Error?
+        for attempt in 1...3 {
+            var payload = Data()
+            payload.append(contentsOf: [0x00, 0x00, 0x00, 0x00, 0x01, 0x01])
+            payload.append(contentsOf: le16(nextSequence()))
+            payload.append(contentsOf: [0x07, 0x06, argWords, 0x00])
+            payload.append(pathData)
+            do {
+                try requireOK(try transact(payload), context: context)
+                return "\(context): OK"
+            } catch SigmaError.timeout {
+                lastError = SigmaError.timeout
+                if attempt < 3 { usleep(500_000) }
+            } catch {
+                throw error
+            }
+        }
+        throw lastError ?? SigmaError.timeout
+    }
+
+    public mutating func pausePlay() throws -> String {
+        var payload = Data()
+        payload.append(contentsOf: [0x00, 0x00, 0x00, 0x00, 0x01, 0x01])
+        payload.append(contentsOf: le16(nextSequence()))
+        payload.append(contentsOf: [0x06, 0x03, 0x00, 0x00])
+        let context = "pausePlay 06:03"
+        try requireOK(try transact(payload), context: context)
+        return "\(context): OK"
+    }
+
+    public mutating func clearAll(partition: Character = "D") throws -> [String] {
+        // Per JetFileII v2.8.7 sec 3.7: 0x07:0x07/08/09/0A delete all text/string/picture/array
+        // files on a partition. Arg = [partition_letter, 0x00, 0x00, 0x00], ArgLen=1.
+        let partByte = UInt8(partition.asciiValue ?? UInt8(ascii: "D"))
+        let subs: [(UInt8, String)] = [
+            (0x07, "delAllText"),
+            (0x08, "delAllString"),
+            (0x09, "delAllPic"),
+            (0x0a, "delAllArrayPic"),
+        ]
+        var steps: [String] = []
+        for (sub, label) in subs {
+            let context = "clearAll \(label) 07:\(String(format: "%02X", sub)) part=\(partition)"
+            var lastError: Error?
+            var ok = false
+            for attempt in 1...3 {
+                var payload = Data()
+                payload.append(contentsOf: [0x00, 0x00, 0x00, 0x00, 0x01, 0x01])
+                payload.append(contentsOf: le16(nextSequence()))
+                payload.append(contentsOf: [0x07, sub, 0x01, 0x00])
+                payload.append(contentsOf: [partByte, 0x00, 0x00, 0x00])
+                do {
+                    try requireOK(try transact(payload), context: context)
+                    ok = true
+                    break
+                } catch SigmaError.timeout {
+                    lastError = SigmaError.timeout
+                    if attempt < 3 { usleep(500_000) }
+                } catch {
+                    lastError = error
+                    break
+                }
+            }
+            if !ok {
+                steps.append("\(context): \(lastError.map { "\($0)" } ?? "failed")")
+            } else {
+                steps.append("\(context): OK")
+            }
+        }
+        return steps
+    }
+
+    public mutating func listFiles(flag: UInt8 = 1, path: String = "") throws -> (count: UInt16, raw: Data, names: [String]) {
+        // 0x07:0x0B DIR. flag: 0=use Arg path, 1=root of default partition,
+        // 2=fonts, 3=text, 4=string, 5=picture, 6=array picture.
+        var arg = Data()
+        if flag == 0 {
+            arg.append(Data(path.utf8))
+            if arg.last != 0 { arg.append(0x00) }
+            while arg.count % 4 != 0 { arg.append(0x00) }
+        }
+        let argWords = UInt8((arg.count + 3) / 4)
 
         var payload = Data()
         payload.append(contentsOf: [0x00, 0x00, 0x00, 0x00, 0x01, 0x01])
         payload.append(contentsOf: le16(nextSequence()))
-        payload.append(contentsOf: [0x07, 0x06, argWords, 0x00])
-        payload.append(pathData)
+        payload.append(contentsOf: [0x07, 0x0b, argWords, flag])
+        payload.append(arg)
 
-        let context = "delete \(path)"
-        try requireOK(try transact(payload), context: context)
-        return "\(context): OK"
+        let context = "listFiles flag=\(flag) path=\(path)"
+        let response = try transact(payload)
+        try requireOK(response, context: context)
+
+        // Echo header is 16 bytes: SYN+CS+DataLen+Src+Dst+Serial+Major+Sub+ArgLen+Flag.
+        // Then 4-byte arg [count_LE16, reserved_LE16] then N bytes of DirectoryEntryStruct (32B each).
+        guard response.count >= 20 else { return (0, Data(), []) }
+        let count = UInt16(response[16]) | (UInt16(response[17]) << 8)
+        let entries = response.subdata(in: 20..<response.count)
+        var names: [String] = []
+        let entrySize = 32
+        var i = 0
+        while i + entrySize <= entries.count {
+            let nameBytes = entries.subdata(in: i..<(i + 11))
+            let trimmed = nameBytes.prefix { $0 != 0 }
+            if let s = String(data: Data(trimmed), encoding: .ascii), !s.isEmpty {
+                names.append(s)
+            }
+            i += entrySize
+        }
+        return (count, entries, names)
     }
 
     private mutating func sendFile(name: String, content: Data, command: UInt8) throws -> String {
@@ -378,6 +508,167 @@ public struct SigmaClient {
     private mutating func nextSequence() -> UInt16 {
         defer { sequence &+= 1 }
         return sequence
+    }
+
+    /// Low-level RPC. Sends `(major, sub)` with optional param_3 (word-aligned scalar args)
+    /// and param_4 (byte-blob payload), returns response body (bytes after the 16-byte header).
+    /// Mirrors FUN_1000f590 in czJetFileII.dll.
+    public mutating func queryRPC(
+        major: UInt8,
+        sub: UInt8,
+        param3: Data = Data(),
+        param4: Data = Data()
+    ) throws -> SigmaRPCResponse {
+        guard param3.count % 4 == 0 else {
+            throw SigmaError.socket("queryRPC param3 length must be a multiple of 4 (got \(param3.count))")
+        }
+        let words = UInt16(param3.count / 4)
+        let seq = nextSequence()
+
+        var payload = Data()
+        payload.append(contentsOf: le32(UInt32(param4.count)))
+        payload.append(contentsOf: [0x01, 0x01])
+        payload.append(contentsOf: le16(seq))
+        payload.append(contentsOf: [major, sub])
+        payload.append(contentsOf: le16(words))
+        payload.append(param3)
+        payload.append(param4)
+
+        let response = try transact(payload)
+        guard response.count >= 16 else {
+            throw SigmaError.shortResponse("rpc \(String(format: "%02X:%02X", major, sub))", hex(response))
+        }
+        let respMajor = response[12]
+        let respSub = response[13]
+        let respWords = UInt16(response[14]) | (UInt16(response[15]) << 8)
+        let respParam4Len = UInt32(response[4])
+            | (UInt32(response[5]) << 8)
+            | (UInt32(response[6]) << 16)
+            | (UInt32(response[7]) << 24)
+        let respSeq = UInt16(response[10]) | (UInt16(response[11]) << 8)
+
+        let body = response.suffix(from: response.startIndex + 16)
+        let param3Len = Int(respWords) * 4
+        let safeParam3Len = min(param3Len, body.count)
+        let param3Out = Data(body.prefix(safeParam3Len))
+        let remaining = body.dropFirst(safeParam3Len)
+        let param4Len = min(Int(respParam4Len), remaining.count)
+        let param4Out = Data(remaining.prefix(param4Len))
+
+        return SigmaRPCResponse(
+            major: respMajor,
+            sub: respSub,
+            sequence: respSeq,
+            param3: param3Out,
+            param4: param4Out,
+            raw: response
+        )
+    }
+
+    /// czReadPCBID — major=1, sub=0x1b.
+    /// Response body layout: u16 status (0x9005) + u32 pcb-id (LE).
+    public mutating func readPCBID() throws -> UInt32 {
+        let response = try queryRPC(
+            major: 0x01,
+            sub: 0x1b,
+            param3: Data(repeating: 0, count: 4)
+        )
+        let body = response.bodyBytes
+        guard body.count >= 6 else {
+            throw SigmaError.shortResponse("readPCBID", hex(response.raw))
+        }
+        let base = body.startIndex
+        let status = UInt16(body[base]) | (UInt16(body[base + 1]) << 8)
+        guard status == 0x9005 || status == 0x9000 else {
+            throw SigmaError.status("readPCBID", status, hex(response.raw))
+        }
+        return UInt32(body[base + 2])
+            | (UInt32(body[base + 3]) << 8)
+            | (UInt32(body[base + 4]) << 16)
+            | (UInt32(body[base + 5]) << 24)
+    }
+
+    /// czReadBrightInfoExt — major=1, sub=0x16. Returns 8-byte brightness telemetry blob:
+    /// [mode, level, ...6 reserved]. Mode bit 0 = auto.
+    public mutating func readBrightnessInfo() throws -> SigmaBrightnessInfo {
+        let response = try queryRPC(major: 0x01, sub: 0x16)
+        let body = response.bodyBytes
+        guard body.count >= 2 else {
+            throw SigmaError.shortResponse("readBrightnessInfo", hex(response.raw))
+        }
+        let base = body.startIndex
+        return SigmaBrightnessInfo(
+            modeFlags: body[base],
+            level: body[base + 1],
+            raw: Data(body)
+        )
+    }
+
+    /// czReadLEDTime — major=0x05, sub=0x01. No payload. Response body is 8 BCD
+    /// bytes (no status prefix; success implied by the wire-header ack):
+    ///   yearLow, yearHigh, month, day, hour, minute, second, weekday raw.
+    public mutating func readSignTime() throws -> SigmaSignTime {
+        let response = try queryRPC(major: 0x05, sub: 0x01)
+        let body = response.bodyBytes
+        guard body.count >= 8 else {
+            throw SigmaError.shortResponse("readSignTime", hex(response.raw))
+        }
+        let base = body.startIndex
+        func bcd(_ byte: UInt8) -> Int { Int(byte >> 4) * 10 + Int(byte & 0x0F) }
+        let yearLow = bcd(body[base])
+        let yearHigh = bcd(body[base + 1])
+        return SigmaSignTime(
+            year: yearHigh * 100 + yearLow,
+            month: bcd(body[base + 2]),
+            day: bcd(body[base + 3]),
+            hour: bcd(body[base + 4]),
+            minute: bcd(body[base + 5]),
+            second: bcd(body[base + 6]),
+            weekday: Int(body[base + 7])
+        )
+    }
+
+    /// czAjustLEDTimeEx — major=0x05, sub=0x04. 12-byte param3 payload:
+    ///   yearLow BCD, yearHigh BCD, month BCD, day BCD,
+    ///   hour BCD, minute BCD, second BCD, weekday raw,
+    ///   u32 reserved (0).
+    /// Sigma treats invalid RTC as a render gate — playback engine refuses
+    /// to render until the clock is set, so this should be called once on
+    /// connect as part of the init handshake.
+    public mutating func setSignTime(_ date: Date = Date()) throws {
+        let calendar = Calendar(identifier: .gregorian)
+        let components = calendar.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second, .weekday],
+            from: date
+        )
+        guard
+            let year = components.year,
+            let month = components.month,
+            let day = components.day,
+            let hour = components.hour,
+            let minute = components.minute,
+            let second = components.second,
+            let weekday = components.weekday
+        else {
+            throw SigmaError.socket("setSignTime: failed to extract date components")
+        }
+        func bcd(_ value: Int) -> UInt8 {
+            let v = max(0, min(99, value))
+            return UInt8((v / 10) << 4 | (v % 10))
+        }
+        var payload = Data(count: 12)
+        payload[0] = bcd(year % 100)
+        payload[1] = bcd((year / 100) & 0xFF)
+        payload[2] = bcd(month)
+        payload[3] = bcd(day)
+        payload[4] = bcd(hour)
+        payload[5] = bcd(minute)
+        payload[6] = bcd(second)
+        payload[7] = UInt8(weekday & 0xFF)
+        let response = try queryRPC(major: 0x05, sub: 0x04, param3: payload)
+        guard response.major == 0x05, response.sub == 0x04 else {
+            throw SigmaError.shortResponse("setSignTime", hex(response.raw))
+        }
     }
 
     public mutating func replayCapturedPackets(_ packets: [SigmaReplayPacket]) throws -> [String] {
@@ -607,6 +898,65 @@ public struct SigmaTextProgramEntry: Sendable {
         self.color = color
         self.options = options
     }
+}
+
+public struct SigmaRPCResponse: Sendable {
+    public let major: UInt8
+    public let sub: UInt8
+    public let sequence: UInt16
+    public let param3: Data
+    public let param4: Data
+    public let raw: Data
+
+    /// Concatenated body (param3 + param4) — useful when the response packs
+    /// status/value bytes into whichever slot fits.
+    public var bodyBytes: Data {
+        if !param3.isEmpty && !param4.isEmpty { return param3 + param4 }
+        return param3.isEmpty ? param4 : param3
+    }
+}
+
+public struct SigmaSignTime: Sendable, Equatable {
+    public let year: Int
+    public let month: Int
+    public let day: Int
+    public let hour: Int
+    public let minute: Int
+    public let second: Int
+    public let weekday: Int
+
+    public init(
+        year: Int,
+        month: Int,
+        day: Int,
+        hour: Int,
+        minute: Int,
+        second: Int,
+        weekday: Int
+    ) {
+        self.year = year
+        self.month = month
+        self.day = day
+        self.hour = hour
+        self.minute = minute
+        self.second = second
+        self.weekday = weekday
+    }
+
+    public var description: String {
+        String(
+            format: "%04d-%02d-%02d %02d:%02d:%02d (wd=%d)",
+            year, month, day, hour, minute, second, weekday
+        )
+    }
+}
+
+public struct SigmaBrightnessInfo: Sendable {
+    public let modeFlags: UInt8
+    public let level: UInt8
+    public let raw: Data
+
+    public var isAuto: Bool { modeFlags & 0x01 != 0 }
 }
 
 public struct SigmaReplayPacket: Sendable {
@@ -1276,6 +1626,14 @@ private let tokenDisplayWidth: [String: Int] = [
 ]
 
 private struct SigmaSequenceEntry {
+    init(filename: String, length: Int, fileType: SigmaProgramFileType, driveCode: UInt8, nmgPayload: Data? = nil) {
+        self.filename = filename
+        self.length = length
+        self.fileType = fileType
+        self.driveCode = driveCode
+        self.nmgPayload = nmgPayload
+    }
+    let nmgPayload: Data?
     let filename: String
     let length: Int
     let fileType: SigmaProgramFileType
@@ -1286,10 +1644,11 @@ private func makeSequenceFile(
     messageLength: Int,
     filename: String = "temp.Nmg",
     fileType: SigmaProgramFileType = .text,
-    driveCode: UInt8 = UInt8(ascii: "D")
+    driveCode: UInt8 = UInt8(ascii: "D"),
+    nmgPayload: Data? = nil
 ) -> Data {
     makeSequenceFile(
-        entries: [SigmaSequenceEntry(filename: filename, length: messageLength, fileType: fileType, driveCode: driveCode)]
+        entries: [SigmaSequenceEntry(filename: filename, length: messageLength, fileType: fileType, driveCode: driveCode, nmgPayload: nmgPayload)]
     )
 }
 
@@ -1312,24 +1671,49 @@ private func makeSequenceFile(entries: [SigmaSequenceEntry]) -> Data {
         return data
     }
 
-    var data = Data([
-        0x53, 0x51, 0x04, 0x00
-    ])
-    data.append(contentsOf: le16(UInt16(entries.count)))
-    data.append(contentsOf: [
-        0x00, 0x00,
-        entries[0].driveCode, entries[0].fileType.code, 0x0f, 0x7f, 0x26, 0x20, 0x05, 0x00,
-        0x01, 0x01, 0x01, 0x01, 0x26, 0x20, 0x05, 0x00,
-        0x01, 0x01, 0x01, 0x01
-    ])
+    // SQ block layout verified from 5 A-set wire captures (2026-05-06).
+    // See analysis/captures/A*-*.notes.md and tasks/sq-block-rewrite-plan.md.
+    //
+    // Block header (16B): count_LE32 + "SQ\x04\x00" + ver_LE32(=1) + "DT\x0f\x7f"
+    // Per entry (28B):    tsA(8) + tsB(8) + slot1_LE16 + slot2_LE16 + filename_8B
+    // Total per single-entry SequentList: 16 + 28 = 44B.
+    var data = Data()
+    data.append(contentsOf: le32(UInt32(entries.count)))
+    data.append(contentsOf: [0x53, 0x51, 0x04, 0x00])
+    data.append(contentsOf: le32(1))
+    data.append(contentsOf: [0x44, 0x54, 0x0f, 0x7f])
+    let timestamp = sigmaCreationTimestamp()
     for entry in entries {
-        // Vendor format: [length: 2 bytes] [flags: 2 bytes] [filename: 12 bytes]
-        // No 0xf8 0x00 prefix (that was from an incorrect guess).
+        data.append(timestamp)
+        data.append(timestamp)
+        // slot1: timing/dwell. Vendor Editor v3.99 leaks uninitialised stack
+        // memory here (verified: A4-WON ≡ A4-WOFF identical despite content
+        // diff; A2-WON = 0x2020 = " ", A2-WOFF = 0x7274 = "tr"). Sign appears
+        // to ignore. Emit 0 until knob-test capture clarifies semantics.
+        data.append(contentsOf: le16(0))
+        // slot2: NMG body length.
         data.append(contentsOf: le16(UInt16(clamping: entry.length)))
-        data.append(contentsOf: [0x01, 0x01])
-        data.append(contentsOf: fixedBytes(entry.filename, count: 12))
+        data.append(contentsOf: fixedBytes(entry.filename, count: 8))
     }
     return data
+}
+
+/// 8-byte BCD timestamp matching Editor v3.99 SQ-block format:
+/// (yrLo, yrHi, mo, hr, 01, 01, 01, 01). Editor only fills first 4 fields;
+/// trailing 4 bytes are template defaults (verified across 5 captures).
+private func sigmaCreationTimestamp(now: Date = Date()) -> Data {
+    let cal = Calendar(identifier: .gregorian)
+    let parts = cal.dateComponents([.year, .month, .hour], from: now)
+    func bcd(_ value: Int) -> UInt8 {
+        let clamped = max(0, min(99, value))
+        return UInt8(((clamped / 10) << 4) | (clamped % 10))
+    }
+    let year = parts.year ?? 2000
+    let yrLo = bcd(year % 100)
+    let yrHi = bcd(year / 100)
+    let mo = bcd(parts.month ?? 1)
+    let hr = bcd(parts.hour ?? 0)
+    return Data([yrLo, yrHi, mo, hr, 0x01, 0x01, 0x01, 0x01])
 }
 
 private func filePlacement(for fileType: SigmaProgramFileType) -> (drive: String, folder: String, driveCode: UInt8) {

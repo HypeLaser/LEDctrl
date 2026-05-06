@@ -1,0 +1,1321 @@
+// callconv: eax cdecl (stack);
+void sym.czJetFileII.dll__czShowMsgToNmg_28 (int32_t arg_8h, int32_t arg_ch, int32_t arg_10h, int32_t arg_14h, int32_t arg_18h, int32_t arg_1ch, int32_t arg_20h) {
+        push (ebp)
+        ebp = esp
+        esp -= 0x48
+        eax = dword [0x10062028] // [0x10062028:4]=0xbb40e64e
+        eax ^= ebp
+        dword [var_4h] = eax
+        ecx = dword [arg_8h]
+        eax = dword [arg_10h]
+        dword [var_48h] = ecx
+        v = ecx & ecx
+        if (!v) goto loc_0x1000c712 // likely
+        goto loc_0x1000c541;
+    loc_0x1000c712:
+        ecx = dword [var_4h] // ebp
+        ecx ^= ebp
+        eax = 2
+        fcn.10055592 () // fcn.10055592(0x2, 0x0)
+        esp = ebp
+        ebp = pop ()
+        return
+        goto loc_0x1000c549;
+        return eax;
+    loc_0x1000c549:
+        v = dword [arg_ch] - 0
+        if (!v) goto loc_0x1000c712 // likely
+        goto loc_0x1000c553;
+    loc_0x1000c553:
+        push (edi)
+        push (0x1005bd54) // "wb" // (pstr 0x1005bd54) "wb"
+        push (eax)
+        dword [sym.imp.MSVCR100.dll_fopen] () // 0x10058110 // reloc.MSVCR100.dll_fopen // file*fopen(NULL, "wb")
+        edi = eax
+        esp += 8
+        v = edi & edi
+        if (v) goto loc_0x1000c57f // unlikely
+        return eax;
+    loc_0x1000c57f:
+        push (0x40)   // '@' // 64 // "@"
+        eax = var_44h
+        push (0)
+        push (eax)
+        sub.MSVCR100.dll_memset () // void *memset(0x00000000, NULL, 0x00000000)
+        al = byte [0x1005be06] // [0x1005be06:1]=88 // "X"
+        ecx = dword [str.QZ00SAX] // [0x1005be00:4]=0x30305a51 // "QZ00SAX"
+        dx = word [0x1005be04] // [0x1005be04:2]=0x4153 // "SAX"
+        byte [var_3eh] = al
+        eax = dword [arg_14h]
+        dword [var_44h] = ecx
+        ecx = eax - 0x30
+        esp += 0xc    // ebp
+        word [var_40h] = dx
+        byte [var_3dh] = 0x1a // 26
+        v = ecx - 0x39 // '9' // 57
+        if (((unsigned) v) <= 0) goto 0x1000c5bf // unlikely
+        goto loc_0x1000c5ba;
+    loc_0x1000c5bf:
+        byte [var_3ch] = al
+        eax = dword [arg_18h]
+        byte [var_3bh] = 0x1c // 28
+        v = al - 0x2f // '/' // 47
+        if (v) goto loc_0x1000c5ed // likely
+        goto loc_0x1000c5cd;
+    loc_0x1000c5ed:
+        v = eax - 0x2f // '/' // 47
+        if (((unsigned) v) > 0) goto 0x1000c5f7 // unlikely
+        goto loc_0x1000c5f2;
+    loc_0x1000c5f7:
+        byte [var_3ah] = al
+        ecx = 0xb     // 11
+        
+    loc_0x1000c5ff:
+        // CODE XREF from sym.czJetFileII.dll__czShowMsgToNmg_28 @ 0x1000c5eb(x)
+        eax = dword [arg_1ch]
+        push (ebx)
+        push (esi)
+        bl = 0xa
+        word [ebp + ecx - 0x44] = 0x490a // '\nI'
+        edx = eax
+        v = eax - 0x2e // '.' // 46
+        if (((unsigned) v) > 0) goto 0x1000c619 // unlikely
+        goto loc_0x1000c614;
+    loc_0x1000c619: // orphan
+         byte [ebp + ecx - 0x42] = dl
+         byte [ebp + ecx - 0x41] = bl
+         byte [ebp + ecx - 0x40] = 0x4f // 'O' // 79
+         v = eax - 0x2e           // '.' // 46
+         if (((unsigned) v) > 0) 
+    loc_0x1000c630: // orphan
+         ebx = dword [arg_20h]
+         byte [ebp + ecx - 0x3f] = al
+         eax = 0xd1b71759
+         eax = eax * ebx
+         edx >>>= 0xd
+         edx = edx * 0x2710
+         esi = ebx
+         esi -= edx
+         eax = 0x10624dd3
+         eax = eax * esi
+         edx >>>= 6
+         dl += 0x30               // 48
+         word [ebp + ecx - 0x3e] = 0x320e // '\x0e2'
+         byte [ebp + ecx - 0x3c] = dl
+         eax = 0x10624dd3
+         eax = eax * ebx
+         edx >>>= 6
+         edx = edx * 0x3e8        // 1000
+         esi = ebx
+         esi -= edx
+         eax = 0x51eb851f
+         eax = eax * esi
+         edx >>>= 5
+         dl += 0x30               // 48
+         byte [ebp + ecx - 0x3b] = dl
+         eax = 0x51eb851f
+         eax = eax * ebx
+         edx >>>= 5
+         edx = edx * 0x64         // 100
+         esi = ebx
+         esi -= edx
+         eax = 0xcccccccd
+         eax = eax * esi
+         edx >>>= 3
+         dl += 0x30               // 48
+         byte [ebp + ecx - 0x3a] = dl
+         eax = 0xcccccccd
+         eax = eax * ebx
+         esi = dword [sym.imp.MSVCR100.dll_fwrite] // [0x10058178:4]=0x5fab2 reloc.MSVCR100.dll_fwrite // reloc.MSVCR100.dll_fwrite
+         edx >>>= 3
+         al = dl
+         dl += dl
+         dl += dl
+         al += dl
+         al += al
+         bl -= al
+         push (edi)
+         bl += 0x30               // 48
+         byte [ebp + ecx - 0x39] = bl
+         push (1)                 // 1
+         ecx += 0xc               // 12
+         push (ecx)
+         eax = var_44h            // "\nI"
+         push (eax)               // (pstr 0x00177fbc) "\nI"
+         esi ()                   // reloc.MSVCR100.dll_fwrite // size_t fwrite(0x0000490a, 0x00000000, 0x00000000, -1)
+         ecx = dword [arg_ch]
+         edx = dword [var_48h]
+         push (edi)
+         push (1)                 // 1
+         push (ecx)
+         push (edx)               // (cstr 0x00177fbc) "\nI"
+         esi ()                   // reloc.MSVCR100.dll_fwrite // size_t fwrite(NULL, NULL, 0x00000000, -1)
+         push (edi)
+         push (1)                 // 1
+         push (1)                 // 1
+         push (0x1005bdc0)
+         esi ()                   // reloc.MSVCR100.dll_fwrite // size_t fwrite(0x00000004, 0x00000000, 0x00000000, -1)
+         push (edi)
+         dword [sym.imp.MSVCR100.dll_fclose] () // 0x10058120 // reloc.MSVCR100.dll_fclose // int fclose(-1)
+         esp += 0x34              // ebp
+         esi = pop ()
+         ebx = pop ()
+         eax = 0
+         edi = pop ()
+         ecx = dword [var_4h]
+         ecx ^= ebp
+         fcn.10055592 ()          // fcn.10055592(0x0, 0x0)
+         esp = ebp
+         ebp = pop ()
+         return
+
+    loc_0x1000c62b: // orphan
+         eax = 0x30               // '0' // 48
+
+         goto loc_0x1000c614;
+    loc_0x1000c614: // orphan
+         edx = 0x30               // '0' // 48
+
+         goto loc_0x1000c5f2;
+    loc_0x1000c5f2: // orphan
+         eax = 0x31               // '1' // 49
+
+         goto loc_0x1000c5cd;
+    loc_0x1000c5cd: // orphan
+         edx = eax
+         ecx = eax
+         ecx >>>= 0x10
+         edx >>>= 8
+         byte [var_3ah] = al
+         eax >>>= 0x18
+         byte [var_38h] = cl
+         byte [var_39h] = dl
+         byte [var_37h] = al
+         ecx = 0xe                // 14
+         
+    loc_0x1000c5ba: // orphan
+         eax = 0x31               // '1' // 49
+
+         return eax;
+    loc_0x1000c569: // orphan
+         eax = 0x5101
+         edi = pop ()
+         ecx = dword [var_4h]
+         ecx ^= ebp
+         fcn.10055592 ()          // ebp // fcn.10055592(0x5101, 0x0)
+         esp = ebp
+         ebp = pop ()
+         return
+
+}
+
+// callconv: eax cdecl (stack);
+void sym.czJetFileII.dll_czShowMsg (int32_t arg_8h, int32_t arg_ch, int32_t arg_10h, int32_t arg_14h, int32_t arg_18h, int32_t arg_1ch, int32_t arg_20h, int32_t arg_24h, int32_t arg_28h, int32_t arg_2ch) {
+        push (ebp)
+        ebp = esp
+        esp &= 0xfffffff8
+        esp -= 0x36c
+        eax = dword [0x10062028] // [0x10062028:4]=0xbb40e64e
+        eax ^= esp
+        dword [var_368h] = eax
+        eax = dword [arg_20h]
+        push (ebx)
+        push (esi)
+        push (edi)
+        edi = dword [arg_8h]
+        dword [var_14h] = eax
+        v = edi & edi
+        if (!v) goto loc_0x1000c501 // likely
+        goto loc_0x1000becf;
+    loc_0x1000c501:
+        eax = 2
+        
+    loc_0x1000c506:
+        ecx = dword [arg_374h]
+        edi = pop ()
+        esi = pop ()
+        ebx = pop ()
+        ecx ^= esp
+        fcn.10055592 () // fcn.10055592(0x0, 0x1000c70c)
+        esp = ebp
+        ebp = pop ()
+        return
+        goto loc_0x1000bed7;
+        return eax;
+    loc_0x1000bed7:
+        push (0x1005bdb4) // "nmg" // (pstr 0x1005bdb4) "nmg"
+        push (0x100)  // 256
+        eax = var_178h
+        push (eax)
+        sym.czJetFileII.dll__czGetPCTempFilename_12 () // sym.czJetFileII.dll__czGetPCTempFilename_12(0x178170, 0x0, 0x0)
+        push (0x1005b4c4) // "sys" // (pstr 0x1005b4c4) "sys"
+        push (0x100)  // 256
+        ecx = var_278h
+        push (ecx)
+        sym.czJetFileII.dll__czGetPCTempFilename_12 () // sym.czJetFileII.dll__czGetPCTempFilename_12(0x178170, 0x0, 0x178260)
+        edx = var_170h
+        push (0x1005bd54) // "wb" // (pstr 0x1005bd54) "wb"
+        push (edx)
+        dword [sym.imp.MSVCR100.dll_fopen] () // 0x10058110 // reloc.MSVCR100.dll_fopen // file*fopen("", "wb")
+        esi = eax
+        esp += 8
+        v = esi & esi
+        if (!v) goto loc_0x1000c3b4 // unlikely
+        goto loc_0x1000bf25;
+    loc_0x1000c3b4:
+        eax = 0x5101
+        edi = pop ()
+        esi = pop ()
+        ebx = pop ()
+        ecx = dword [var_368h_2]
+        ecx ^= esp
+        fcn.10055592 () // fcn.10055592(0x5101, 0x1000c517)
+        esp = ebp
+        ebp = pop ()
+        return
+        goto loc_0x1000bf74;
+        return eax;
+    loc_0x1000bf74:
+        eax = 0x31    // '1' // 49
+        
+    loc_0x1000bf79:
+        byte [var_138h] = al
+        eax = dword [arg_14h]
+        byte [var_139h] = 0x1c // [0x1c:1]=255 // 28
+        v = al - 0x2f // '/' // 47
+        if (v) goto loc_0x1000bfbf // likely
+        goto loc_0x1000bf8f;
+        return eax;
+    loc_0x1000bf8f:
+        edx = eax
+        ecx = eax
+        ecx >>>= 0x10
+        edx >>>= 8
+        byte [var_13ah] = al
+        eax >>>= 0x18
+        byte [var_13ch] = cl
+        byte [var_13bh] = dl
+        byte [var_13dh] = al
+        ecx = 0xe     // 14
+        goto loc_0x1000bfd5
+        
+    loc_0x1000bfd5:
+        // CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000bfbd(x)
+        eax = dword [arg_18h]
+        bl = 0xa
+        word [esp + ecx + 0x130] = 0x490a // '\nI' // [0x490a:2]=0xffff
+        edx = eax
+        v = eax - 0x2e // '.' // 46
+        if (((unsigned) v) > 0) goto 0x1000bff0 // unlikely
+        goto loc_0x1000bfeb;
+        return eax;
+    loc_0x1000bfeb:
+        edx = 0x30    // '0' // 48
+        
+    loc_0x1000bff0:
+        byte [esp + ecx + 0x132] = dl
+        byte [esp + ecx + 0x133] = bl
+        byte [esp + ecx + 0x134] = 0x4f // 'O' // [0x4f:1]=255 // 79
+        v = eax - 0x2e // '.' // 46
+        if (((unsigned) v) > 0) goto 0x1000c010 // unlikely
+        goto loc_0x1000c00b;
+        return eax;
+    loc_0x1000c00b:
+        eax = 0x30    // '0' // 48
+        
+    loc_0x1000c010:
+        ebx = dword [arg_1ch]
+        byte [esp + ecx + 0x135] = al
+        eax = 0xd1b71759
+        eax = eax * ebx
+        edx >>>= 0xd
+        edx = edx * 0x2710
+        eax = ebx
+        eax -= edx
+        dword [var_10h] = eax
+        eax = 0x10624dd3
+        eax = eax * dword [var_10h]
+        edx >>>= 6
+        dl += 0x30    // 48
+        word [esp + ecx + 0x136] = 0x320e // '\x0e2' // [0x320e:2]=0xffff
+        byte [esp + ecx + 0x138] = dl
+        eax = 0x10624dd3
+        eax = eax * ebx
+        edx >>>= 6
+        edx = edx * 0x3e8 // 1000
+        eax = ebx
+        eax -= edx
+        dword [var_10h] = eax
+        eax = 0x51eb851f
+        eax = eax * dword [var_10h]
+        edx >>>= 5
+        dl += 0x30    // 48
+        byte [esp + ecx + 0x139] = dl
+        eax = 0x51eb851f
+        eax = eax * ebx
+        edx >>>= 5
+        edx = edx * 0x64 // 100
+        eax = ebx
+        eax -= edx
+        dword [var_10h] = eax
+        eax = 0xcccccccd
+        eax = eax * dword [var_10h]
+        edx >>>= 3
+        dl += 0x30    // 48
+        byte [esp + ecx + 0x13a] = dl
+        eax = 0xcccccccd
+        eax = eax * ebx
+        edx >>>= 3
+        al = dl
+        dl += dl
+        dl += dl
+        al += dl
+        al += al
+        bl -= al
+        bl += 0x30    // 48
+        push (esi)
+        byte [esp + ecx + 0x13f] = bl
+        ebx = dword [sym.imp.MSVCR100.dll_fwrite] // [0x10058178:4]=0x5fab2 reloc.MSVCR100.dll_fwrite // reloc.MSVCR100.dll_fwrite
+        push (1)      // 1
+        ecx += 0xc    // 12
+        push (ecx)
+        eax = var_134h // "\nI"
+        push (eax)    // (pstr 0x00178130) "\nI"
+        ebx ()        // (pstr 0x1005b4c4) "sys" // reloc.MSVCR100.dll_fwrite // size_t fwrite(0x0000490a, 0x00000000, 0x00000000, -1)
+        ecx = dword [arg_ch]
+        push (esi)
+        push (1)      // 1
+        push (ecx)
+        push (edi)    // (cstr 0x00178130) "\nI"
+        ebx ()        // (pstr 0x1005bd54) "wb" // reloc.MSVCR100.dll_fwrite // size_t fwrite(NULL, NULL, 0x00000000, -1)
+        push (esi)
+        push (1)      // 1
+        push (1)      // 1
+        push (0x1005bdc0)
+        ebx ()        // reloc.MSVCR100.dll_fwrite // size_t fwrite(0x00000004, 0x00000000, 0x00000000, -1)
+        push (esi)
+        dword [sym.imp.MSVCR100.dll_fclose] () // 0x10058120 // reloc.MSVCR100.dll_fclose // int fclose(-1)
+        esp += 0x34   // ebp
+        push (0x98)   // 152
+        edi = 0
+        edx = var_44h
+        push (edi)
+        push (edx)
+        sub.MSVCR100.dll_memset () // void *memset(0x00000000, NULL, 0x00000000)
+        esp += 0xc    // ebp
+        dword [var_44h] = edi
+        dword [var_c4h] = edi
+        ecx = dword [var_14h_2]
+        eax = ecx
+        dword [var_c8h] = edi
+        dword [var_90h] = 0xbb8 // [0xbb8:4]=-1 // 3000
+        esi = eax + 1
+        ecx = ecx
+        return eax;
+    loc_0x1000bf25: // orphan
+         push (0x40)              // '@' // 64 // "@"
+         eax = var_134h           // "\nI"
+         push (0)
+         push (eax)               // (pstr 0x00178130) "\nI"
+         sub.MSVCR100.dll_memset () // void *memset(0x0000490a, NULL, 0x00000000)
+         al = byte [0x1005bdbe]   // [0x1005bdbe:1]=65 // "A\x04"
+         ecx = dword [0x1005bdb8] // [0x1005bdb8:4]=0x30305a01
+         dx = word [0x1005bdbc]   // [0x1005bdbc:2]=0x4102
+         byte [var_142h] = al
+         eax = dword [arg_374h]
+         dword [var_134h] = ecx
+         ecx = eax - 0x30
+         esp += 0xc               // ebp
+         word [var_134h_2] = dx
+         byte [var_137h] = 0x1a   // [0x1a:1]=255 // 26
+         v = ecx - 0x39           // '9' // 57
+         if (((unsigned) v) <= 0) 
+    loc_0x1000bfbf: // orphan
+         v = eax - 0x2f           // '/' // 47
+         if (((unsigned) v) > 0) 
+    loc_0x1000bfc9: // orphan
+         byte [var_13ah] = al
+         ecx = 0xb                // 11
+
+         goto loc_0x1000bff0;
+    loc_0x1000c140: // orphan
+         dl = byte [eax]
+         eax++
+         v = dl & dl
+         if (v) 
+         goto loc_0x1000c147;
+    loc_0x1000c147: // orphan
+         eax -= esi
+         v = eax - 0x20           // 32
+         jae 0x1000c15e           // unlikely
+
+    loc_0x1000c15e: // orphan
+         eax = 0x20               // 32
+
+         return eax;
+    loc_0x1000c1d2: // orphan
+         push (1)                 // 1
+         push (4)                 // 4
+         ecx = var_18h
+         push (ecx)
+         sym.czJetFileII.dll_czGetProperty () // sym.czJetFileII.dll_czGetProperty(0x0, 0x0, 0x178010)
+         v = eax & eax
+         if (!v) 
+    loc_0x1000c1fd: // orphan
+         esi = dword [arg_28h]
+         eax = 0
+         dword [var_10h] = eax
+         dword [var_14h_2] = eax
+         dword [var_28h] = eax
+         dword [var_2ch] = eax
+         dword [var_30h] = eax
+         dword [var_34h] = eax
+         dword [var_38h] = eax
+         dword [var_14h] = eax
+         v = esi - edi
+         if (!v) 
+    loc_0x1000c24f: // orphan
+         v = dword [var_10h_2] - edi
+         if (!v) 
+    loc_0x1000c27d: // orphan
+         ecx = dword [str.D:TQMSG.Nmg] // [0x1005bde4:4]=0x545c3a44 // "D:\\T\\QMSG.Nmg"
+         edx = dword [0x1005bde8] // [0x1005bde8:4]=0x534d515c // "\QMSG.Nmg"
+         eax = dword [0x1005bdec] // [0x1005bdec:4]=0x6d4e2e47 // "G.Nmg"
+         dword [var_10h] = ecx
+         cl = byte [0x1005bdf0]   // [0x1005bdf0:1]=103 // "g"
+         dword [var_14h_2] = edx
+         dword [var_28h] = eax
+         byte [var_2ch] = cl
+
+         goto loc_0x1000c31d;
+    loc_0x1000c31d: // orphan
+         v = byte [eax] - 0
+         if (!v) 
+    loc_0x1000c1e4: // orphan
+         // CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c318(x)
+         eax = 0
+         edi = pop ()
+         esi = pop ()
+         ebx = pop ()
+         ecx = dword [var_368h_3]
+         ecx ^= esp
+         fcn.10055592 ()          // fcn.10055592(0x0, 0x1000c3ca)
+         esp = ebp
+         ebp = pop ()
+         return
+
+    loc_0x1000c326: // orphan
+         push (0x34)              // '4' // 52 // "4"
+         eax += 0x10              // 16
+         push (eax)
+         edx = var_104h
+         push (edx)
+         sub.MSVCR100.dll_memcpy () // void *memcpy(0x00000000, 0x00000000, 0x00000000)
+         al = byte [var_10ah]
+         esp += 0xc               // ebp
+         v = al - 0x45            // 'E' // 69
+         if (!v) 
+    loc_0x1000c34f: // orphan
+         v = al - 0x43            // 'C' // 67
+         if (!v) 
+    loc_0x1000c36c: // orphan
+         ecx = var_170h_2
+         push (ecx)
+         edx = var_18h            // "D:\T\QMSG.Nmg"
+         push (edx)               // (pstr 0x00178020) "D:\T\QMSG.Nmg"
+         sym.czJetFileII.dll_czWriteSpecFile () // sym.czJetFileII.dll_czWriteSpecFile(0x0, 0x0)
+         dword [var_14h_3] = eax
+         v = eax - edi
+         if (v) 
+         goto loc_0x1000c38a;
+    loc_0x1000c38a: // orphan
+         eax = var_270h
+         push (0x1005bd54)        // "wb" // (pstr 0x1005bd54) "wb"
+         push (eax)
+         dword [sym.imp.MSVCR100.dll_fopen] () // 0x10058110 // reloc.MSVCR100.dll_fopen // file*fopen("", "wb")
+         esi = eax
+         esp += 8                 // ebp
+         v = esi - edi
+         if (v) 
+    loc_0x1000c3da: // orphan
+         eax = 0
+         push (esi)
+         dword [var_1ch] = eax
+         dword [var_10h_2] = eax
+         eax = 1
+         push (8)                 // 8
+         push (eax)
+         ecx = var_1ch
+         push (ecx)
+         edx = 0x5153             // 'SQ'
+         dword [var_1ch] = 0x45153 // [0x45153:4]=-1
+         word [var_10h_2] = ax
+         ebx ()                   // 0x1000c406(0x1, 0x0, 0x178018, 0x5153)
+         eax = 0
+         esp += 0x10
+         dword [var_c4h_2] = eax
+         dword [var_dch] = eax
+         dword [var_c4h] = eax
+         dword [var_c8h] = eax
+         dword [var_d4h] = eax
+         dword [var_ech] = eax
+         dword [var_f0h] = eax
+         dword [var_f4h] = eax
+         dword [var_f8h] = eax
+         v = dword [arg_28h] - edi
+         if (!v) 
+    loc_0x1000c459: // orphan
+         v = dword [var_10h_3] - edi
+         dl = v != 0
+         edx = edx + edx + 0x44
+         byte [var_c4h_2] = dl
+
+         goto loc_0x1000c4ca;
+    loc_0x1000c4ca: // orphan
+         edi = dword [var_14h_3]
+
+         goto loc_0x1000c4b4;
+    loc_0x1000c4b4: // orphan
+         eax = var_270h
+         push (eax)
+         push (str.SEQUENT.SYS)   // 0x1005bd48 // "SEQUENT.SYS" // (pstr 0x1005bd48) "SEQUENT.SYS"
+         sym.czJetFileII.dll_czWriteSystemFile () // sym.czJetFileII.dll_czWriteSystemFile(0x178270, 0x0)
+         edi = eax
+         
+    loc_0x1000c4ce: // orphan
+         // CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c4c8(x)
+         esi = dword [sym.imp.KERNEL32.dll_DeleteFileA] // [0x100580b4:4]=0x5f814 reloc.KERNEL32.dll_DeleteFileA // reloc.KERNEL32.dll_DeleteFileA
+         ecx = var_270h_2
+         push (ecx)
+         esi ()                   // (pstr 0x1005bd48) "SEQUENT.SYS" // reloc.KERNEL32.dll_DeleteFileA // BOOL DeleteFileA(NULL)
+         edx = var_170h_2
+         push (edx)
+         esi ()                   // reloc.KERNEL32.dll_DeleteFileA // BOOL DeleteFileA(NULL)
+         eax = edi
+         edi = pop ()
+         esi = pop ()             // ebp
+         ebx = pop ()
+         ecx = dword [var_368h_4]
+         ecx ^= esp
+         fcn.10055592 ()          // ebp // fcn.10055592(0x0, 0x1000c579)
+         esp = ebp
+         ebp = pop ()
+         return
+
+    loc_0x1000c44f: // orphan
+         byte [var_c4h_2] = 0x45  // 'E' // [0x45:1]=255 // 69
+         
+    loc_0x1000c46b: // orphan
+         // CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c457(x)
+         eax = dword [str.QMSG.Nmg] // [0x1005bdf4:4]=0x47534d51 // "QMSG.Nmg"
+         ecx = dword [0x1005bdf8] // [0x1005bdf8:4]=0x676d4e2e // ".Nmg"
+         push (esi)
+         push (0x24)              // '$' // 36 // "$"
+         edx = var_c4h_2          // "E"
+         push (1)                 // 1
+         push (edx)               // (pstr 0x001780d8) "E"
+         word [var_e9h] = 0xf54   // 'T\x0f' // [0xf54:2]=0xffff // 3924
+         byte [var_ebh] = 0xff    // [0xff:1]=255 // 255
+         dword [var_f0h] = eax
+         dword [var_f4h] = ecx
+         ebx ()                   // 0x1000c4a5(0x47534d51, 0x0, 0x676d4e2e, 0x1780d8)
+         push (esi)
+         dword [sym.imp.MSVCR100.dll_fclose] () // 0x10058120 // reloc.MSVCR100.dll_fclose // int fclose(-1)
+         esp += 0x14
+         v = dword [arg_2ch] - edi
+         if (!v) 
+         goto loc_0x1000c3a6;
+    loc_0x1000c3a6: // orphan
+         ecx = var_170h_3
+         push (ecx)
+         dword [sym.imp.KERNEL32.dll_DeleteFileA] () // 0x100580b4 // "$" // reloc.KERNEL32.dll_DeleteFileA // BOOL DeleteFileA(NULL)
+
+         goto loc_0x1000c353;
+    loc_0x1000c353: // orphan
+         v = esi - edi
+         if (v) 
+         goto loc_0x1000c357;
+    loc_0x1000c357: // orphan
+         byte [var_10ah] = 0x43   // 'C' // [0x43:1]=255 // 67
+
+         goto loc_0x1000c347;
+    loc_0x1000c347: // orphan
+         v = esi - edi
+         if (v) 
+    loc_0x1000c3d0: // orphan
+         byte [var_10ah] = 0x45   // 'E' // [0x45:1]=255 // 69
+         
+    loc_0x1000c35f: // orphan
+         // CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c3d8(x)
+         eax = var_f8h
+         push (eax)
+         sym.czJetFileII.dll_czWriteDefDisplayStyle () // sym.czJetFileII.dll_czWriteDefDisplayStyle(0x1780fc)
+
+         goto loc_0x1000c2b5;
+    loc_0x1000c2b5: // orphan
+         push (0x170)             // 368
+         dword [sym.imp.MSVCR100.dll___2_YAPAXI_Z] () // 0x10058104 // reloc.MSVCR100.dll___2_YAPAXI_Z // sym.imp.MSVCR100.dll___2_YAPAXI_Z(0x0, 0x0, 0x0, 0x0)
+         esi = eax
+         esp += 4
+         v = esi - edi
+         if (!v) 
+         goto loc_0x1000c2cd;
+    loc_0x1000c2cd: // orphan
+         eax = dword [0x10062c00] // [0x10062c00:4]=0
+         push (esi)
+         push (eax)
+         dword [sym.imp.KERNEL32.dll_TlsSetValue] () // 0x10058090 // reloc.KERNEL32.dll_TlsSetValue // BOOL TlsSetValue(NULL, -1)
+         v = eax & eax
+         if (!v) 
+         goto loc_0x1000c2e2;
+    loc_0x1000c2e2: // orphan
+         eax = 0
+         byte [esi] = 0
+         dword [esi + 1] = eax
+         dword [esi + 5] = eax
+         push (0x34)              // '4' // 52 // "4"
+         dword [esi + 9] = eax
+         ecx = esi + 0x10
+         push (edi)
+         word [esi + 0xd] = ax
+         push (ecx)
+         byte [esi + 0xf] = al
+         sub.MSVCR100.dll_memset () // void *memset(0x00000000, NULL, 0x00000000)
+         esp += 0xc               // ebp
+         push (0x12c)             // 300
+         push (edi)
+         esi += 0x44              // 68
+         push (esi)               // "D"
+         sub.MSVCR100.dll_memset () // void *memset(0x00000000, NULL, 0x00000000)
+         esp += 0xc               // ebp
+         
+         goto loc_0x1000c255;
+    loc_0x1000c255: // orphan
+         eax = dword [str.F:TQMSG.Nmg] // [0x1005bdd4:4]=0x545c3a46 // "F:\\T\\QMSG.Nmg"
+         ecx = dword [0x1005bdd8] // [0x1005bdd8:4]=0x534d515c // "\QMSG.Nmg"
+         edx = dword [0x1005bddc] // [0x1005bddc:4]=0x6d4e2e47 // "G.Nmg"
+         dword [var_10h] = eax
+         al = byte [0x1005bde0]   // [0x1005bde0:1]=103 // "g"
+         dword [var_14h_2] = ecx
+         dword [var_28h] = edx
+         byte [var_2ch] = al
+         
+    loc_0x1000c2a4: // orphan
+         // CODE XREFS from sym.czJetFileII.dll_czShowMsg @ 0x1000c24d(x), 0x1000c27b(x)
+         edx = dword [0x10062c00] // [0x10062c00:4]=0
+         push (edx)
+         dword [sym.imp.KERNEL32.dll_TlsGetValue] () // 0x1005807c // " \xf7\x05" // reloc.KERNEL32.dll_TlsGetValue // LPVOID TlsGetValue(NULL)
+         v = eax - edi
+         if (v) 
+         goto loc_0x1000c226;
+    loc_0x1000c226: // orphan
+         edx = dword [str.E:TQMSG.Nmg] // [0x1005bdc4:4]=0x545c3a45 // "E:\\T\\QMSG.Nmg"
+         eax = dword [0x1005bdc8] // [0x1005bdc8:4]=0x534d515c // "\QMSG.Nmg"
+         ecx = dword [0x1005bdcc] // [0x1005bdcc:4]=0x6d4e2e47 // "G.Nmg"
+         dword [var_10h] = edx
+         dl = byte [0x1005bdd0]   // [0x1005bdd0:1]=103 // "g"
+         dword [var_14h_2] = eax
+         dword [var_28h] = ecx
+         byte [var_2ch] = dl
+         
+         goto loc_0x1000c14e;
+    loc_0x1000c14e: // orphan
+         eax = ecx
+         esi = eax + 1
+
+    loc_0x1000c153: // orphan
+         dl = byte [eax]
+         eax++
+         v = dl & dl
+         if (v) 
+         goto loc_0x1000c15a;
+    loc_0x1000c15a: // orphan
+         eax -= esi
+         
+    loc_0x1000c163: // orphan
+         // CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c15c(x)
+         push (eax)
+         push (ecx)
+         eax = var_50h
+         push (eax)
+         sub.MSVCR100.dll_memcpy () // void *memcpy(0x00000000, NULL, NULL)
+         ecx = dword [arg_24h]
+         esp += 0xc               // ebp
+         eax = var_40h
+         edx = 0
+         push (eax)
+         dword [var_7ch] = ecx
+         dword [var_8ch] = edx
+         dword [var_90h_2] = 3
+         dword [var_bch] = edi
+         dword [var_c0h] = edi
+         dword [var_c4h_2] = edi
+         dword [var_c8h] = edi
+         dword [var_d4h] = edi
+         dword [var_9ch] = 0x10001 // [0x10001:4]=-1
+         sym.czJetFileII.dll_czInitAPI () // sym.czJetFileII.dll_czInitAPI(0x178040)
+         sym.czJetFileII.dll_czInitProperty ()
+         v = eax - edi
+         if (v) 
+         goto loc_0x1000c00b;
+    loc_0x1000bfc4: // orphan
+         eax = 0x31               // '1' // 49
+
+         goto loc_0x1000bf8f;
+}
+
+// callconv: eax cdecl (stack);
+void sym.czJetFileII.dll_czShowMsg (int32_t arg_8h, int32_t arg_ch, int32_t arg_10h, int32_t arg_14h, int32_t arg_18h, int32_t arg_1ch, int32_t arg_20h, int32_t arg_24h, int32_t arg_28h, int32_t arg_2ch) {
+        push (ebp)
+        ebp = esp
+        esp &= 0xfffffff8
+        esp -= 0x36c
+        eax = dword [0x10062028] // [0x10062028:4]=0xbb40e64e
+        eax ^= esp
+        dword [var_368h] = eax
+        eax = dword [arg_20h]
+        push (ebx)
+        push (esi)
+        push (edi)
+        edi = dword [arg_8h]
+        dword [var_14h] = eax
+        v = edi & edi
+        if (!v) goto loc_0x1000c501 // likely
+        goto loc_0x1000becf;
+    loc_0x1000c501:
+        eax = 2
+        
+    loc_0x1000c506:
+        ecx = dword [arg_374h]
+        edi = pop ()
+        esi = pop ()
+        ebx = pop ()
+        ecx ^= esp
+        fcn.10055592 () // fcn.10055592(0x0, 0x0)
+        esp = ebp
+        ebp = pop ()
+        return
+        goto loc_0x1000bed7;
+        return eax;
+    loc_0x1000bed7:
+        push (0x1005bdb4) // "nmg" // (pstr 0x1005bdb4) "nmg"
+        push (0x100)  // 256
+        eax = var_178h
+        push (eax)
+        sym.czJetFileII.dll__czGetPCTempFilename_12 () // sym.czJetFileII.dll__czGetPCTempFilename_12(0x178170, 0x0, 0x0)
+        push (0x1005b4c4) // "sys" // (pstr 0x1005b4c4) "sys"
+        push (0x100)  // 256
+        ecx = var_278h
+        push (ecx)
+        sym.czJetFileII.dll__czGetPCTempFilename_12 () // sym.czJetFileII.dll__czGetPCTempFilename_12(0x178170, 0x0, 0x178260)
+        edx = var_170h
+        push (0x1005bd54) // "wb" // (pstr 0x1005bd54) "wb"
+        push (edx)
+        dword [sym.imp.MSVCR100.dll_fopen] () // 0x10058110 // reloc.MSVCR100.dll_fopen // file*fopen("", "wb")
+        esi = eax
+        esp += 8
+        v = esi & esi
+        if (!v) goto loc_0x1000c3b4 // unlikely
+        goto loc_0x1000bf25;
+    loc_0x1000c3b4:
+        eax = 0x5101
+        edi = pop ()
+        esi = pop ()
+        ebx = pop ()
+        ecx = dword [var_368h_2]
+        ecx ^= esp
+        fcn.10055592 () // fcn.10055592(0x5101, 0x1000c517)
+        esp = ebp
+        ebp = pop ()
+        return
+        goto loc_0x1000bf74;
+        return eax;
+    loc_0x1000bf74:
+        eax = 0x31    // '1' // 49
+        
+    loc_0x1000bf79:
+        byte [var_138h] = al
+        eax = dword [arg_14h]
+        byte [var_139h] = 0x1c // [0x1c:1]=255 // 28
+        v = al - 0x2f // '/' // 47
+        if (v) goto loc_0x1000bfbf // likely
+        goto loc_0x1000bf8f;
+        return eax;
+    loc_0x1000bf8f:
+        edx = eax
+        ecx = eax
+        ecx >>>= 0x10
+        edx >>>= 8
+        byte [var_13ah] = al
+        eax >>>= 0x18
+        byte [var_13ch] = cl
+        byte [var_13bh] = dl
+        byte [var_13dh] = al
+        ecx = 0xe     // 14
+        goto loc_0x1000bfd5
+        
+    loc_0x1000bfd5:
+        // CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000bfbd(x)
+        eax = dword [arg_18h]
+        bl = 0xa
+        word [esp + ecx + 0x130] = 0x490a // '\nI' // [0x490a:2]=0xffff
+        edx = eax
+        v = eax - 0x2e // '.' // 46
+        if (((unsigned) v) > 0) goto 0x1000bff0 // likely
+        goto loc_0x1000bfeb;
+        return eax;
+    loc_0x1000bfeb:
+        edx = 0x30    // '0' // 48
+        
+    loc_0x1000bff0:
+        byte [esp + ecx + 0x132] = dl
+        byte [esp + ecx + 0x133] = bl
+        byte [esp + ecx + 0x134] = 0x4f // 'O' // [0x4f:1]=255 // 79
+        v = eax - 0x2e // '.' // 46
+        if (((unsigned) v) > 0) goto 0x1000c010 // unlikely
+        goto loc_0x1000c00b;
+        return eax;
+    loc_0x1000c00b:
+        eax = 0x30    // '0' // 48
+        
+    loc_0x1000c010:
+        ebx = dword [arg_1ch]
+        byte [esp + ecx + 0x135] = al
+        eax = 0xd1b71759
+        eax = eax * ebx
+        edx >>>= 0xd
+        edx = edx * 0x2710
+        eax = ebx
+        eax -= edx
+        dword [var_10h] = eax
+        eax = 0x10624dd3
+        eax = eax * dword [var_10h]
+        edx >>>= 6
+        dl += 0x30    // 48
+        word [esp + ecx + 0x136] = 0x320e // '\x0e2' // [0x320e:2]=0xffff
+        byte [esp + ecx + 0x138] = dl
+        eax = 0x10624dd3
+        eax = eax * ebx
+        edx >>>= 6
+        edx = edx * 0x3e8 // 1000
+        eax = ebx
+        eax -= edx
+        dword [var_10h] = eax
+        eax = 0x51eb851f
+        eax = eax * dword [var_10h]
+        edx >>>= 5
+        dl += 0x30    // 48
+        byte [esp + ecx + 0x139] = dl
+        eax = 0x51eb851f
+        eax = eax * ebx
+        edx >>>= 5
+        edx = edx * 0x64 // 100
+        eax = ebx
+        eax -= edx
+        dword [var_10h] = eax
+        eax = 0xcccccccd
+        eax = eax * dword [var_10h]
+        edx >>>= 3
+        dl += 0x30    // 48
+        byte [esp + ecx + 0x13a] = dl
+        eax = 0xcccccccd
+        eax = eax * ebx
+        edx >>>= 3
+        al = dl
+        dl += dl
+        dl += dl
+        al += dl
+        al += al
+        bl -= al
+        bl += 0x30    // 48
+        push (esi)
+        byte [esp + ecx + 0x13f] = bl
+        ebx = dword [sym.imp.MSVCR100.dll_fwrite] // [0x10058178:4]=0x5fab2 reloc.MSVCR100.dll_fwrite // reloc.MSVCR100.dll_fwrite
+        push (1)
+        ecx += 0xc    // 12
+        push (ecx)
+        eax = var_134h // "\nI"
+        push (eax)    // (pstr 0x00178130) "\nI"
+        ebx ()        // (pstr 0x1005b4c4) "sys" // reloc.MSVCR100.dll_fwrite // size_t fwrite(0x0000490a, 0x00000000, 0x00000000, -1)
+        ecx = dword [arg_ch]
+        push (esi)
+        push (1)
+        push (ecx)
+        push (edi)    // (cstr 0x00178130) "\nI"
+        ebx ()        // (pstr 0x1005bd54) "wb" // reloc.MSVCR100.dll_fwrite // size_t fwrite(NULL, NULL, 0x00000000, -1)
+        push (esi)
+        push (1)
+        push (1)
+        push (0x1005bdc0)
+        ebx ()        // reloc.MSVCR100.dll_fwrite // size_t fwrite(0x00000004, 0x00000000, 0x00000000, -1)
+        push (esi)
+        dword [sym.imp.MSVCR100.dll_fclose] () // 0x10058120 // reloc.MSVCR100.dll_fclose // int fclose(-1)
+        esp += 0x34   // ebp
+        push (0x98)   // 152
+        edi = 0
+        edx = var_44h
+        push (edi)
+        push (edx)
+        sub.MSVCR100.dll_memset () // void *memset(0x00000000, NULL, 0x00000000)
+        esp += 0xc    // ebp
+        dword [var_44h] = edi
+        dword [var_c4h] = edi
+        ecx = dword [var_14h_2]
+        eax = ecx
+        dword [var_c8h] = edi
+        dword [var_90h] = 0xbb8 // [0xbb8:4]=-1 // 3000
+        esi = eax + 1
+        ecx = ecx
+        return eax;
+    loc_0x1000bf25: // orphan
+         push (0x40)              // '@' // 64 // "@"
+         eax = var_134h           // "\nI"
+         push (0)
+         push (eax)               // (pstr 0x00178130) "\nI"
+         sub.MSVCR100.dll_memset () // void *memset(0x0000490a, NULL, 0x00000000)
+         al = byte [0x1005bdbe]   // [0x1005bdbe:1]=65 // "A\x04"
+         ecx = dword [0x1005bdb8] // [0x1005bdb8:4]=0x30305a01
+         dx = word [0x1005bdbc]   // [0x1005bdbc:2]=0x4102
+         byte [var_142h] = al
+         eax = dword [arg_374h]
+         dword [var_134h] = ecx
+         ecx = eax - 0x30
+         esp += 0xc               // ebp
+         word [var_134h_2] = dx
+         byte [var_137h] = 0x1a   // [0x1a:1]=255 // 26
+         v = ecx - 0x39           // '9' // 57
+         if (((unsigned) v) <= 0) 
+    loc_0x1000bfbf: // orphan
+         v = eax - 0x2f           // '/' // 47
+         if (((unsigned) v) > 0) 
+    loc_0x1000bfc9: // orphan
+         byte [var_13ah] = al
+         ecx = 0xb                // 11
+
+         goto loc_0x1000bff0;
+    loc_0x1000c140: // orphan
+         dl = byte [eax]
+         eax++
+         v = dl & dl
+         if (v) 
+         goto loc_0x1000c147;
+    loc_0x1000c147: // orphan
+         eax -= esi
+         v = eax - 0x20           // 32
+         jae 0x1000c15e           // unlikely
+
+    loc_0x1000c15e: // orphan
+     ~   eax = 0x20               // 32
+
+         return eax;
+    loc_0x1000c1d2: // orphan
+         push (1)
+         push (4)                 // 4
+         ecx = var_18h
+         push (ecx)
+         sym.czJetFileII.dll_czGetProperty () // sym.czJetFileII.dll_czGetProperty(0x0, 0x0, 0x178010)
+         v = eax & eax
+         if (!v) 
+    loc_0x1000c1fd: // orphan
+         esi = dword [arg_28h]
+         eax = 0
+         dword [var_10h] = eax
+         dword [var_14h_2] = eax
+         dword [var_28h] = eax
+         dword [var_2ch] = eax
+         dword [var_30h] = eax
+         dword [var_34h] = eax
+         dword [var_38h] = eax
+         dword [var_14h] = eax
+         v = esi - edi
+         if (!v) 
+    loc_0x1000c24f: // orphan
+         v = dword [var_10h_2] - edi
+         if (!v) 
+    loc_0x1000c27d: // orphan
+         ecx = dword [str.D:TQMSG.Nmg] // [0x1005bde4:4]=0x545c3a44 // "D:\\T\\QMSG.Nmg"
+         edx = dword [0x1005bde8] // [0x1005bde8:4]=0x534d515c // "\QMSG.Nmg"
+         eax = dword [0x1005bdec] // [0x1005bdec:4]=0x6d4e2e47 // "G.Nmg"
+         dword [var_10h] = ecx
+         cl = byte [0x1005bdf0]   // [0x1005bdf0:1]=103 // "g"
+         dword [var_14h_2] = edx
+         dword [var_28h] = eax
+         byte [var_2ch] = cl
+
+         goto loc_0x1000c31d;
+    loc_0x1000c31d: // orphan
+         v = byte [eax] - 0
+         if (!v) 
+    loc_0x1000c1e4: // orphan
+         // CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c318(x)
+         eax = 0
+         edi = pop ()
+         esi = pop ()
+         ebx = pop ()
+         ecx = dword [var_368h_3]
+         ecx ^= esp
+         fcn.10055592 ()          // fcn.10055592(0x0, 0x1000c3ca)
+         esp = ebp
+         ebp = pop ()
+         return
+
+    loc_0x1000c326: // orphan
+         push (0x34)              // '4' // 52 // "4"
+         eax += 0x10              // 16
+         push (eax)
+         edx = var_104h
+         push (edx)
+         sub.MSVCR100.dll_memcpy () // void *memcpy(0x00450000, 0x00000000, 0x00000000)
+         al = byte [var_10ah]
+         esp += 0xc               // ebp
+         v = al - 0x45            // 'E' // 69
+         if (!v) 
+    loc_0x1000c34f: // orphan
+         v = al - 0x43            // 'C' // 67
+         if (!v) 
+    loc_0x1000c36c: // orphan
+         ecx = var_170h_2
+         push (ecx)
+         edx = var_18h            // "D:\T\QMSG.Nmg"
+         push (edx)               // (pstr 0x00178020) "D:\T\QMSG.Nmg"
+         sym.czJetFileII.dll_czWriteSpecFile () // sym.czJetFileII.dll_czWriteSpecFile(0x0, 0x0)
+         dword [var_14h_3] = eax
+         v = eax - edi
+         if (v) 
+         goto loc_0x1000c38a;
+    loc_0x1000c38a: // orphan
+         eax = var_270h
+         push (0x1005bd54)        // "wb" // (pstr 0x1005bd54) "wb"
+         push (eax)
+         dword [sym.imp.MSVCR100.dll_fopen] () // 0x10058110 // reloc.MSVCR100.dll_fopen // file*fopen("", "wb")
+         esi = eax
+         esp += 8                 // ebp
+         v = esi - edi
+         if (v) 
+    loc_0x1000c3da: // orphan
+         eax = 0
+         push (esi)
+         dword [var_1ch] = eax
+         dword [var_10h_2] = eax
+         eax = 1
+         push (8)                 // 8
+         push (eax)
+         ecx = var_1ch
+         push (ecx)
+         edx = 0x5153             // 'SQ'
+         dword [var_1ch] = 0x45153 // [0x45153:4]=-1
+         word [var_10h_2] = ax
+         ebx ()                   // 0x1000c406(0x1, 0x0, 0x178018, 0x5153)
+         eax = 0
+         esp += 0x10
+         dword [var_c4h_2] = eax
+         dword [var_dch] = eax
+         dword [var_c4h] = eax
+         dword [var_c8h] = eax
+         dword [var_d4h] = eax
+         dword [var_ech] = eax
+         dword [var_f0h] = eax
+         dword [var_f4h] = eax
+         dword [var_f8h] = eax
+         v = dword [arg_28h] - edi
+         if (!v) 
+    loc_0x1000c459: // orphan
+         v = dword [var_10h_3] - edi
+         dl = v != 0
+         edx = edx + edx + 0x44
+         byte [var_c4h_2] = dl
+
+         goto loc_0x1000c4ca;
+    loc_0x1000c4ca: // orphan
+         edi = dword [var_14h_3]
+
+         goto loc_0x1000c4b4;
+    loc_0x1000c4b4: // orphan
+         eax = var_270h
+         push (eax)
+         push (str.SEQUENT.SYS)   // 0x1005bd48 // "SEQUENT.SYS" // (pstr 0x1005bd48) "SEQUENT.SYS"
+         sym.czJetFileII.dll_czWriteSystemFile () // sym.czJetFileII.dll_czWriteSystemFile(0x178270, 0x0)
+         edi = eax
+         
+    loc_0x1000c4ce: // orphan
+         // CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c4c8(x)
+         esi = dword [sym.imp.KERNEL32.dll_DeleteFileA] // [0x100580b4:4]=0x5f814 reloc.KERNEL32.dll_DeleteFileA // reloc.KERNEL32.dll_DeleteFileA
+         ecx = var_270h_2
+         push (ecx)
+         esi ()                   // (pstr 0x1005bd48) "SEQUENT.SYS" // reloc.KERNEL32.dll_DeleteFileA // BOOL DeleteFileA(NULL"")
+         edx = var_170h_2
+         push (edx)
+         esi ()                   // reloc.KERNEL32.dll_DeleteFileA // BOOL DeleteFileA(NULL"")
+         eax = edi
+         edi = pop ()
+         esi = pop ()             // ebp
+         ebx = pop ()
+         ecx = dword [var_368h_4]
+         ecx ^= esp
+         fcn.10055592 ()          // ebp // fcn.10055592(0x0, 0x1000c4fb)
+         esp = ebp
+         ebp = pop ()
+         return
+
+    loc_0x1000c44f: // orphan
+         byte [var_c4h_2] = 0x45  // 'E' // [0x45:1]=255 // 69
+         
+    loc_0x1000c46b: // orphan
+         // CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c457(x)
+         eax = dword [str.QMSG.Nmg] // [0x1005bdf4:4]=0x47534d51 // "QMSG.Nmg"
+         ecx = dword [0x1005bdf8] // [0x1005bdf8:4]=0x676d4e2e // ".Nmg"
+         push (esi)
+         push (0x24)              // '$' // 36 // "$"
+         edx = var_c4h_2          // "E"
+         push (1)
+         push (edx)               // (pstr 0x001780d8) "E"
+         word [var_e9h] = 0xf54   // 'T\x0f' // [0xf54:2]=0xffff // 3924
+         byte [var_ebh] = 0xff    // [0xff:1]=255 // 255
+         dword [var_f0h] = eax
+         dword [var_f4h] = ecx
+         ebx ()                   // 0x1000c4a5(0x47534d51, 0x0, 0x676d4e2e, 0x1780d8)
+         push (esi)
+         dword [sym.imp.MSVCR100.dll_fclose] () // 0x10058120 // reloc.MSVCR100.dll_fclose // int fclose(-1)
+         esp += 0x14
+         v = dword [arg_2ch] - edi
+         if (!v) 
+         goto loc_0x1000c3a6;
+    loc_0x1000c3a6: // orphan
+         ecx = var_170h_3
+         push (ecx)
+         dword [sym.imp.KERNEL32.dll_DeleteFileA] () // 0x100580b4 // "$" // reloc.KERNEL32.dll_DeleteFileA // BOOL DeleteFileA(NULL"")
+
+         goto loc_0x1000c353;
+    loc_0x1000c353: // orphan
+         v = esi - edi
+         if (v) 
+         goto loc_0x1000c357;
+    loc_0x1000c357: // orphan
+         byte [var_10ah] = 0x43   // 'C' // [0x43:1]=255 // 67
+
+         goto loc_0x1000c347;
+    loc_0x1000c347: // orphan
+         v = esi - edi
+         if (v) 
+    loc_0x1000c3d0: // orphan
+         byte [var_10ah] = 0x45   // 'E' // [0x45:1]=255 // 69
+         
+    loc_0x1000c35f: // orphan
+         // CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c3d8(x)
+         eax = var_f8h
+         push (eax)
+         sym.czJetFileII.dll_czWriteDefDisplayStyle () // sym.czJetFileII.dll_czWriteDefDisplayStyle(0x1780fc)
+
+         goto loc_0x1000c2b5;
+    loc_0x1000c2b5: // orphan
+         push (0x170)             // 368
+         dword [sym.imp.MSVCR100.dll___2_YAPAXI_Z] () // 0x10058104 // reloc.MSVCR100.dll___2_YAPAXI_Z // sym.imp.MSVCR100.dll___2_YAPAXI_Z(0x0, 0x0, 0x0, 0x0)
+         esi = eax
+         esp += 4
+         v = esi - edi
+         if (!v) 
+         goto loc_0x1000c2cd;
+    loc_0x1000c2cd: // orphan
+         eax = dword [0x10062c00] // [0x10062c00:4]=0
+         push (esi)
+         push (eax)
+         dword [sym.imp.KERNEL32.dll_TlsSetValue] () // 0x10058090 // reloc.KERNEL32.dll_TlsSetValue // BOOL TlsSetValue(NULL, -1)
+         v = eax & eax
+         if (!v) 
+         goto loc_0x1000c2e2;
+    loc_0x1000c2e2: // orphan
+         eax = 0
+         byte [esi] = 0
+         dword [esi + 1] = eax
+         dword [esi + 5] = eax
+         push (0x34)              // '4' // 52 // "4"
+         dword [esi + 9] = eax
+         ecx = esi + 0x10
+         push (edi)
+         word [esi + 0xd] = ax
+         push (ecx)
+         byte [esi + 0xf] = al
+         sub.MSVCR100.dll_memset () // void *memset(0x00000000, NULL, 0x00000000)
+         esp += 0xc               // ebp
+         push (0x12c)             // 300
+         push (edi)
+         esi += 0x44              // 68
+         push (esi)               // "D"
+         sub.MSVCR100.dll_memset () // void *memset(0x00000000, NULL, 0x00000000)
+         esp += 0xc               // ebp
+         
+         goto loc_0x1000c255;
+    loc_0x1000c255: // orphan
+         eax = dword [str.F:TQMSG.Nmg] // [0x1005bdd4:4]=0x545c3a46 // "F:\\T\\QMSG.Nmg"
+         ecx = dword [0x1005bdd8] // [0x1005bdd8:4]=0x534d515c // "\QMSG.Nmg"
+         edx = dword [0x1005bddc] // [0x1005bddc:4]=0x6d4e2e47 // "G.Nmg"
+         dword [var_10h] = eax
+         al = byte [0x1005bde0]   // [0x1005bde0:1]=103 // "g"
+         dword [var_14h_2] = ecx
+         dword [var_28h] = edx
+         byte [var_2ch] = al
+         
+    loc_0x1000c2a4: // orphan
+         // CODE XREFS from sym.czJetFileII.dll_czShowMsg @ 0x1000c24d(x), 0x1000c27b(x)
+         edx = dword [0x10062c00] // [0x10062c00:4]=0
+         push (edx)
+         dword [sym.imp.KERNEL32.dll_TlsGetValue] () // 0x1005807c // " \xf7\x05" // reloc.KERNEL32.dll_TlsGetValue // LPVOID TlsGetValue(NULL)
+         v = eax - edi
+         if (v) 
+         goto loc_0x1000c226;
+    loc_0x1000c226: // orphan
+         edx = dword [str.E:TQMSG.Nmg] // [0x1005bdc4:4]=0x545c3a45 // "E:\\T\\QMSG.Nmg"
+         eax = dword [0x1005bdc8] // [0x1005bdc8:4]=0x534d515c // "\QMSG.Nmg"
+         ecx = dword [0x1005bdcc] // [0x1005bdcc:4]=0x6d4e2e47 // "G.Nmg"
+         dword [var_10h] = edx
+         dl = byte [0x1005bdd0]   // [0x1005bdd0:1]=103 // "g"
+         dword [var_14h_2] = eax
+         dword [var_28h] = ecx
+         byte [var_2ch] = dl
+         
+         goto loc_0x1000c14e;
+    loc_0x1000c14e: // orphan
+         eax = ecx
+         esi = eax + 1
+
+    loc_0x1000c153: // orphan
+         dl = byte [eax]
+         eax++
+         v = dl & dl
+         if (v) 
+         goto loc_0x1000c15a;
+    loc_0x1000c15a: // orphan
+         eax -= esi
+         
+    loc_0x1000c163: // orphan
+         // CODE XREF from sym.czJetFileII.dll_czShowMsg @ 0x1000c15c(x)
+         push (eax)
+         push (ecx)
+         eax = var_50h
+         push (eax)
+         sub.MSVCR100.dll_memcpy () // void *memcpy(0x00000000, NULL, NULL)
+         ecx = dword [arg_24h]
+         esp += 0xc               // ebp
+         eax = var_40h
+         edx = 0
+         push (eax)
+         dword [var_7ch] = ecx
+         dword [var_8ch] = edx
+         dword [var_90h_2] = 3
+         dword [var_bch] = edi
+         dword [var_c0h] = edi
+         dword [var_c4h_2] = edi
+         dword [var_c8h] = edi
+         dword [var_d4h] = edi
+         dword [var_9ch] = 0x10001 // [0x10001:4]=-1
+         sym.czJetFileII.dll_czInitAPI () // sym.czJetFileII.dll_czInitAPI(0x178040)
+         sym.czJetFileII.dll_czInitProperty ()
+         v = eax - edi
+         if (v) 
+         goto loc_0x1000c00b;
+    loc_0x1000bfc4: // orphan
+         eax = 0x31               // '1' // 49
+
+         goto loc_0x1000bf8f;
+}
+

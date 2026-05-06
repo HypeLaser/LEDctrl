@@ -1,0 +1,7 @@
+command=01:0C
+frames=1
+
+frame 1: bytes=38 cmd=01:0C status=0x310B descWords=0 headerBytes=20 bodyBytes=18
+
+payload.concat.bin bytes=18
+payload head=34 35 36 37 38 39 30 31 12 00 E3 92 00 1D 6F 00 D4 50

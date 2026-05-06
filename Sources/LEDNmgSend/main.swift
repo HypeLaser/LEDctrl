@@ -43,6 +43,29 @@ while idx < args.count {
     case "--delete" where idx + 1 < args.count:
         deletePath = args[idx + 1]
         idx += 2
+    case "--list":
+        var client = SigmaClient(host: host)
+        do {
+            let flag: UInt8 = (idx + 1 < args.count) ? (UInt8(args[idx + 1]) ?? 1) : 1
+            let res = try client.listFiles(flag: flag)
+            print("count=\(res.count) names=\(res.names)")
+            print("raw hex: \(res.raw.map { String(format: "%02x", $0) }.joined(separator: " "))")
+            exit(0)
+        } catch {
+            print("error: \(error)")
+            exit(1)
+        }
+    case "--list-path" where idx + 1 < args.count:
+        var client = SigmaClient(host: host)
+        do {
+            let res = try client.listFiles(flag: 0, path: args[idx + 1])
+            print("count=\(res.count) names=\(res.names)")
+            print("raw hex: \(res.raw.map { String(format: "%02x", $0) }.joined(separator: " "))")
+            exit(0)
+        } catch {
+            print("error: \(error)")
+            exit(1)
+        }
     default:
         path = args[idx]
         idx += 1
@@ -52,6 +75,8 @@ while idx < args.count {
 if let deletePath {
     do {
         var client = SigmaClient(host: host)
+        // Pause playback first — sign locks open files (status 0x9015).
+        if let pause = try? client.pausePlay() { print(pause) }
         let step = try client.deleteFile(path: deletePath)
         print(step)
         exit(0)

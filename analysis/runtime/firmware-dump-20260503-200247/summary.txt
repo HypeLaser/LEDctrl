@@ -1,0 +1,7 @@
+command=01:13
+frames=1
+
+frame 1: bytes=68 cmd=01:13 status=0x4552 descWords=0 headerBytes=20 bodyBytes=48
+
+payload.concat.bin bytes=48
+payload head=A3 5C 14 00 00 00 00 00 00 0A 00 00 14 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 93 00 B7 06 2E 3C D2 03 D2 03 00 00

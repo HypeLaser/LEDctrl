@@ -1,0 +1,395 @@
+jjjjjj
+ebutton
+combobox
+explorerbar
+header
+listview
+progress
+scrollbar
+startpanel
+status
+taskband
+taskbar
+toolbar
+tooltip
+trackbar
+traynotify
+treeview
+window
+\SOFTWARE\Classes\CLSID\%s
+Cancel
+Ignore
+NoToAll
+YesToAll
+system
+Unspecified error (%d) from %s.
+%s (%s)
+COMBOBOX
+BUTTON
+BUTTON
+BUTTON
+Sending Data,
+please wait2...
+RICHED20.DLL
+RichEdit20W
+msctls_statusbar32
+Build 2016.11.18
+Save &As
+&Paste
+Zoom &In
+Zoom O&ut
+Full Size
+&Grid Line
+QSPASTE
+----------------------------------------------------
+BBABORT
+BBCANCEL
+BBCLOSE
+BBHELP
+BBIGNORE
+BBRETRY
+CLOSEDFOLDER
+CL_MPBACK
+CL_MPEJECT
+CL_MPNEXT
+CL_MPPAUSE
+CL_MPPLAY
+CL_MPPREV
+CL_MPRECORD
+CL_MPSTEP
+CL_MPSTOP
+CURRENTFOLDER
+DI_MPBACK
+DI_MPEJECT
+DI_MPNEXT
+DI_MPPAUSE
+DI_MPPLAY
+DI_MPPREV
+DI_MPRECORD
+DI_MPSTEP
+DI_MPSTOP
+EN_MPBACK
+EN_MPEJECT
+EN_MPNEXT
+EN_MPPAUSE
+EN_MPPLAY
+EN_MPPREV
+EN_MPRECORD
+EN_MPSTEP
+EN_MPSTOP
+EXECUTABLE
+FLOPPY
+KNOWNFILE
+NETWORK
+OPENFOLDER
+PREVIEWGLYPH
+RXSPINDOWN
+RXSPINUP
+SPINDOWN
+SPINUP
+UNKNOWNFILE
+DLGTEMPLATE
+DVCLAL
+PACKAGEINFO
+TFORMABOUTBOX
+TFRMCOLOR
+TFRMCONNECT
+TFRMCOUNTER
+TFRMCUSTOMSTR
+TFRMDEFAULTSET
+TFRMEDITOR
+TFRMINSERTSYMBOLS
+TFRMMAINBMP
+TFRMMESSAGE
+TFRMMULTIPLEPROGRESS
+TFRMPROGRESSII
+TFRMRANGE
+TFRMREPORT
+TFRMRGYWCOLOR
+TFRMSET
+TFRMSETCOUNT
+TFRMSIMULATOR
+TFRMSITESET
+TFRMSPECIAL_D_T_T
+TFRMSTOPTIME
+TFRMSTRING
+TFRMWAIT
+TSPLASHFORM
+FILLCOLOR
+INGEST
+RX_DRAGCUR
+RX_HANDCUR
+MAINICON
+MS Sans Serif
+Details
+Could not load '%s' libraryLFile specified is not an executable file, dynamic-link library, or icon file
+Function not yet implemented
+Previous Month|
+Previous Year|
+Next Month|
+Next Year|
+Select a Date
+All files (*.*)|*.*
+Browse
+Buffer overflow
+Invalid UTF7&Cannot change the size of a JPEG image
+JPEG error #%d
+JPEG Image FileNUnable to retrieve a pointer to a running object registered with OLE for %s/%s
+Socks server did not respond.$Invalid socks authentication method.%Authentication error to socks server.
+General SOCKS server failure."Connection not allowed by ruleset.
+Network unreachable.
+Host unreachable.
+Connection refused.
+TTL expired.
+Command not supported.
+Address type not supported.
+OLE error %.8x.Method '%s' not supported by automation object/Variant does not reference an automation object7Dispatch methods do not support more than 64 parameters
+DCOM not installed
+Socket is already connected.
+Socket is not connected..Cannot send or receive after socket is closed.#Too many references, cannot splice.
+Connection timed out.
+Connection refused."Too many levels of symbolic links.
+File name too long.
+Host is down.
+No route to host.
+Directory not empty
+Host not found.
+Request rejected or failed.5Request rejected because SOCKS server cannot connect.QRequest rejected because the client program and identd report different user-ids.
+Unknown socks error.
+Message too long.
+Protocol wrong type for socket.
+Bad protocol option.
+Protocol not supported.
+Socket type not supported."Operation not supported on socket.
+Protocol family not supported.0Address family not supported by protocol family.
+Address already in use. Cannot assign requested address.
+Network is down.
+Network is unreachable. Net dropped connection or reset.!Software caused connection abort.
+Connection reset by peer.
+No buffer space available.
+Disconnected.
+Connect timed out.
+%s is not a valid service.
+Socket Error # %d
+Interrupted system call.
+Bad file number.
+Access denied.
+Bad address.
+Invalid argument.
+Too many open files.
+Operation would block. 
+Operation now in progress.
+Operation already in progress.
+Socket operation on non-socket.
+Destination address required.
+Winsock Initialization Error.
+Set Size Exceeded.
+File "%s" not found1Only one TIdAntiFreeze can exist per application.
+Not Connected
+No data to read.$Can not bind in port range (%d - %d)
+Invalid Port Range (%d - %d)
+Read Timeout
+Max line length exceeded.*Error on call Winsock2 library function %s&Error on loading Winsock2 library (%s)
+Resolving hostname %s.
+Connecting to %s.
+Connected.
+Disconnecting.
+=This control requires version 4.70 or greater of COMCTL32.DLL
+Date exceeds maximum of %s
+Date is less than minimum of %s4You must be in ShowCheckbox mode to set to this date#Failed to set calendar date or time%Failed to set maximum selection range$Failed to set calendar min/max range%Failed to set calendar selected range
+No help keyword specified.
+Already connected.
+Cannot allocate socket.
+Connection Closed Gracefully.;Could not bind socket. Address and port are already in use.
+Not all bytes sent.
+Not enough data in buffer.
+Package Size Too Big.
+Inactive Caption Text
+Info Background
+Info Text
+Menu Background
+Menu Text
+Scroll Bar
+3D Dark Shadow
+3D Light
+Window Background
+Window Frame
+Window Text
+Invalid owner
+RichEdit line insertion error
+Failed to Load Stream
+Failed to Save Stream
+Medium Gray
+Active Border
+Active Caption
+Application Workspace
+Background
+Button Face
+Button Highlight
+Button Shadow
+Button Text
+Caption Text
+Default
+Gray Text
+Highlight Background
+Highlight Text
+Inactive Border
+Inactive Caption
+Purple
+Silver
+Yellow
+Fuchsia
+Money Green
+Sky Blue
+Picture:
+ (%dx%d)
+Preview
+Docked control must have a name%Error removing control from dock tree
+ - Dock zone not found
+ - Dock zone has no control
+Separator#No OnGetItem event handler assigned"Unable to find a Table of Contents
+No help found for %s#No context-sensitive help installed$No topic-based help system installed
+Maroon
+Shift+
+(None)
+Value must be between %d and %d
+Unable to insert a line
+Invalid clipboard format Clipboard does not support Icons
+Cannot open clipboard
+Text exceeds memo capacity.There is no default printer currently selected/Menu '%s' is already being used by another form
+&Ignore
+N&o to All
+Yes to &All
+Bitmaps
+Invalid input value7Invalid input value.  Use escape key to abandon changes
+Line too long
+Warning
+Information
+Confirm
+Cancel
+&Abort
+&Retry
+5Cannot create form. No MDI forms are currently active0Can only modify an image if it contains a bitmap*A control cannot have itself as its parent
+Cancel
+&Close
+&Ignore
+&Retry
+Cannot drag a form
+Metafiles
+Enhanced Metafiles
+!Control '%s' has no parent window$Parent given is not a parent of '%s'
+Cannot hide an MDI Child Form)Cannot change Visible in OnShow or OnHide"Cannot make a visible window modal
+Scrollbar property out of range
+%s property out of range
+Menu index out of range
+Menu inserted twice
+Sub-menu is not in menu
+Not enough timers available!Printer is not currently printing
+Printing in progress
+Printer selected is not valid
+%s on %s@GroupIndex cannot be less than a previous menu item's GroupIndex
+Invalid image
+Scan line index out of range!Cannot change the size of an icon$Unknown picture file extension (.%s)
+Unsupported clipboard format
+Out of system resources
+Canvas does not allow drawing
+Invalid image size
+Invalid ImageList
+Unable to Replace Image
+Invalid ImageList Index)Failed to read ImageList data from stream(Failed to write ImageList data to stream$Error creating window device context
+Error creating window class+Cannot focus a disabled or invisible window
+Stream read error
+Property is read-only
+Failed to get data for '%s'
+Resource %s not found
+%s.Seek not implemented$Operation not allowed on sorted list Too many rows or columns deleted$%s not in a class registration group
+Property %s does not exist
+Stream write error
+Thread creation error: %s
+Thread Error: %s (%d)
+Bitmap image is not valid
+Icon image is not valid
+Metafile is not valid
+Invalid pixel format
+Cannot open file "%s". %s
+Grid too large for operation
+Grid index out of range
+Unable to write to %s
+Invalid stream format$''%s'' is not a valid component name
+Invalid property value
+Invalid property path
+Invalid property value
+Invalid data type for '%s'&Cannot insert or delete rows from grid List capacity out of bounds (%d)
+List count out of bounds (%d)
+List index out of bounds (%d)+Out of memory while expanding memory stream
+Error reading %s%s%s: %s
+Thursday
+Friday
+Saturday
+Ancestor for '%s' not found
+Cannot assign a %s to a %s
+Bits index out of range*Can't write to a read-only resource streamECheckSynchronize called from thread $%x, which is NOT the main thread
+Class %s not found
+A class named %s already exists%List does not allow duplicates ($0%x)#A component named %s already exists%String list does not allow duplicates
+Cannot create file "%s". %s1Fixed column count must be less than column count+Fixed row count must be less than row count
+August
+September
+October
+November
+December
+Sunday
+Monday
+Tuesday
+Wednesday
+January
+February
+Invalid argument
+Invalid variant type
+Operation not supported
+Unexpected variant error
+External exception %x
+Assertion failed
+Interface not supported
+Exception in safecall method
+%s (%s, line %d)
+Abstract Error?Access violation at address %p in module '%s'. %s of address %p
+System Error.  Code: %d.
+A call to an OS function failed
+Application Error1Format '%s' invalid or incompatible with argument
+No argument for format '%s'"Variant method calls not supported
+Write$Error creating variant or safe array)Variant or safe array index out of bounds
+Variant or safe array is locked
+Invalid variant type conversion
+Invalid variant operation
+Invalid NULL variant operation%Invalid variant operation (%s%.8x)
+%s5Could not convert variant of type (%s) into type (%s)=Overflow while converting variant of type (%s) into type (%s)
+Variant overflow
+Division by zero
+Range check error
+Integer overflow Invalid floating point operation
+Floating point division by zero
+Floating point overflow
+Floating point underflow
+Invalid pointer operation
+Invalid class typecast0Access violation at address %p. %s of address %p
+Access violation
+Stack overflow
+Control-C hit
+Privileged instruction
+Operation aborted(Exception %s in module %s at %p.
+!'%s' is not a valid integer value('%s' is not a valid floating point value
+'%s' is not a valid date
+'%s' is not a valid time!'%s' is not a valid date and time
+Invalid argument to time encode
+Invalid argument to date encode
+Out of memory
+I/O error %d
+File not found
+Invalid filename
+Too many open files
+File access denied
+Read beyond end of file
+Disk full
+Invalid numeric input
+Adobe Photoshop
+Adobe Photoshop CS3

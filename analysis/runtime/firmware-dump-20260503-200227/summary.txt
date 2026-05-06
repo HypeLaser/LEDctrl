@@ -1,0 +1,7 @@
+command=01:44
+frames=1
+
+frame 1: bytes=22 cmd=01:44 status=0x9005 descWords=0 headerBytes=20 bodyBytes=2
+
+payload.concat.bin bytes=2
+payload head=20 00

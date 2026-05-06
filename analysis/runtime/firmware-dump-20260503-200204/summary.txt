@@ -1,0 +1,7 @@
+command=01:12
+frames=1
+
+frame 1: bytes=775 cmd=01:12 status=0x6946 descWords=0 headerBytes=20 bodyBytes=755
+
+payload.concat.bin bytes=755
+payload head=77 61 72 65 3A 41 35 31 32 2D 35 20 42 75 69 6C 64 44 61 74 65 28 46 65 62 20 32 32 20 32 30 31 32 2D 31 31 3A 32 39 3A 31 30 29 0D 0A 48 61 72 64 77 61 72 65 3A 35 32 30 35 28 43 50 4C 44 20

@@ -1,0 +1,33 @@
+                                          TwittLed Configuration
+                                          Customize the Software
+
+                               1.         1. Insert the TwittLED software installation      3. An Authorization window will now open
+Quick Start Guide                         disk into your PC and double click on
+                                          TwittLED Setup icon. Follow the onscreen
+                                                                                            (Fig.2). Enter your twitter account credentials
+                                                                                            and click on             button.
+Welcome to TwittLED from                  instructions to install the software.
+Messagemaker Displays. Before you                                                           (Fig.2)
+can display your Tweets your sign will    2. Once the installation is complete launch the
+need to be setup and your software        program. (Fig.1). Enter the IP address
+configured:                               assigned to the sign in the COM port/IP
+ Connect the TwittLED to the              Address field and select the output LED
+network using the Ethernet cable          colour (applicable only for multi-coloured
+                                          TwittLED, Leave it to the default value if your
+supplied (plug it into a network point,
+                                          sign is single coloured) and then click           4. After you have entered the correct
+network hub or a modem)                   Connect.                                          credentials you will be redirected to the main
+                                                                                            software interface window.
+ Power on the TwittLED and wait for       (Fig.1.)
+it to start up. The sign is DHCP
+enabled so it will automatically be
+assigned with an IP Address by the
+network. Make a note of the IP
+address once it is assigned to the
+TwittLED by the network, it will
+display the new IP Address as part
+                                           The latest tweets on your timeline will be loaded into the software and the TwittLED. You can
+of the start-up message.                   minimise the software window, the Tweets will automatically be updated in real time in the
+                                           background.
+www.messagemaker.co.uk
+

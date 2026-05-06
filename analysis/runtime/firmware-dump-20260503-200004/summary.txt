@@ -1,0 +1,4 @@
+command=01:0A
+frames=1
+
+frame 1: bytes=32 status=0x0A01 payloadWords=4 payloadBytes=0 bodyBytes=0

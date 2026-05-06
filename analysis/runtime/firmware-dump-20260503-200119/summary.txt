@@ -1,0 +1,7 @@
+command=01:0A
+frames=1
+
+frame 1: bytes=32 cmd=01:0A status=0xA512 descWords=4 headerBytes=20 bodyBytes=12
+
+payload.concat.bin bytes=12
+payload head=01 04 FF FF 50 00 07 00 01 27 01 01

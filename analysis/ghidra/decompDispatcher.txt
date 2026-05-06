@@ -1,0 +1,298 @@
+openjdk version "21.0.10" 2026-01-20
+OpenJDK Runtime Environment Homebrew (build 21.0.10)
+OpenJDK 64-Bit Server VM Homebrew (build 21.0.10, mixed mode)
+INFO  Using log config file: jar:file:/opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml (LoggingInitialization)  
+INFO  Using log file: /Users/alexscott/Library/ghidra/ghidra_12.0.4_PUBLIC/application.log (LoggingInitialization)  
+INFO  Loading user preferences: /Users/alexscott/Library/ghidra/ghidra_12.0.4_PUBLIC/preferences (Preferences)  
+INFO  Searching for classes... (ClassSearcher)  
+INFO  Class search complete (776 ms) (ClassSearcher)  
+INFO  Initializing SSL Context (DefaultSSLContextInitializer)  
+INFO  Initializing Random Number Generator... (SecureRandomFactory)  
+INFO  Random Number Generator initialization complete: NativePRNGNonBlocking (SecureRandomFactory)  
+INFO  Trust manager disabled, cacerts have not been set (DefaultTrustManagerFactory)  
+INFO  Headless startup complete (1572 ms) (AnalyzeHeadless)  
+INFO  Class searcher loaded 58 extension points (18 false positives) (ClassSearcher)  
+INFO  HEADLESS Script Paths:
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/Base/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/SystemEmulation/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/FileFormats/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/WildcardAssembler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/BSim/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/8051/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/BytePatterns/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/Atmel/ghidra_scripts
+    /Users/alexscott/Projects/LEDctrl/analysis/ghidra
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Debug/Debugger-rmi-trace/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/Jython/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/DATA/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/FunctionID/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/PyGhidra/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/MicrosoftCodeAnalyzer/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/SwiftDemangler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/PDB/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/JVM/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/Decompiler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/GnuDemangler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/VersionTracking/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/DecompilerDependent/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/PIC/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Debug/Debugger/ghidra_scripts (HeadlessAnalyzer)  
+INFO  HEADLESS: execution starts (HeadlessAnalyzer)  
+INFO  Opening existing project: /Users/alexscott/Projects/LEDctrl/analysis/ghidra/./proj/SigmaProj (HeadlessAnalyzer)  
+INFO  Opening project: /Users/alexscott/Projects/LEDctrl/analysis/ghidra/./proj/SigmaProj (HeadlessProject)  
+INFO  REPORT: Processing project file: /czJetFileII.dll (HeadlessAnalyzer)  
+INFO  REPORT: Execute script: DumpDispatcher.java  (HeadlessAnalyzer)  
+INFO  SCRIPT: /Users/alexscott/Projects/LEDctrl/analysis/ghidra/DumpDispatcher.java (HeadlessAnalyzer)  
+INFO  DumpDispatcher.java> 
+=================== FUN_1000f590_dispatch =================== (GhidraScript)  
+INFO  DumpDispatcher.java> 
+void __thiscall
+FUN_1000f590(void *this,undefined1 param_1,undefined1 param_2,void *param_3,void *param_4)
+
+{
+  undefined2 uVar1;
+  ushort uVar2;
+  int in_EAX;
+  int iVar3;
+  uint uVar4;
+  uint extraout_ECX;
+  uint uVar5;
+  byte *pbVar6;
+  uint uVar7;
+  size_t unaff_EBX;
+  undefined1 *unaff_ESI;
+  
+  *(short *)(in_EAX + 0x1252) = *(short *)(in_EAX + 0x1252) + 1;
+  iVar3 = (-(uint)(*(char *)(in_EAX + 0x51) != '\0') & 0xfffffc00) + 0xa755;
+  if (unaff_ESI != (undefined1 *)0x0) {
+    *unaff_ESI = (char)iVar3;
+    unaff_ESI[1] = (char)((uint)iVar3 >> 8);
+    unaff_ESI[4] = (char)unaff_EBX;
+    unaff_ESI[5] = (char)(unaff_EBX >> 8);
+  }
+  uVar1 = *(undefined2 *)(*(int *)(in_EAX + 0x48) + 0x48);
+  if (unaff_ESI != (undefined1 *)0x0) {
+    unaff_ESI[6] = (char)uVar1;
+    unaff_ESI[7] = (char)((ushort)uVar1 >> 8);
+  }
+  uVar1 = *(undefined2 *)(*(int *)(in_EAX + 0x48) + 0x4a);
+  if (unaff_ESI != (undefined1 *)0x0) {
+    unaff_ESI[8] = (char)uVar1;
+    unaff_ESI[9] = (char)((ushort)uVar1 >> 8);
+  }
+  uVar1 = *(undefined2 *)(in_EAX + 0x1252);
+  if (unaff_ESI != (undefined1 *)0x0) {
+    unaff_ESI[10] = (char)uVar1;
+    unaff_ESI[0xb] = (char)((ushort)uVar1 >> 8);
+    unaff_ESI[0xc] = param_1;
+    unaff_ESI[0xd] = param_2;
+    unaff_ESI[0xf] = 0;
+  }
+  if (unaff_ESI != (undefined1 *)0x0) {
+    unaff_ESI[0xe] = (char)((int)this + 3U >> 2);
+  }
+  memcpy(unaff_ESI + 0x10,param_3,(size_t)this);
+  if (unaff_ESI == (undefined1 *)0x0) {
+    iVar3 = 0;
+  }
+  else {
+    iVar3 = (uint)(byte)unaff_ESI[0xe] * 4;
+  }
+  memcpy(unaff_ESI + iVar3 + 0x10,param_4,unaff_EBX);
+  if (unaff_ESI == (undefined1 *)0x0) {
+    uVar4 = 0;
+    uVar5 = extraout_ECX;
+  }
+  else {
+    uVar5 = (uint)(byte)unaff_ESI[0xe];
+    uVar4 = (byte)unaff_ESI[4] + 0x10 + ((uint)(byte)unaff_ESI[5] * 0x40 + uVar5) * 4;
+  }
+  uVar7 = 0;
+  if (4 < uVar4) {
+    iVar3 = uVar4 - 4;
+    if (*(char *)(in_EAX + 0x51) == '\0') {
+      pbVar6 = unaff_ESI + 4;
+      for (; 0 < iVar3; iVar3 = iVar3 + -1) {
+        uVar7 = uVar7 + *pbVar6;
+        pbVar6 = pbVar6 + 1;
+      }
+    }
+    else {
+      uVar2 = FUN_10003250(uVar5,unaff_ESI + 4);
+      uVar7 = (uint)uVar2;
+    }
+  }
+  if (unaff_ESI != (undefined1 *)0x0) {
+    unaff_ESI[2] = (char)(uVar7 & 0xffff);
+    unaff_ESI[3] = (char)((uVar7 & 0xffff) >> 8);
+  }
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpDispatcher.java> 
+=================== FUN_1000fdd0_response =================== (GhidraScript)  
+INFO  DumpDispatcher.java> 
+uint FUN_1000fdd0(int param_1,int param_2)
+
+{
+  char cVar1;
+  undefined1 uVar2;
+  int in_EAX;
+  int iVar3;
+  undefined3 extraout_var;
+  char *pcVar4;
+  void *unaff_EBX;
+  int iVar5;
+  uint uVar6;
+  uint local_c;
+  uint local_8;
+  
+  iVar5 = 0;
+  if (param_1 == 0) {
+    cVar1 = '\0';
+    local_c = 0;
+  }
+  else {
+    cVar1 = *(char *)(param_1 + 0xc);
+    local_c = (uint)*(byte *)(param_1 + 0xd);
+  }
+  iVar3 = *(int *)(in_EAX + 0x48);
+  local_8 = 0;
+  if (*(int *)(iVar3 + 0x4c) != 0) {
+    do {
+      if (*(int *)(iVar3 + 0x54) != 0) {
+        return 0x5011;
+      }
+      pcVar4 = (char *)FUN_1000f7f0(in_EAX,param_1,param_2,unaff_EBX,0x600);
+      uVar2 = FUN_1000f6c0(local_c,pcVar4,in_EAX,cVar1,(char)local_c);
+      iVar5 = CONCAT31(extraout_var,uVar2);
+      if (iVar5 != 2) break;
+      iVar3 = *(int *)(in_EAX + 0x48);
+      if (*(int *)(iVar3 + 0x8c) != 0) {
+        (**(code **)(iVar3 + 0x8c))
+                  (iVar3,"..\\..\\src\\czBaseCMD\\czBaseCMD.cpp",0x251,6,
+                   "Read Data Timeout Or Error");
+      }
+      iVar3 = *(int *)(in_EAX + 0x48);
+      local_8 = local_8 + 1;
+    } while (local_8 < *(uint *)(iVar3 + 0x4c));
+  }
+  iVar3 = *(int *)(in_EAX + 0x48);
+  if (*(uint *)(iVar3 + 0x4c) <= local_8) {
+    uVar6 = 0x5100;
+    goto LAB_1000fecc;
+  }
+  if (iVar5 != 0) {
+    if (iVar5 != 1) {
+      uVar6 = 0x5004;
+      goto LAB_1000fecc;
+    }
+    if (unaff_EBX != (void *)0x0) {
+      uVar6 = (uint)*(ushort *)((int)unaff_EBX + 0x10);
+      if (uVar6 == 0x9000) {
+        uVar6 = 0;
+      }
+      goto LAB_1000fecc;
+    }
+  }
+  uVar6 = 0;
+LAB_1000fecc:
+  if ((*(int *)(iVar3 + 0x8c) != 0) && (uVar6 != 0)) {
+    pcVar4 = czErrorDesc(uVar6);
+    (**(code **)(iVar3 + 0x8c))(iVar3,"..\\..\\src\\czBaseCMD\\czBaseCMD.cpp",0x26e,3,pcVar4);
+  }
+  return uVar6;
+}
+
+ (GhidraScript)  
+INFO  DumpDispatcher.java> 
+=================== FUN_1000f3e0_setup =================== (GhidraScript)  
+INFO  DumpDispatcher.java> 
+undefined4 * FUN_1000f3e0(undefined4 *param_1)
+
+{
+  ushort uVar1;
+  uint uVar2;
+  int *piVar3;
+  code *pcVar4;
+  DWORD dwTlsIndex;
+  LPVOID pvVar5;
+  LPVOID pvVar6;
+  undefined1 *lpTlsValue;
+  BOOL BVar7;
+  void *local_10;
+  undefined1 *puStack_c;
+  undefined4 local_8;
+  
+  local_8 = 0xffffffff;
+  puStack_c = &LAB_10056b3b;
+  local_10 = ExceptionList;
+  ExceptionList = &local_10;
+  *param_1 = CBaseCMD::vftable;
+  FUN_10002d90();
+  dwTlsIndex = DAT_10062c08;
+  local_8 = 0;
+  *(undefined1 *)((int)param_1 + 0x51) = 0;
+  *(undefined2 *)((int)param_1 + 0x1252) = 0;
+  pvVar5 = TlsGetValue(dwTlsIndex);
+  if ((pvVar5 == (LPVOID)0x0) && (pvVar5 = LocalAlloc(0x40,0x98), pvVar5 != (HLOCAL)0x0)) {
+    TlsSetValue(DAT_10062c08,pvVar5);
+  }
+  param_1[0x12] = pvVar5;
+  if (pvVar5 != (LPVOID)0x0) {
+    pvVar6 = TlsGetValue(DAT_10062c00);
+    pvVar5 = pvVar6;
+    if (pvVar6 == (LPVOID)0x0) {
+      lpTlsValue = operator_new(0x170);
+      pvVar5 = (LPVOID)0x0;
+      if (lpTlsValue != (undefined1 *)0x0) {
+        BVar7 = TlsSetValue(DAT_10062c00,lpTlsValue);
+        pvVar5 = (LPVOID)0x0;
+        if (BVar7 != 0) {
+          *lpTlsValue = 0;
+          *(undefined4 *)(lpTlsValue + 1) = 0;
+          *(undefined4 *)(lpTlsValue + 5) = 0;
+          *(undefined4 *)(lpTlsValue + 9) = 0;
+          *(undefined2 *)(lpTlsValue + 0xd) = 0;
+          lpTlsValue[0xf] = 0;
+          memset(lpTlsValue + 0x10,0,0x34);
+          memset(lpTlsValue + 0x44,0,300);
+          pvVar5 = pvVar6;
+        }
+      }
+    }
+    param_1[0x13] = pvVar5;
+    if (pvVar5 != (LPVOID)0x0) {
+      uVar1 = *(ushort *)(param_1[0x12] + 0x5c);
+      if ((uVar1 < 0x40) || (0x500 < uVar1)) {
+        *(undefined2 *)(param_1[0x12] + 0x5c) = 0x300;
+      }
+      uVar2 = *(uint *)(param_1[0x12] + 0x4c);
+      if ((uVar2 == 0) || (100 < uVar2)) {
+        *(undefined4 *)(param_1[0x12] + 0x4c) = 3;
+      }
+      uVar2 = *(uint *)(param_1[0x12] + 0x50);
+      if ((uVar2 < 0x32) || (60000 < uVar2)) {
+        *(undefined4 *)(param_1[0x12] + 0x50) = 3000;
+      }
+      piVar3 = (int *)param_1[0x12];
+      if ((piVar3[0x21] == 0) || (piVar3[0x22] == 0)) {
+        FUN_10002e10(piVar3[0xf],piVar3[0xe],*piVar3,(char *)(piVar3 + 10));
+        *(undefined1 *)(param_1 + 0x14) = 1;
+      }
+      else {
+        *(undefined1 *)(param_1 + 0x14) = 0;
+      }
+      pcVar4 = *(code **)(param_1[0x12] + 0x78);
+      if (pcVar4 != (code *)0x0) {
+        (*pcVar4)(param_1[0x12]);
+      }
+    }
+  }
+  ExceptionList = local_10;
+  return param_1;
+}
+
+ (GhidraScript)  
+INFO  REPORT: Save succeeded for processed file: /czJetFileII.dll (HeadlessAnalyzer)  

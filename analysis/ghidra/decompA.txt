@@ -1,0 +1,416 @@
+;;; Created F_52541c@0052541c
+;;; Created F_525000@00525000
+;;; Created F_525200@00525200
+;;; Created F_525500@00525500
+;;; Created F_525700@00525700
+
+=== Hex 0x525400..0x525700 ===
+00525400: ff 8d 45 fc e8 b7 f4 ed ff c3 e9 f5 ed ed ff eb  |..E.............|
+00525410: e8 8b 45 f8 5b 8b e5 5d c3 8d 40 00 55 8b ec 83  |..E.[..]..@.U...|
+00525420: c4 bc 53 33 db 89 5d bc 89 5d ec 89 4d f4 89 55  |..S3..]..]..M..U|
+00525430: f8 89 45 fc 33 c0 55 68 64 56 52 00 64 ff 30 64  |..E.3.UhdVR.d.0d|
+00525440: 89 20 c6 45 f3 00 e8 01 6c ee ff dd 5d e0 9b ff  |. .E....l...]...|
+00525450: 75 e4 ff 75 e0 8d 45 d8 50 8d 45 d6 50 8d 45 d4  |u..u..E.P.E.P.E.|
+00525460: 50 8d 45 d2 50 8d 4d da 8d 55 dc 8d 45 de e8 51  |P.E.P.M..U..E..Q|
+00525470: ef ff ff 8b 45 f8 e8 0d 4d ee ff 84 c0 0f 84 c3  |....E...M.......|
+00525480: 01 00 00 8b 45 f8 e8 9d fc ff ff 88 45 d1 33 c0  |....E.......E.3.|
+00525490: 8a 45 d1 83 f8 04 0f 87 82 00 00 00 ff 24 85 a3  |.E...........$..|
+005254a0: 54 52 00 b7 54 52 00 cc 54 52 00 e1 54 52 00 f6  |TR..TR..TR..TR..|
+005254b0: 54 52 00 0b 55 52 00 8b 45 f8 e8 7d fe ff ff 8b  |TR..UR..E..}....|
+005254c0: 55 f4 66 89 42 16 c6 45 d0 54 eb 52 8b 45 f8 e8  |U.f.B..E.T.R.E..|
+005254d0: 68 fe ff ff 8b 55 f4 66 89 42 16 c6 45 d0 53 eb  |h....U.f.B..E.S.|
+005254e0: 3d c6 45 d0 50 8b 45 f8 e8 ab fd ff ff 8b 55 f4  |=.E.P.E.......U.|
+005254f0: 66 89 42 16 eb 28 8b 45 f8 e8 3e fe ff ff 8b 55  |f.B..(.E..>....U|
+00525500: f4 66 89 42 16 c6 45 d0 41 eb 13 c6 45 d0 46 8b  |.f.B..E.A...E.F.|
+00525510: 45 f8 e8 81 fd ff ff 8b 55 f4 66 89 42 16 8d 55  |E.......U.f.B..U|
+00525520: bc 8b 45 f8 e8 a3 4f ee ff 8b 45 bc 8d 55 ec e8  |..E...O...E..U..|
+00525530: dc 4e ee ff 8d 45 ec ba 7c 56 52 00 e8 47 f6 ed  |.N...E..|VR..G..|
+00525540: ff 8d 45 ec ba 0c 00 00 00 e8 be f9 ed ff 33 c0  |..E...........3.|
+00525550: 89 45 e8 8b 45 ec 8b 55 e8 8a 04 10 8b 55 f4 8b  |.E..E..U.....U..|
+00525560: 4d e8 88 44 0a 18 ff 45 e8 83 7d e8 0c 75 e4 8b  |M..D...E..}..u..|
+00525570: 45 f4 c6 00 44 8b 45 f4 8a 55 d0 88 50 01 8b 45  |E...D.E..U..P..E|
+00525580: f4 c6 40 02 80 8b 45 f4 c6 40 03 7f 0f b7 55 de  |..@...E..@....U.|
+00525590: 8b 45 fc e8 60 02 00 00 66 25 ff ff 8b 55 f4 66  |.E..`...f%...U.f|
+005255a0: 89 42 04 0f b7 55 dc 8b 45 fc e8 49 02 00 00 24  |.B...U..E..I...$|
+005255b0: ff 8b 55 f4 88 42 06 0f b7 55 d8 8b 45 fc e8 35  |..U..B...U..E..5|
+005255c0: 02 00 00 24 ff 8b 55 f4 88 42 07 8b 45 f4 c6 40  |...$..U..B..E..@|
+005255d0: 08 01 8b 45 f4 c6 40 09 01 8b 45 f4 c6 40 0a 01  |...E..@...E..@..|
+005255e0: 8b 45 f4 c6 40 0b 01 0f b7 55 de 8b 45 fc e8 05  |.E..@....U..E...|
+005255f0: 02 00 00 66 25 ff ff 8b 55 f4 66 89 42 0c 0f b7  |...f%...U.f.B...|
+00525600: 55 dc 8b 45 fc e8 ee 01 00 00 24 ff 8b 55 f4 88  |U..E......$..U..|
+00525610: 42 0e 0f b7 55 d8 8b 45 fc e8 da 01 00 00 24 ff  |B...U..E......$.|
+00525620: 8b 55 f4 88 42 0f 8b 45 f4 c6 40 10 01 8b 45 f4  |.U..B..E..@...E.|
+00525630: c6 40 11 01 8b 45 f4 c6 40 12 01 8b 45 f4 c6 40  |.@...E..@...E..@|
+00525640: 13 01 c6 45 f3 01 33 c0 5a 59 59 64 89 10 68 6b  |...E..3.ZYYd..hk|
+00525650: 56 52 00 8d 45 bc e8 65 f2 ed ff 8d 45 ec e8 5d  |VR..E..e....E..]|
+00525660: f2 ed ff c3 e9 9b eb ed ff eb e8 8a 45 f3 5b 8b  |............E.[.|
+00525670: e5 5d c3 00 ff ff ff ff 01 00 00 00 00 00 00 00  |.]..............|
+00525680: 55 8b ec 81 c4 8c fe ff ff 53 33 c9 89 8d 8c fe  |U........S3.....|
+00525690: ff ff 89 55 f8 89 45 fc 8b 45 fc e8 d0 f6 ed ff  |...U..E..E......|
+005256a0: 33 c0 55 68 ec 57 52 00 64 ff 30 64 89 20 8b 45  |3.Uh.WR.d.0d. .E|
+005256b0: f8 e8 0a f2 ed ff 8b 45 fc e8 ca 4a ee ff 84 c0  |.......E...J....|
+005256c0: 0f 84 05 01 00 00 33 c9 b2 01 a1 0c 92 41 00 e8  |......3......A..|
+005256d0: d0 8a ef ff 89 45 f4 b2 01 a1 90 91 41 00 e8 5d  |.....E......A..]|
+005256e0: e3 ed ff 89 45 f0 33 c0 55 68 60 57 52 00 64 ff  |....E.3.Uh`WR.d.|
+005256f0: 30 64 89 20 8b 55 fc 8d 85 a4 fe ff ff e8 aa d7  |0d. .U..........|
+
+=== Decompiled (9 funcs) ===
+
+;;; ============================================
+;;; 00402784  FUN_00402784
+;;; ============================================
+
+int FUN_00402784(int param_1)
+
+{
+  int iVar1;
+  
+  if (param_1 < 1) {
+    iVar1 = 0;
+  }
+  else {
+    iVar1 = (*(code *)PTR_FUN_00561044)();
+    if (iVar1 == 0) {
+      FUN_004028e0(1);
+    }
+  }
+  return iVar1;
+}
+
+
+;;; ============================================
+;;; 004027a4  FUN_004027a4
+;;; ============================================
+
+int FUN_004027a4(int param_1)
+
+{
+  int iVar1;
+  
+  if (param_1 == 0) {
+    iVar1 = 0;
+  }
+  else {
+    iVar1 = (*(code *)PTR_FUN_00561048)();
+    if (iVar1 != 0) {
+      FUN_004028e0(2);
+    }
+  }
+  return iVar1;
+}
+
+
+;;; ============================================
+;;; 0041b014  FUN_0041b014
+;;; ============================================
+
+int FUN_0041b014(int *param_1,int param_2)
+
+{
+  int iVar1;
+  
+  iVar1 = param_1[2];
+  if (iVar1 == param_1[3]) {
+    (**(code **)*param_1)();
+  }
+  *(int *)(param_1[1] + iVar1 * 4) = param_2;
+  param_1[2] = param_1[2] + 1;
+  if (param_2 != 0) {
+    (**(code **)(*param_1 + 4))(param_1,param_2,0);
+  }
+  return iVar1;
+}
+
+
+;;; ============================================
+;;; 00525000  F_525000
+;;; ============================================
+
+/* WARNING: Control flow encountered bad instruction data */
+
+void F_525000(void)
+
+{
+                    /* WARNING: Bad instruction - Truncating control flow here */
+  halt_baddata();
+}
+
+
+;;; ============================================
+;;; 00525200  F_525200
+;;; ============================================
+
+undefined1
+F_525200(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,
+        undefined4 param_5)
+
+{
+  uint uVar1;
+  int extraout_EDX;
+  int unaff_EBP;
+  undefined4 *in_FS_OFFSET;
+  undefined4 in_stack_00000000;
+  
+  (**(code **)(**(int **)(unaff_EBP + -0xc) + 0xc))(*(int **)(unaff_EBP + -0xc),param_2,4);
+  if ((*(short *)(unaff_EBP + -0x10) == 0x5351) && (*(short *)(unaff_EBP + -0xe) == 0)) {
+    *(undefined1 *)(unaff_EBP + -5) = 4;
+    FUN_004042e8();
+  }
+  else {
+    uVar1 = (**(code **)**(undefined4 **)(unaff_EBP + -0xc))();
+    if (extraout_EDX == 0) {
+      if (uVar1 < 2) goto LAB_0052526b;
+    }
+    else if (extraout_EDX < 0) goto LAB_0052526b;
+    (**(code **)(**(int **)(unaff_EBP + -0xc) + 0x14))(*(int **)(unaff_EBP + -0xc),0,0);
+    (**(code **)(**(int **)(unaff_EBP + -0xc) + 0xc))
+              (*(int **)(unaff_EBP + -0xc),unaff_EBP + -0x12,2);
+    if (*(short *)(unaff_EBP + -0x12) != 0x4d42) {
+LAB_0052526b:
+      *in_FS_OFFSET = in_stack_00000000;
+      FUN_00403a70(*(undefined4 *)(unaff_EBP + -0xc),in_stack_00000000,param_5);
+      *(undefined4 *)(unaff_EBP + -0xc) = 0;
+      return 0;
+    }
+    *(undefined1 *)(unaff_EBP + -5) = 2;
+    FUN_004042e8();
+  }
+  return *(undefined1 *)(unaff_EBP + -5);
+}
+
+
+;;; ============================================
+;;; 0052533c  FUN_0052533c
+;;; ============================================
+
+void FUN_0052533c(undefined4 param_1)
+
+{
+  undefined1 *puVar1;
+  char cVar2;
+  uint uVar3;
+  int extraout_EDX;
+  undefined4 *in_FS_OFFSET;
+  undefined4 uStack_44;
+  undefined1 *puStack_40;
+  undefined1 *puStack_3c;
+  undefined4 uStack_38;
+  undefined1 *puStack_34;
+  undefined1 *puStack_30;
+  undefined4 local_28;
+  short local_22 [3];
+  int local_1c;
+  int *local_10;
+  int local_c;
+  undefined4 local_8;
+  
+  local_28 = 0;
+  puStack_30 = (undefined1 *)0x525353;
+  local_8 = param_1;
+  FUN_00404d70(param_1);
+  puStack_34 = &LAB_0052540a;
+  uStack_38 = *in_FS_OFFSET;
+  *in_FS_OFFSET = &uStack_38;
+  local_c = 0;
+  puStack_3c = (undefined1 *)0x52536e;
+  puStack_30 = &stack0xfffffffc;
+  cVar2 = FUN_0040a188(local_8);
+  puVar1 = puStack_30;
+  if (cVar2 == '\0') {
+    *in_FS_OFFSET = uStack_38;
+    puStack_30 = &LAB_00525411;
+    puStack_34 = (undefined1 *)0x525401;
+    FUN_004048c0(&local_28,uStack_38,puVar1);
+    puStack_34 = (undefined1 *)0x525409;
+    FUN_004048c0(&local_8);
+    return;
+  }
+  puStack_3c = (undefined1 *)0x40;
+  puStack_40 = (undefined1 *)0x525383;
+  local_10 = (int *)FUN_0041dd04(PTR_PTR_004190a0,1,local_8);
+  puStack_40 = &LAB_005253e5;
+  uStack_44 = *in_FS_OFFSET;
+  *in_FS_OFFSET = &uStack_44;
+  puStack_3c = &stack0xfffffffc;
+  uVar3 = (**(code **)*local_10)();
+  if (extraout_EDX == 0) {
+    if (uVar3 < 0x12) goto LAB_005253ca;
+  }
+  else if (extraout_EDX < 0) goto LAB_005253ca;
+  (**(code **)(*local_10 + 0xc))(local_10,local_22,0x12);
+  if (local_22[0] == 0x474e) {
+    local_c = local_1c + 8;
+  }
+LAB_005253ca:
+  puVar1 = puStack_3c;
+  *in_FS_OFFSET = uStack_44;
+  puStack_3c = (undefined1 *)0x5253ec;
+  puStack_40 = (undefined1 *)0x5253df;
+  FUN_00403a70(local_10,uStack_44,puVar1);
+  return;
+}
+
+
+;;; ============================================
+;;; 0052541c  F_52541c
+;;; ============================================
+
+void F_52541c(undefined4 param_1,undefined4 param_2,undefined1 *param_3)
+
+{
+  char cVar1;
+  undefined1 uVar2;
+  undefined2 uVar3;
+  int *in_FS_OFFSET;
+  float10 in_ST0;
+  undefined1 *puVar4;
+  undefined1 *puVar5;
+  int iStack_58;
+  undefined *puStack_54;
+  undefined1 *puStack_50;
+  undefined4 auStack_48 [5];
+  undefined1 uStack_34;
+  undefined1 uStack_33;
+  undefined1 auStack_32 [2];
+  undefined1 auStack_30 [2];
+  undefined1 auStack_2e [2];
+  undefined2 uStack_2c;
+  undefined1 auStack_2a [2];
+  undefined2 uStack_28;
+  undefined2 uStack_26;
+  double dStack_24;
+  int iStack_1c;
+  int iStack_18;
+  undefined1 uStack_11;
+  undefined1 *puStack_10;
+  undefined4 uStack_c;
+  undefined4 uStack_8;
+  
+  puStack_50 = &stack0xfffffffc;
+  auStack_48[0] = 0;
+  iStack_18 = 0;
+  puStack_54 = &UNK_00525664;
+  iStack_58 = *in_FS_OFFSET;
+  *in_FS_OFFSET = (int)&iStack_58;
+  uStack_11 = 0;
+  puStack_10 = param_3;
+  uStack_c = param_2;
+  uStack_8 = param_1;
+  FUN_0040c04c();
+  dStack_24 = (double)in_ST0;
+  puVar5 = auStack_2e;
+  puVar4 = auStack_32;
+  func_0x005243c4(&uStack_26,&uStack_28,auStack_2a,puVar4,auStack_30,puVar5,&uStack_2c,dStack_24);
+  cVar1 = FUN_0040a188(uStack_c);
+  if (cVar1 != '\0') {
+    uStack_33 = func_0x00525128(uStack_c);
+    switch(uStack_33) {
+    case 0:
+      uVar3 = FUN_0052533c(uStack_c);
+      *(undefined2 *)(puStack_10 + 0x16) = uVar3;
+      uStack_34 = 0x54;
+      break;
+    case 1:
+      uVar3 = FUN_0052533c(uStack_c);
+      *(undefined2 *)(puStack_10 + 0x16) = uVar3;
+      uStack_34 = 0x53;
+      break;
+    case 2:
+      uStack_34 = 0x50;
+      uVar3 = func_0x00525298(uStack_c);
+      *(undefined2 *)(puStack_10 + 0x16) = uVar3;
+      break;
+    case 3:
+      uVar3 = FUN_0052533c(uStack_c);
+      *(undefined2 *)(puStack_10 + 0x16) = uVar3;
+      uStack_34 = 0x41;
+      break;
+    case 4:
+      uStack_34 = 0x46;
+      uVar3 = func_0x00525298(uStack_c);
+      *(undefined2 *)(puStack_10 + 0x16) = uVar3;
+    }
+    FUN_0040a4cc(uStack_c,auStack_48);
+    FUN_0040a410(auStack_48[0],&iStack_18);
+    FUN_00404b88(&iStack_18,&UNK_0052567c);
+    FUN_00404f0c(&iStack_18,0xc);
+    iStack_1c = 0;
+    do {
+      puStack_10[iStack_1c + 0x18] = *(undefined1 *)(iStack_18 + iStack_1c);
+      iStack_1c = iStack_1c + 1;
+    } while (iStack_1c != 0xc);
+    *puStack_10 = 0x44;
+    puStack_10[1] = uStack_34;
+    puStack_10[2] = 0x80;
+    puStack_10[3] = 0x7f;
+    uVar3 = func_0x005257f8(uStack_8,uStack_26);
+    *(undefined2 *)(puStack_10 + 4) = uVar3;
+    uVar2 = func_0x005257f8(uStack_8,uStack_28);
+    puStack_10[6] = uVar2;
+    uVar2 = func_0x005257f8(uStack_8,uStack_2c);
+    puStack_10[7] = uVar2;
+    puStack_10[8] = 1;
+    puStack_10[9] = 1;
+    puStack_10[10] = 1;
+    puStack_10[0xb] = 1;
+    uVar3 = func_0x005257f8(uStack_8,uStack_26);
+    *(undefined2 *)(puStack_10 + 0xc) = uVar3;
+    uVar2 = func_0x005257f8(uStack_8,uStack_28);
+    puStack_10[0xe] = uVar2;
+    uVar2 = func_0x005257f8(uStack_8,uStack_2c);
+    puStack_10[0xf] = uVar2;
+    puStack_10[0x10] = 1;
+    puStack_10[0x11] = 1;
+    puStack_10[0x12] = 1;
+    puStack_10[0x13] = 1;
+    uStack_11 = 1;
+  }
+  *in_FS_OFFSET = (int)puVar4;
+  FUN_004048c0(auStack_48,puVar4,puVar5,&UNK_0052566b);
+  FUN_004048c0(&iStack_18);
+  return;
+}
+
+
+;;; ============================================
+;;; 00525500  F_525500
+;;; ============================================
+
+void F_525500(void)
+
+{
+  do {
+                    /* WARNING: Do nothing block with infinite loop */
+  } while( true );
+}
+
+
+;;; ============================================
+;;; 00525700  F_525700
+;;; ============================================
+
+void F_525700(undefined4 param_1,int param_2,undefined4 param_3,undefined4 param_4,
+             undefined4 param_5)
+
+{
+  int iVar1;
+  int unaff_EBP;
+  undefined4 *in_FS_OFFSET;
+  undefined4 in_stack_00000000;
+  
+  in((short)param_2);
+  *(int *)(param_2 + 0x12) = *(int *)(param_2 + 0x12) + 1;
+  FUN_0040339c(unaff_EBP + -0x15c);
+  FUN_004028ec();
+  FUN_004031c0(unaff_EBP + -0x15c);
+  iVar1 = FUN_004028ec();
+  if (0x11 < iVar1) {
+    FUN_00403248(unaff_EBP + -0x15c,unaff_EBP + -0x16e);
+    FUN_004028ec();
+  }
+  *in_FS_OFFSET = in_stack_00000000;
+  FUN_0040301c(unaff_EBP + -0x15c,in_stack_00000000,param_5);
+  FUN_004028ec();
+  return;
+}
+

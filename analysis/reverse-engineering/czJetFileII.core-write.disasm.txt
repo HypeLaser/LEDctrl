@@ -1,0 +1,558 @@
+            ; XREFS: CALL 0x1001a9c1  CALL 0x1001aaa1  CALL 0x1001ab83  
+            ; XREFS: CALL 0x1001ac63  CALL 0x1001ad43  CALL 0x1001ae23  
+            ; XREFS: CALL 0x1001af01  CALL 0x1001b3d1  
+┌ 1893: fcn.1001c2e0 (int32_t arg_8h, int32_t arg_ch, int32_t arg_10h, int32_t arg_14h);
+│ `- args(sp[0x4..0x10]) vars(36:sp[0x8..0x134])
+│           0x1001c2e0      55             push ebp
+│           0x1001c2e1      8bec           mov ebp, esp
+│           0x1001c2e3      81ec30010000   sub esp, 0x130
+│           0x1001c2e9      a128200610     mov eax, dword [0x10062028] ; [0x10062028:4]=0xbb40e64e
+│           0x1001c2ee      33c5           xor eax, ebp
+│           0x1001c2f0      8945fc         mov dword [var_4h], eax
+│           0x1001c2f3      8b4508         mov eax, dword [arg_8h]
+│           0x1001c2f6      8985dcfeffff   mov dword [var_124h], eax
+│           0x1001c2fc      8b4510         mov eax, dword [arg_10h]
+│           0x1001c2ff      53             push ebx
+│           0x1001c300      8985d8feffff   mov dword [var_128h], eax
+│           0x1001c306      8bd9           mov ebx, ecx
+│           0x1001c308      85c0           test eax, eax
+│       ┌─< 0x1001c30a      0f8464070000   je 0x1001ca74
+│       │   0x1001c310      85db           test ebx, ebx
+│      ┌──< 0x1001c312      0f845c070000   je 0x1001ca74
+│      ││   0x1001c318      57             push edi
+│      ││   0x1001c319      6850ae0510     push 0x1005ae50             ; "rb"
+│      ││   0x1001c31e      53             push ebx
+│      ││   0x1001c31f      c785d4feff..   mov dword [var_12ch], 1
+│      ││   0x1001c329      c785d0feff..   mov dword [var_130h], 0x5101
+│      ││   0x1001c333      ff1510810510   call dword [sym.imp.MSVCR100.dll_fopen] ; 0x10058110 ; file*fopen(const char *filename, const char *mode)
+│      ││   0x1001c339      8bf8           mov edi, eax
+│      ││   0x1001c33b      83c408         add esp, 8
+│      ││   0x1001c33e      85ff           test edi, edi
+│     ┌───< 0x1001c340      7517           jne 0x1001c359
+│     │││   0x1001c342      5f             pop edi
+│     │││   0x1001c343      b801510000     mov eax, 0x5101
+│     │││   0x1001c348      5b             pop ebx
+│     │││   0x1001c349      8b4dfc         mov ecx, dword [var_4h]
+│     │││   0x1001c34c      33cd           xor ecx, ebp
+│     │││   0x1001c34e      e83f920300     call fcn.10055592
+│     │││   0x1001c353      8be5           mov esp, ebp
+│     │││   0x1001c355      5d             pop ebp
+│     │││   0x1001c356      c21000         ret 0x10
+│     └───> 0x1001c359      56             push esi
+│      ││   0x1001c35a      57             push edi
+│      ││   0x1001c35b      33c0           xor eax, eax
+│      ││   0x1001c35d      6a01           push 1                      ; 1
+│      ││   0x1001c35f      8d8de8feffff   lea ecx, [var_118h]
+│      ││   0x1001c365      6a12           push 0x12                   ; 18
+│      ││   0x1001c367      51             push ecx
+│      ││   0x1001c368      8985e8feffff   mov dword [var_118h], eax
+│      ││   0x1001c36e      8985ecfeffff   mov dword [var_114h], eax
+│      ││   0x1001c374      8985f0feffff   mov dword [var_110h], eax
+│      ││   0x1001c37a      8985f4feffff   mov dword [var_10ch], eax
+│      ││   0x1001c380      668985f8fe..   mov word [var_108h], ax
+│      ││   0x1001c387      ff1538810510   call dword [sym.imp.MSVCR100.dll_fread] ; 0x10058138 ; size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+│      ││   0x1001c38d      ba4e470000     mov edx, 0x474e             ; 'NG'
+│      ││   0x1001c392      83c410         add esp, 0x10
+│      ││   0x1001c395      663995e8fe..   cmp word [var_118h], dx
+│     ┌───< 0x1001c39c      0f85cf010000   jne 0x1001c571
+│     │││   0x1001c3a2      6800100000     push 0x1000
+│     │││   0x1001c3a7      ff1534810510   call dword [sym.imp.MSVCR100.dll_malloc] ; 0x10058134 ;  void *malloc(size_t size)
+│     │││   0x1001c3ad      8bf0           mov esi, eax
+│     │││   0x1001c3af      83c404         add esp, 4
+│     │││   0x1001c3b2      85f6           test esi, esi
+│    ┌────< 0x1001c3b4      7522           jne 0x1001c3d8
+│    ││││   0x1001c3b6      57             push edi
+│    ││││   0x1001c3b7      ff1520810510   call dword [sym.imp.MSVCR100.dll_fclose] ; 0x10058120 ; int fclose(FILE *stream)
+│    ││││   0x1001c3bd      83c404         add esp, 4
+│    ││││   0x1001c3c0      5e             pop esi
+│    ││││   0x1001c3c1      5f             pop edi
+│    ││││   0x1001c3c2      b801010000     mov eax, 0x101              ; 257
+│    ││││   0x1001c3c7      5b             pop ebx
+│    ││││   0x1001c3c8      8b4dfc         mov ecx, dword [var_4h]
+│    ││││   0x1001c3cb      33cd           xor ecx, ebp
+│    ││││   0x1001c3cd      e8c0910300     call fcn.10055592
+│    ││││   0x1001c3d2      8be5           mov esp, ebp
+│    ││││   0x1001c3d4      5d             pop ebp
+│    ││││   0x1001c3d5      c21000         ret 0x10
+│    └────> 0x1001c3d8      6800100000     push 0x1000
+│     │││   0x1001c3dd      6a00           push 0
+│     │││   0x1001c3df      56             push esi
+│     │││   0x1001c3e0      e8b7960300     call sub.MSVCR100.dll_memset ; void *memset(void *s, int c, size_t n)
+│     │││   0x1001c3e5      8bc3           mov eax, ebx
+│     │││   0x1001c3e7      83c40c         add esp, 0xc
+│     │││   0x1001c3ea      8d5001         lea edx, [eax + 1]
+│     │││   0x1001c3ed      8d4900         lea ecx, [ecx]
+│    ┌────> 0x1001c3f0      8a08           mov cl, byte [eax]
+│    ╎│││   0x1001c3f2      40             inc eax
+│    ╎│││   0x1001c3f3      84c9           test cl, cl
+│    └────< 0x1001c3f5      75f9           jne 0x1001c3f0
+│     │││   0x1001c3f7      2bc2           sub eax, edx
+│     │││   0x1001c3f9      50             push eax
+│     │││   0x1001c3fa      53             push ebx
+│     │││   0x1001c3fb      56             push esi
+│     │││   0x1001c3fc      ff150c810510   call dword [sym.imp.MSVCR100.dll_strncpy] ; 0x1005810c ; char *strncpy(char *dest, const char *src, size_t  n)
+│     │││   0x1001c402      6a04           push 4                      ; 4
+│     │││   0x1001c404      6870c00510     push str..tmp               ; 0x1005c070 ; ".tmp"
+│     │││   0x1001c409      56             push esi
+│     │││   0x1001c40a      ff156c810510   call dword [sym.imp.MSVCR100.dll_strncat] ; 0x1005816c ; char *strncat(char *s1, const char *s2, size_t n)
+│     │││   0x1001c410      6878c00510     push 0x1005c078             ; "wb+"
+│     │││   0x1001c415      56             push esi
+│     │││   0x1001c416      ff1510810510   call dword [sym.imp.MSVCR100.dll_fopen] ; 0x10058110 ; file*fopen(const char *filename, const char *mode)
+│     │││   0x1001c41c      83c420         add esp, 0x20
+│     │││   0x1001c41f      8985e4feffff   mov dword [var_11ch], eax
+│     │││   0x1001c425      85c0           test eax, eax
+│    ┌────< 0x1001c427      7529           jne 0x1001c452
+│    ││││   0x1001c429      57             push edi
+│    ││││   0x1001c42a      ff1520810510   call dword [sym.imp.MSVCR100.dll_fclose] ; 0x10058120 ; int fclose(FILE *stream)
+│    ││││   0x1001c430      56             push esi
+│    ││││   0x1001c431      ff1530810510   call dword [sym.imp.MSVCR100.dll_free] ; 0x10058130 ; void free(void *ptr)
+│    ││││   0x1001c437      83c408         add esp, 8
+│    ││││   0x1001c43a      5e             pop esi
+│    ││││   0x1001c43b      5f             pop edi
+│    ││││   0x1001c43c      b801510000     mov eax, 0x5101
+│    ││││   0x1001c441      5b             pop ebx
+│    ││││   0x1001c442      8b4dfc         mov ecx, dword [var_4h]
+│    ││││   0x1001c445      33cd           xor ecx, ebp
+│    ││││   0x1001c447      e846910300     call fcn.10055592
+│    ││││   0x1001c44c      8be5           mov esp, ebp
+│    ││││   0x1001c44e      5d             pop ebp
+│    ││││   0x1001c44f      c21000         ret 0x10
+│    └────> 0x1001c452      8b1d18810510   mov ebx, dword [sym.imp.MSVCR100.dll_fseek] ; [0x10058118:4]=0x5f9b8 reloc.MSVCR100.dll_fseek
+│     │││   0x1001c458      6a00           push 0
+│     │││   0x1001c45a      6a00           push 0
+│     │││   0x1001c45c      57             push edi
+│     │││   0x1001c45d      ffd3           call ebx
+│     │││   0x1001c45f      57             push edi
+│     │││   0x1001c460      6a01           push 1                      ; 1
+│     │││   0x1001c462      6a20           push 0x20                   ; 32
+│     │││   0x1001c464      56             push esi
+│     │││   0x1001c465      ff1538810510   call dword [sym.imp.MSVCR100.dll_fread] ; 0x10058138 ; size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+│     │││   0x1001c46b      6a00           push 0
+│     │││   0x1001c46d      6a12           push 0x12                   ; 18
+│     │││   0x1001c46f      57             push edi
+│     │││   0x1001c470      ffd3           call ebx
+│     │││   0x1001c472      0fb79df0fe..   movzx ebx, word [var_110h]
+│     │││   0x1001c479      0fb785eefe..   movzx eax, word [var_112h]
+│     │││   0x1001c480      c1e310         shl ebx, 0x10
+│     │││   0x1001c483      83c428         add esp, 0x28
+│     │││   0x1001c486      03d8           add ebx, eax
+│     │││   0x1001c488      807e1950       cmp byte [esi + 0x19], 0x50 ; 'P'
+│    ┌────< 0x1001c48c      7557           jne 0x1001c4e5
+│    ││││   0x1001c48e      807e1a44       cmp byte [esi + 0x1a], 0x44 ; 'D'
+│   ┌─────< 0x1001c492      7551           jne 0x1001c4e5
+│   │││││   0x1001c494      85db           test ebx, ebx
+│  ┌──────< 0x1001c496      0f84be000000   je 0x1001c55a
+│  ││││││   0x1001c49c      8d642400       lea esp, [esp]
+│ ┌───────> 0x1001c4a0      57             push edi
+│ ╎││││││   0x1001c4a1      ff1568810510   call dword [sym.imp.MSVCR100.dll_feof] ; 0x10058168 ; int feof(FILE *stream)
+│ ╎││││││   0x1001c4a7      83c404         add esp, 4
+│ ╎││││││   0x1001c4aa      85c0           test eax, eax
+│ ────────< 0x1001c4ac      0f85a8000000   jne 0x1001c55a
+│ ╎││││││   0x1001c4b2      57             push edi
+│ ╎││││││   0x1001c4b3      6800100000     push 0x1000
+│ ╎││││││   0x1001c4b8      6a01           push 1                      ; 1
+│ ╎││││││   0x1001c4ba      56             push esi
+│ ╎││││││   0x1001c4bb      ff1538810510   call dword [sym.imp.MSVCR100.dll_fread] ; 0x10058138 ; size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+│ ╎││││││   0x1001c4c1      8b8de4feffff   mov ecx, dword [var_11ch]
+│ ╎││││││   0x1001c4c7      51             push ecx
+│ ╎││││││   0x1001c4c8      50             push eax
+│ ╎││││││   0x1001c4c9      6a01           push 1                      ; 1
+│ ╎││││││   0x1001c4cb      56             push esi
+│ ╎││││││   0x1001c4cc      8985e0feffff   mov dword [var_120h], eax
+│ ╎││││││   0x1001c4d2      ff1578810510   call dword [sym.imp.MSVCR100.dll_fwrite] ; 0x10058178 ; size_t fwrite(const void *ptr, size_t size, size_t nitems, FILE *stream)
+│ ╎││││││   0x1001c4d8      83c420         add esp, 0x20
+│ ╎││││││   0x1001c4db      2b9de0feffff   sub ebx, dword [var_120h]
+│ └───────< 0x1001c4e1      75bd           jne 0x1001c4a0
+│ ┌───────< 0x1001c4e3      eb75           jmp 0x1001c55a
+│ ││└└────> 0x1001c4e5      8b95e4feffff   mov edx, dword [var_11ch]
+│ ││  │││   0x1001c4eb      52             push edx
+│ ││  │││   0x1001c4ec      6a01           push 1                      ; 1
+│ ││  │││   0x1001c4ee      6a07           push 7                      ; 7
+│ ││  │││   0x1001c4f0      68b8bd0510     push 0x1005bdb8
+│ ││  │││   0x1001c4f5      ff1578810510   call dword [sym.imp.MSVCR100.dll_fwrite] ; 0x10058178 ; size_t fwrite(const void *ptr, size_t size, size_t nitems, FILE *stream)
+│ ││  │││   0x1001c4fb      83c410         add esp, 0x10
+│ ││  │││   0x1001c4fe      85db           test ebx, ebx
+│ ││ ┌────< 0x1001c500      743f           je 0x1001c541
+│ ││┌─────> 0x1001c502      57             push edi
+│ ││╎││││   0x1001c503      ff1568810510   call dword [sym.imp.MSVCR100.dll_feof] ; 0x10058168 ; int feof(FILE *stream)
+│ ││╎││││   0x1001c509      83c404         add esp, 4
+│ ││╎││││   0x1001c50c      85c0           test eax, eax
+│ ────────< 0x1001c50e      7531           jne 0x1001c541
+│ ││╎││││   0x1001c510      57             push edi
+│ ││╎││││   0x1001c511      6800100000     push 0x1000
+│ ││╎││││   0x1001c516      6a01           push 1                      ; 1
+│ ││╎││││   0x1001c518      56             push esi
+│ ││╎││││   0x1001c519      ff1538810510   call dword [sym.imp.MSVCR100.dll_fread] ; 0x10058138 ; size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+│ ││╎││││   0x1001c51f      8b8de4feffff   mov ecx, dword [var_11ch]
+│ ││╎││││   0x1001c525      51             push ecx
+│ ││╎││││   0x1001c526      50             push eax
+│ ││╎││││   0x1001c527      6a01           push 1                      ; 1
+│ ││╎││││   0x1001c529      56             push esi
+│ ││╎││││   0x1001c52a      8985e0feffff   mov dword [var_120h], eax
+│ ││╎││││   0x1001c530      ff1578810510   call dword [sym.imp.MSVCR100.dll_fwrite] ; 0x10058178 ; size_t fwrite(const void *ptr, size_t size, size_t nitems, FILE *stream)
+│ ││╎││││   0x1001c536      83c420         add esp, 0x20
+│ ││╎││││   0x1001c539      2b9de0feffff   sub ebx, dword [var_120h]
+│ ││└─────< 0x1001c53f      75c1           jne 0x1001c502
+│ ───└────> 0x1001c541      8b95e4feffff   mov edx, dword [var_11ch]
+│ ││  │││   0x1001c547      52             push edx
+│ ││  │││   0x1001c548      6a01           push 1                      ; 1
+│ ││  │││   0x1001c54a      6a01           push 1                      ; 1
+│ ││  │││   0x1001c54c      68c0bd0510     push 0x1005bdc0
+│ ││  │││   0x1001c551      ff1578810510   call dword [sym.imp.MSVCR100.dll_fwrite] ; 0x10058178 ; size_t fwrite(const void *ptr, size_t size, size_t nitems, FILE *stream)
+│ ││  │││   0x1001c557      83c410         add esp, 0x10
+│ ││  │││   ; CODE XREF from fcn.1001c2e0 @ 0x1001c4e3(x)
+│ └└──────> 0x1001c55a      56             push esi
+│     │││   0x1001c55b      ff1530810510   call dword [sym.imp.MSVCR100.dll_free] ; 0x10058130 ; void free(void *ptr)
+│     │││   0x1001c561      57             push edi
+│     │││   0x1001c562      ff1520810510   call dword [sym.imp.MSVCR100.dll_fclose] ; 0x10058120 ; int fclose(FILE *stream)
+│     │││   0x1001c568      8bbde4feffff   mov edi, dword [var_11ch]
+│     │││   0x1001c56e      83c408         add esp, 8
+│     └───> 0x1001c571      8b3518810510   mov esi, dword [sym.imp.MSVCR100.dll_fseek] ; [0x10058118:4]=0x5f9b8 reloc.MSVCR100.dll_fseek
+│      ││   0x1001c577      6a02           push 2                      ; 2
+│      ││   0x1001c579      6a00           push 0
+│      ││   0x1001c57b      57             push edi
+│      ││   0x1001c57c      ffd6           call esi
+│      ││   0x1001c57e      57             push edi
+│      ││   0x1001c57f      ff1514810510   call dword [sym.imp.MSVCR100.dll_ftell] ; 0x10058114 ; long ftell(FILE *stream)
+│      ││   0x1001c585      6a00           push 0
+│      ││   0x1001c587      6a00           push 0
+│      ││   0x1001c589      57             push edi
+│      ││   0x1001c58a      8bd8           mov ebx, eax
+│      ││   0x1001c58c      ffd6           call esi
+│      ││   0x1001c58e      83c41c         add esp, 0x1c
+│      ││   0x1001c591      85db           test ebx, ebx
+│     ┌───< 0x1001c593      7522           jne 0x1001c5b7
+│     │││   0x1001c595      57             push edi
+│     │││   0x1001c596      ff1520810510   call dword [sym.imp.MSVCR100.dll_fclose] ; 0x10058120 ; int fclose(FILE *stream)
+│     │││   0x1001c59c      83c404         add esp, 4
+│     │││   0x1001c59f      5e             pop esi
+│     │││   0x1001c5a0      5f             pop edi
+│     │││   0x1001c5a1      b802510000     mov eax, 0x5102
+│     │││   0x1001c5a6      5b             pop ebx
+│     │││   0x1001c5a7      8b4dfc         mov ecx, dword [var_4h]
+│     │││   0x1001c5aa      33cd           xor ecx, ebp
+│     │││   0x1001c5ac      e8e18f0300     call fcn.10055592
+│     │││   0x1001c5b1      8be5           mov esp, ebp
+│     │││   0x1001c5b3      5d             pop ebp
+│     │││   0x1001c5b4      c21000         ret 0x10
+│     └───> 0x1001c5b7      8b85dcfeffff   mov eax, dword [var_124h]
+│      ││   0x1001c5bd      8b4848         mov ecx, dword [eax + 0x48]
+│      ││   0x1001c5c0      0fb7495c       movzx ecx, word [ecx + 0x5c]
+│      ││   0x1001c5c4      33d2           xor edx, edx
+│      ││   0x1001c5c6      8d4419ff       lea eax, [ecx + ebx - 1]
+│      ││   0x1001c5ca      f7f1           div ecx
+│      ││   0x1001c5cc      8985e4feffff   mov dword [var_11ch], eax
+│      ││   0x1001c5d2      8b85d8feffff   mov eax, dword [var_128h]
+│      ││   0x1001c5d8      8d5001         lea edx, [eax + 1]
+│     ┌───< 0x1001c5db      eb03           jmp 0x1001c5e0
+..
+│     │││   ; CODE XREF from fcn.1001c2e0 @ 0x1001c5db(x)
+│    ┌└───> 0x1001c5e0      8a08           mov cl, byte [eax]
+│    ╎ ││   0x1001c5e2      40             inc eax
+│    ╎ ││   0x1001c5e3      84c9           test cl, cl
+│    └────< 0x1001c5e5      75f9           jne 0x1001c5e0
+│      ││   0x1001c5e7      2bc2           sub eax, edx
+│      ││   0x1001c5e9      6800010000     push 0x100                  ; 256
+│      ││   0x1001c5ee      8d95fcfeffff   lea edx, [var_104h]
+│      ││   0x1001c5f4      6a00           push 0
+│      ││   0x1001c5f6      52             push edx
+│      ││   0x1001c5f7      8d7001         lea esi, [eax + 1]
+│      ││   0x1001c5fa      e89d940300     call sub.MSVCR100.dll_memset ; void *memset(void *s, int c, size_t n)
+│      ││   0x1001c5ff      8b450c         mov eax, dword [arg_ch]
+│      ││   0x1001c602      83c0fe         add eax, 0xfffffffe
+│      ││   0x1001c605      83c40c         add esp, 0xc
+│      ││   0x1001c608      83f80b         cmp eax, 0xb                ; 11
+│     ┌───< 0x1001c60b      0f8741040000   ja case.0x1001c618.9
+│     │││   0x1001c611      0fb680a0ca..   movzx eax, byte [eax + 0x1001caa0]
+│     │││   ;-- switch:
+│     │││   0x1001c618      ff24858cca..   jmp dword [eax*4 + 0x1001ca8c] ; switch table (12 cases) at 0x1001caa0
+│     │││   ;-- case 2...3:                                            ; from 0x1001c618
+│     │││   ; CODE XREF from fcn.1001c2e0 @ 0x1001c618(x)
+│     │││   0x1001c61f      83fe0c         cmp esi, 0xc                ; 12
+│    ┌────< 0x1001c622      7205           jb 0x1001c629
+│    ││││   0x1001c624      be0c000000     mov esi, 0xc                ; 12
+│    └────> 0x1001c629      8b8dd8feffff   mov ecx, dword [var_128h]
+│     │││   0x1001c62f      56             push esi
+│     │││   0x1001c630      51             push ecx
+│     │││   0x1001c631      8d95fcfeffff   lea edx, [var_104h]
+│     │││   0x1001c637      52             push edx
+│     │││   0x1001c638      e811940300     call sub.MSVCR100.dll_memcpy ; void *memcpy(void *s1, const void *s2, size_t n)
+│     │││   0x1001c63d      8b95dcfeffff   mov edx, dword [var_124h]
+│     │││   0x1001c643      8bc3           mov eax, ebx
+│     │││   0x1001c645      c1e808         shr eax, 8
+│     │││   0x1001c648      888509ffffff   mov byte [var_f7h], al
+│     │││   0x1001c64e      8b4248         mov eax, dword [edx + 0x48]
+│     │││   0x1001c651      0fb7405c       movzx eax, word [eax + 0x5c]
+│     │││   0x1001c655      88850cffffff   mov byte [var_f4h], al
+│     │││   0x1001c65b      c1e808         shr eax, 8
+│     │││   0x1001c65e      88850dffffff   mov byte [var_f3h], al
+│     │││   0x1001c664      8b85e4feffff   mov eax, dword [var_11ch]
+│     │││   0x1001c66a      8bcb           mov ecx, ebx
+│     │││   0x1001c66c      889d08ffffff   mov byte [var_f8h], bl
+│     │││   0x1001c672      c1e910         shr ecx, 0x10
+│     │││   0x1001c675      c1eb18         shr ebx, 0x18
+│     │││   0x1001c678      83c40c         add esp, 0xc
+│     │││   0x1001c67b      88850effffff   mov byte [var_f2h], al
+│     │││   0x1001c681      c1e808         shr eax, 8
+│     │││   0x1001c684      888d0affffff   mov byte [var_f6h], cl
+│     │││   0x1001c68a      889d0bffffff   mov byte [var_f5h], bl
+│     │││   0x1001c690      88850fffffff   mov byte [var_f1h], al
+│     │││   0x1001c696      66c78510ff..   mov word [var_f0h], 1
+│     │││   0x1001c69f      c785e0feff..   mov dword [var_120h], 0x18  ; 24
+│    ┌────< 0x1001c6a9      e9e1010000     jmp 0x1001c88f
+│    ││││   ;-- case 4...7:                                            ; from 0x1001c618
+│    ││││   ; CODE XREF from fcn.1001c2e0 @ 0x1001c618(x)
+│    ││││   0x1001c6ae      0fb64514       movzx eax, byte [arg_14h]
+│    ││││   0x1001c6b2      8885fcfeffff   mov byte [var_104h], al
+│    ││││   0x1001c6b8      83fe0c         cmp esi, 0xc                ; 12
+│   ┌─────< 0x1001c6bb      7205           jb 0x1001c6c2
+│   │││││   0x1001c6bd      be0c000000     mov esi, 0xc                ; 12
+│   └─────> 0x1001c6c2      8b8dd8feffff   mov ecx, dword [var_128h]
+│    ││││   0x1001c6c8      56             push esi
+│    ││││   0x1001c6c9      51             push ecx
+│    ││││   0x1001c6ca      8d95fefeffff   lea edx, [var_102h]
+│    ││││   0x1001c6d0      52             push edx
+│    ││││   0x1001c6d1      e878930300     call sub.MSVCR100.dll_memcpy ; void *memcpy(void *s1, const void *s2, size_t n)
+│    ││││   0x1001c6d6      8b95dcfeffff   mov edx, dword [var_124h]
+│    ││││   0x1001c6dc      8bc3           mov eax, ebx
+│    ││││   0x1001c6de      c1e808         shr eax, 8
+│    ││││   0x1001c6e1      88850bffffff   mov byte [var_f5h], al
+│    ││││   0x1001c6e7      8b4248         mov eax, dword [edx + 0x48]
+│    ││││   0x1001c6ea      0fb7405c       movzx eax, word [eax + 0x5c]
+│    ││││   0x1001c6ee      88850effffff   mov byte [var_f2h], al
+│    ││││   0x1001c6f4      c1e808         shr eax, 8
+│    ││││   0x1001c6f7      88850fffffff   mov byte [var_f1h], al
+│    ││││   0x1001c6fd      8b85e4feffff   mov eax, dword [var_11ch]
+│    ││││   0x1001c703      8bcb           mov ecx, ebx
+│    ││││   0x1001c705      889d0affffff   mov byte [var_f6h], bl
+│    ││││   0x1001c70b      c1e910         shr ecx, 0x10
+│    ││││   0x1001c70e      c1eb18         shr ebx, 0x18
+│    ││││   0x1001c711      83c40c         add esp, 0xc
+│    ││││   0x1001c714      888510ffffff   mov byte [var_f0h], al
+│    ││││   0x1001c71a      c1e808         shr eax, 8
+│    ││││   0x1001c71d      888d0cffffff   mov byte [var_f4h], cl
+│    ││││   0x1001c723      889d0dffffff   mov byte [var_f3h], bl
+│    ││││   0x1001c729      888511ffffff   mov byte [var_efh], al
+│    ││││   0x1001c72f      66c78512ff..   mov word [var_eeh], 1
+│    ││││   0x1001c738      c785e0feff..   mov dword [var_120h], 0x18  ; 24
+│   ┌─────< 0x1001c742      e948010000     jmp 0x1001c88f
+│   │││││   ;-- case 8:                                                ; from 0x1001c618
+│   │││││   ; CODE XREF from fcn.1001c2e0 @ 0x1001c618(x)
+│   │││││   0x1001c747      8b85dcfeffff   mov eax, dword [var_124h]
+│   │││││   0x1001c74d      8bcb           mov ecx, ebx
+│   │││││   0x1001c74f      c1e908         shr ecx, 8
+│   │││││   0x1001c752      888dfdfeffff   mov byte [var_103h], cl
+│   │││││   0x1001c758      8b4848         mov ecx, dword [eax + 0x48]
+│   │││││   0x1001c75b      0fb7415c       movzx eax, word [ecx + 0x5c]
+│   │││││   0x1001c75f      888500ffffff   mov byte [var_100h], al
+│   │││││   0x1001c765      c1e808         shr eax, 8
+│   │││││   0x1001c768      888501ffffff   mov byte [var_ffh], al
+│   │││││   0x1001c76e      8b85e4feffff   mov eax, dword [var_11ch]
+│   │││││   0x1001c774      8bd3           mov edx, ebx
+│   │││││   0x1001c776      83c60a         add esi, 0xa
+│   │││││   0x1001c779      889dfcfeffff   mov byte [var_104h], bl
+│   │││││   0x1001c77f      c1ea10         shr edx, 0x10
+│   │││││   0x1001c782      c1eb18         shr ebx, 0x18
+│   │││││   0x1001c785      888502ffffff   mov byte [var_feh], al
+│   │││││   0x1001c78b      c1e808         shr eax, 8
+│   │││││   0x1001c78e      8895fefeffff   mov byte [var_102h], dl
+│   │││││   0x1001c794      889dfffeffff   mov byte [var_101h], bl
+│   │││││   0x1001c79a      888503ffffff   mov byte [var_fdh], al
+│   │││││   0x1001c7a0      66c78504ff..   mov word [var_fch], 1
+│   │││││   0x1001c7a9      89b5e0feffff   mov dword [var_120h], esi
+│   │││││   0x1001c7af      81fe00010000   cmp esi, 0x100              ; 256
+│  ┌──────< 0x1001c7b5      720a           jb 0x1001c7c1
+│  ││││││   0x1001c7b7      c785e0feff..   mov dword [var_120h], 0x100 ; 256
+│  └──────> 0x1001c7c1      8b95e0feffff   mov edx, dword [var_120h]
+│   │││││   0x1001c7c7      8b85d8feffff   mov eax, dword [var_128h]
+│   │││││   0x1001c7cd      83c2f6         add edx, 0xfffffff6
+│   │││││   0x1001c7d0      52             push edx
+│   │││││   0x1001c7d1      50             push eax
+│   │││││   0x1001c7d2      8d8d06ffffff   lea ecx, [var_fah]
+│   │││││   0x1001c7d8      51             push ecx
+│  ┌──────< 0x1001c7d9      e9a9000000     jmp 0x1001c887
+│  ││││││   ;-- case 13:                                               ; from 0x1001c618
+│  ││││││   ; CODE XREF from fcn.1001c2e0 @ 0x1001c618(x)
+│  ││││││   0x1001c7de      8b8ddcfeffff   mov ecx, dword [var_124h]
+│  ││││││   0x1001c7e4      8bd3           mov edx, ebx
+│  ││││││   0x1001c7e6      c1ea08         shr edx, 8
+│  ││││││   0x1001c7e9      8bc3           mov eax, ebx
+│  ││││││   0x1001c7eb      c1e810         shr eax, 0x10
+│  ││││││   0x1001c7ee      8895fdfeffff   mov byte [var_103h], dl
+│  ││││││   0x1001c7f4      8b5148         mov edx, dword [ecx + 0x48]
+│  ││││││   0x1001c7f7      8885fefeffff   mov byte [var_102h], al
+│  ││││││   0x1001c7fd      0fb7425c       movzx eax, word [edx + 0x5c]
+│  ││││││   0x1001c801      888500ffffff   mov byte [var_100h], al
+│  ││││││   0x1001c807      c1e808         shr eax, 8
+│  ││││││   0x1001c80a      888501ffffff   mov byte [var_ffh], al
+│  ││││││   0x1001c810      8b85e4feffff   mov eax, dword [var_11ch]
+│  ││││││   0x1001c816      8bc8           mov ecx, eax
+│  ││││││   0x1001c818      8bd0           mov edx, eax
+│  ││││││   0x1001c81a      83c60e         add esi, 0xe                ; 14
+│  ││││││   0x1001c81d      889dfcfeffff   mov byte [var_104h], bl
+│  ││││││   0x1001c823      c1eb18         shr ebx, 0x18
+│  ││││││   0x1001c826      888502ffffff   mov byte [var_feh], al
+│  ││││││   0x1001c82c      c1e908         shr ecx, 8
+│  ││││││   0x1001c82f      c1ea10         shr edx, 0x10
+│  ││││││   0x1001c832      c1e818         shr eax, 0x18
+│  ││││││   0x1001c835      889dfffeffff   mov byte [var_101h], bl
+│  ││││││   0x1001c83b      888d03ffffff   mov byte [var_fdh], cl
+│  ││││││   0x1001c841      889504ffffff   mov byte [var_fch], dl
+│  ││││││   0x1001c847      888505ffffff   mov byte [var_fbh], al
+│  ││││││   0x1001c84d      c78506ffff..   mov dword [var_fah], 1
+│  ││││││   0x1001c857      89b5e0feffff   mov dword [var_120h], esi
+│  ││││││   0x1001c85d      81fe00010000   cmp esi, 0x100              ; 256
+│ ┌───────< 0x1001c863      720a           jb 0x1001c86f
+│ │││││││   0x1001c865      c785e0feff..   mov dword [var_120h], 0x100 ; 256
+│ └───────> 0x1001c86f      8b85e0feffff   mov eax, dword [var_120h]
+│  ││││││   0x1001c875      8b8dd8feffff   mov ecx, dword [var_128h]
+│  ││││││   0x1001c87b      83c0f2         add eax, 0xfffffff2
+│  ││││││   0x1001c87e      50             push eax
+│  ││││││   0x1001c87f      51             push ecx
+│  ││││││   0x1001c880      8d950affffff   lea edx, [var_f6h]
+│  ││││││   0x1001c886      52             push edx
+│  ││││││   ; CODE XREF from fcn.1001c2e0 @ 0x1001c7d9(x)
+│  └──────> 0x1001c887      e8c2910300     call sub.MSVCR100.dll_memcpy ; void *memcpy(void *s1, const void *s2, size_t n)
+│   │││││   0x1001c88c      83c40c         add esp, 0xc
+│   │││││   ; CODE XREFS from fcn.1001c2e0 @ 0x1001c6a9(x), 0x1001c742(x)
+│   └└────> 0x1001c88f      83bde4feff..   cmp dword [var_11ch], 1
+│    ┌────< 0x1001c896      0f8291010000   jb case.default.0x1001c8bc
+│    ││││   0x1001c89c      8bb5dcfeffff   mov esi, dword [var_124h]
+│    ││││   0x1001c8a2      81c652060000   add esi, 0x652              ; 1618
+│    ││││   0x1001c8a8      c785d8feff..   mov dword [var_128h], 0x64  ; 'd' ; 100
+│   ┌─────> 0x1001c8b2      8b450c         mov eax, dword [arg_ch]
+│   ╎││││   0x1001c8b5      0fb680beca..   movzx eax, byte [eax + 0x1001cabe]
+│   ╎││││   ;-- switch:
+│   ╎││││   0x1001c8bc      ff2485acca..   jmp dword [eax*4 + 0x1001caac] ; switch table (2 cases) at 0x1001caac
+│   ╎││││   ;-- case 0:                                                ; from 0x1001c8bc
+│   ╎││││   ; CODE XREF from fcn.1001c2e0 @ 0x1001c8bc(x)
+│   ╎││││   0x1001c8c3      8b85d4feffff   mov eax, dword [var_12ch]
+│   ╎││││   0x1001c8c9      888510ffffff   mov byte [var_f0h], al
+│   ╎││││   0x1001c8cf      c1e808         shr eax, 8
+│   ╎││││   0x1001c8d2      888511ffffff   mov byte [var_efh], al
+│  ┌──────< 0x1001c8d8      eb59           jmp 0x1001c933
+│  │╎││││   ;-- case 1:                                                ; from 0x1001c8bc
+│  │╎││││   ; CODE XREF from fcn.1001c2e0 @ 0x1001c8bc(x)
+│  │╎││││   0x1001c8da      8b85d4feffff   mov eax, dword [var_12ch]
+│  │╎││││   0x1001c8e0      888512ffffff   mov byte [var_eeh], al
+│  │╎││││   0x1001c8e6      c1e808         shr eax, 8
+│  │╎││││   0x1001c8e9      888513ffffff   mov byte [var_edh], al
+│ ┌───────< 0x1001c8ef      eb42           jmp 0x1001c933
+..
+│ ││╎││││   ; CODE XREFS from fcn.1001c2e0 @ 0x1001c8d8(x), 0x1001c8ef(x)
+│ └└──────> 0x1001c933      8b9ddcfeffff   mov ebx, dword [var_124h]
+│   ╎││││   0x1001c939      6800060000     push 0x600                  ; 1536
+│   ╎││││   0x1001c93e      6a00           push 0
+│   ╎││││   0x1001c940      81c3520c0000   add ebx, 0xc52              ; 3154
+│   ╎││││   0x1001c946      53             push ebx
+│   ╎││││   0x1001c947      e850910300     call sub.MSVCR100.dll_memset ; void *memset(void *s, int c, size_t n)
+│   ╎││││   0x1001c94c      8b85dcfeffff   mov eax, dword [var_124h]
+│   ╎││││   0x1001c952      8b4848         mov ecx, dword [eax + 0x48]
+│   ╎││││   0x1001c955      0fb7515c       movzx edx, word [ecx + 0x5c]
+│   ╎││││   0x1001c959      57             push edi
+│   ╎││││   0x1001c95a      52             push edx
+│   ╎││││   0x1001c95b      6a01           push 1                      ; 1
+│   ╎││││   0x1001c95d      53             push ebx
+│   ╎││││   0x1001c95e      ff1538810510   call dword [sym.imp.MSVCR100.dll_fread] ; 0x10058138 ; size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+│   ╎││││   0x1001c964      8b550c         mov edx, dword [arg_ch]
+│   ╎││││   0x1001c967      83c41c         add esp, 0x1c
+│   ╎││││   0x1001c96a      53             push ebx
+│   ╎││││   0x1001c96b      8d8dfcfeffff   lea ecx, [var_104h]
+│   ╎││││   0x1001c971      51             push ecx
+│   ╎││││   0x1001c972      8b8de0feffff   mov ecx, dword [var_120h]
+│   ╎││││   0x1001c978      52             push edx
+│   ╎││││   0x1001c979      8bd8           mov ebx, eax
+│   ╎││││   0x1001c97b      8b85dcfeffff   mov eax, dword [var_124h]
+│   ╎││││   0x1001c981      6a02           push 2                      ; 2
+│   ╎││││   0x1001c983      e8082cffff     call fcn.1000f590
+│   ╎││││   0x1001c988      85f6           test esi, esi
+│  ┌──────< 0x1001c98a      7504           jne 0x1001c990
+│  │╎││││   0x1001c98c      33c0           xor eax, eax
+│ ┌───────< 0x1001c98e      eb15           jmp 0x1001c9a5
+│ │└──────> 0x1001c990      0fb64605       movzx eax, byte [esi + 5]
+│ │ ╎││││   0x1001c994      0fb64e0e       movzx ecx, byte [esi + 0xe]
+│ │ ╎││││   0x1001c998      0fb65604       movzx edx, byte [esi + 4]
+│ │ ╎││││   0x1001c99c      c1e006         shl eax, 6
+│ │ ╎││││   0x1001c99f      03c1           add eax, ecx
+│ │ ╎││││   0x1001c9a1      8d448210       lea eax, [edx + eax*4 + 0x10]
+│ │ ╎││││   ; CODE XREF from fcn.1001c2e0 @ 0x1001c98e(x)
+│ └───────> 0x1001c9a5      8b9ddcfeffff   mov ebx, dword [var_124h]
+│   ╎││││   0x1001c9ab      50             push eax
+│   ╎││││   0x1001c9ac      8b85dcfeffff   mov eax, dword [var_124h]
+│   ╎││││   0x1001c9b2      56             push esi
+│   ╎││││   0x1001c9b3      83c352         add ebx, 0x52               ; 82
+│   ╎││││   0x1001c9b6      e81534ffff     call fcn.1000fdd0
+│   ╎││││   0x1001c9bb      8bd8           mov ebx, eax
+│   ╎││││   0x1001c9bd      85db           test ebx, ebx
+│  ┌──────< 0x1001c9bf      7572           jne 0x1001ca33
+│  │╎││││   0x1001c9c1      8b85dcfeffff   mov eax, dword [var_124h]
+│  │╎││││   0x1001c9c7      8b4848         mov ecx, dword [eax + 0x48]
+│  │╎││││   0x1001c9ca      399980000000   cmp dword [ecx + 0x80], ebx
+│ ┌───────< 0x1001c9d0      741c           je 0x1001c9ee
+│ ││╎││││   0x1001c9d2      8b85d8feffff   mov eax, dword [var_128h]
+│ ││╎││││   0x1001c9d8      33d2           xor edx, edx
+│ ││╎││││   0x1001c9da      f7b5e4feffff   div dword [var_11ch]
+│ ││╎││││   0x1001c9e0      8b9180000000   mov edx, dword [ecx + 0x80]
+│ ││╎││││   0x1001c9e6      50             push eax
+│ ││╎││││   0x1001c9e7      53             push ebx
+│ ││╎││││   0x1001c9e8      51             push ecx
+│ ││╎││││   0x1001c9e9      ffd2           call edx
+│ ││╎││││   0x1001c9eb      83c40c         add esp, 0xc
+│ └───────> 0x1001c9ee      8b85d4feffff   mov eax, dword [var_12ch]
+│  │╎││││   0x1001c9f4      8385d8feff..   add dword [var_128h], 0x64  ; [0x64:4]=-1 ; 100
+│  │╎││││   0x1001c9fb      40             inc eax
+│  │╎││││   0x1001c9fc      8985d4feffff   mov dword [var_12ch], eax
+│  │╎││││   0x1001ca02      3b85e4feffff   cmp eax, dword [var_11ch]
+│  │└─────< 0x1001ca08      0f86a4feffff   jbe 0x1001c8b2
+│  │ ││││   0x1001ca0e      57             push edi
+│  │ ││││   0x1001ca0f      ff1520810510   call dword [sym.imp.MSVCR100.dll_fclose] ; 0x10058120 ; int fclose(FILE *stream)
+│  │ ││││   0x1001ca15      83c404         add esp, 4
+│  │ ││││   0x1001ca18      5e             pop esi
+│  │ ││││   0x1001ca19      5f             pop edi
+│  │ ││││   0x1001ca1a      8bc3           mov eax, ebx
+│  │ ││││   0x1001ca1c      5b             pop ebx
+│  │ ││││   0x1001ca1d      8b4dfc         mov ecx, dword [var_4h]
+│  │ ││││   0x1001ca20      33cd           xor ecx, ebp
+│  │ ││││   0x1001ca22      e86b8b0300     call fcn.10055592
+│  │ ││││   0x1001ca27      8be5           mov esp, ebp
+│  │ ││││   0x1001ca29      5d             pop ebp
+│  │ ││││   0x1001ca2a      c21000         ret 0x10
+│  │ ││││   ;-- default:                                               ; from 0x1001c8bc
+│  │ ││││   ; CODE XREF from fcn.1001c2e0 @ 0x1001c8bc(x)
+│  │ └────> 0x1001ca2d      8b9dd0feffff   mov ebx, dword [var_130h]
+│  └──────> 0x1001ca33      57             push edi
+│     │││   0x1001ca34      ff1520810510   call dword [sym.imp.MSVCR100.dll_fclose] ; 0x10058120 ; int fclose(FILE *stream)
+│     │││   0x1001ca3a      83c404         add esp, 4
+│     │││   0x1001ca3d      5e             pop esi
+│     │││   0x1001ca3e      5f             pop edi
+│     │││   0x1001ca3f      8bc3           mov eax, ebx
+│     │││   0x1001ca41      5b             pop ebx
+│     │││   0x1001ca42      8b4dfc         mov ecx, dword [var_4h]
+│     │││   0x1001ca45      33cd           xor ecx, ebp
+│     │││   0x1001ca47      e8468b0300     call fcn.10055592
+│     │││   0x1001ca4c      8be5           mov esp, ebp
+│     │││   0x1001ca4e      5d             pop ebp
+│     │││   0x1001ca4f      c21000         ret 0x10
+│     │││   ;-- default:                                               ; from 0x1001c618
+│     │││   ; CODE XREF from fcn.1001c2e0 @ 0x1001c618(x)
+│     └───> 0x1001ca52      57             push edi
+│      ││   0x1001ca53      ff1520810510   call dword [sym.imp.MSVCR100.dll_fclose] ; 0x10058120 ; int fclose(FILE *stream)
+│      ││   0x1001ca59      83c404         add esp, 4
+│      ││   0x1001ca5c      5e             pop esi
+│      ││   0x1001ca5d      5f             pop edi
+│      ││   0x1001ca5e      b802000000     mov eax, 2
+│      ││   0x1001ca63      5b             pop ebx
+│      ││   0x1001ca64      8b4dfc         mov ecx, dword [var_4h]
+│      ││   0x1001ca67      33cd           xor ecx, ebp
+│      ││   0x1001ca69      e8248b0300     call fcn.10055592
+│      ││   0x1001ca6e      8be5           mov esp, ebp
+│      ││   0x1001ca70      5d             pop ebp
+│      ││   0x1001ca71      c21000         ret 0x10
+│      └└─> 0x1001ca74      8b4dfc         mov ecx, dword [var_4h]
+│           0x1001ca77      33cd           xor ecx, ebp
+│           0x1001ca79      b802000000     mov eax, 2
+│           0x1001ca7e      5b             pop ebx
+│           0x1001ca7f      e80e8b0300     call fcn.10055592
+│           0x1001ca84      8be5           mov esp, ebp
+│           0x1001ca86      5d             pop ebp
+└           0x1001ca87      c21000         ret 0x10

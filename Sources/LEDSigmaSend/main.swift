@@ -26,6 +26,7 @@ var outEffectID = 1
 var speedID = 2
 var holdSeconds = 2
 var wrapsText = true
+var clearFirst = false
 var words: [String] = []
 var idx = 2
 while idx < args.count {
@@ -57,6 +58,9 @@ while idx < args.count {
     case "--mode" where idx + 1 < args.count:
         wrapsText = args[idx + 1].lowercased() != "marquee"
         idx += 2
+    case "--clear-first":
+        clearFirst = true
+        idx += 1
     default:
         words.append(args[idx])
         idx += 1
@@ -65,6 +69,9 @@ while idx < args.count {
 
 var client = SigmaClient(host: host)
 do {
+    if clearFirst {
+        for step in try client.clearAll() { print(step) }
+    }
     let options = SigmaTextOptions(
         inEffectCode: wrapsText ? effectCode(id: inEffectID) : UInt8(ascii: "1"),
         outEffectCode: wrapsText ? effectCode(id: outEffectID) : UInt8(ascii: "1"),

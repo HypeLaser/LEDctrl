@@ -1,0 +1,63 @@
+=== Byte pattern search ===
+-- temp.Nmg ASCII (74 65 6d 70 2e 4e 6d 67)
+  00546238
+-- NMG magic 01 5a 30 30 (01 5a 30 30)
+  0054f048
+  0054f080
+  005503ec
+  00550424
+  005530d8
+  00558175
+-- SequentList.tmps (53 65 71 75 65 6e 74 4c 69 73 74 2e 74 6d 70 73)
+  0054624c
+
+=== Immediate operand search ===
+imm 0x30305a01 : 0 hits
+imm 0x5153 : 1 hits
+  00524535  in FUN_00524510@00524510
+imm 0x5444 : 0 hits
+imm 0x7f0f : 0 hits
+imm 0x7f0f5444 : 0 hits
+imm 0xf7f : 0 hits
+
+=== Decompiled candidates ===
+
+;;; ============================================
+;;; 00524510  FUN_00524510
+;;; ============================================
+
+int FUN_00524510(int param_1,char param_2)
+
+{
+  undefined4 uVar1;
+  char extraout_DL;
+  char cVar2;
+  undefined4 *in_FS_OFFSET;
+  undefined4 uStack_1c;
+  
+  cVar2 = '\0';
+  if (param_2 != '\0') {
+    param_1 = FUN_00403dd4();
+    cVar2 = extraout_DL;
+  }
+  FUN_00403a40(param_1,0);
+  *(undefined2 *)(param_1 + 4) = 0x5153;
+  *(undefined1 *)(param_1 + 6) = 4;
+  *(undefined1 *)(param_1 + 7) = 0;
+  *(undefined2 *)(param_1 + 8) = 0;
+  *(undefined4 *)(param_1 + 0x14) = 0;
+  *(undefined2 *)(param_1 + 8) = *(undefined2 *)(param_1 + 0x14);
+  uVar1 = FUN_00403a40(PTR_PTR_00418818,1);
+  *(undefined4 *)(param_1 + 0x18) = uVar1;
+  uVar1 = FUN_00403a40(PTR_PTR_00418e7c,1);
+  *(undefined4 *)(param_1 + 0x1c) = uVar1;
+  *(undefined4 *)(param_1 + 0xc) = *(undefined4 *)(param_1 + 0x18);
+  *(undefined4 *)(param_1 + 0x10) = *(undefined4 *)(param_1 + 0x1c);
+  FUN_004048c0(param_1 + 0x20);
+  if (cVar2 != '\0') {
+    FUN_00403e2c(param_1);
+    *in_FS_OFFSET = uStack_1c;
+  }
+  return param_1;
+}
+

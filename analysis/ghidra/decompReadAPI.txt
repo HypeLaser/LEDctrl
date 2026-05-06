@@ -1,0 +1,1686 @@
+openjdk version "21.0.10" 2026-01-20
+OpenJDK Runtime Environment Homebrew (build 21.0.10)
+OpenJDK 64-Bit Server VM Homebrew (build 21.0.10, mixed mode)
+INFO  Using log config file: jar:file:/opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml (LoggingInitialization)  
+INFO  Using log file: /Users/alexscott/Library/ghidra/ghidra_12.0.4_PUBLIC/application.log (LoggingInitialization)  
+INFO  Loading user preferences: /Users/alexscott/Library/ghidra/ghidra_12.0.4_PUBLIC/preferences (Preferences)  
+INFO  Searching for classes... (ClassSearcher)  
+INFO  Class search complete (723 ms) (ClassSearcher)  
+INFO  Initializing SSL Context (DefaultSSLContextInitializer)  
+INFO  Initializing Random Number Generator... (SecureRandomFactory)  
+INFO  Random Number Generator initialization complete: NativePRNGNonBlocking (SecureRandomFactory)  
+INFO  Trust manager disabled, cacerts have not been set (DefaultTrustManagerFactory)  
+INFO  Headless startup complete (1367 ms) (AnalyzeHeadless)  
+INFO  Class searcher loaded 58 extension points (18 false positives) (ClassSearcher)  
+INFO  HEADLESS Script Paths:
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/Base/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/SystemEmulation/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/FileFormats/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/WildcardAssembler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/BSim/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/8051/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/BytePatterns/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/Atmel/ghidra_scripts
+    /Users/alexscott/Projects/LEDctrl/analysis/ghidra
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Debug/Debugger-rmi-trace/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/Jython/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/DATA/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/FunctionID/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/PyGhidra/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/MicrosoftCodeAnalyzer/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/SwiftDemangler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/PDB/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/JVM/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/Decompiler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/GnuDemangler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/VersionTracking/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Features/DecompilerDependent/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Processors/PIC/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.0.4/libexec/Ghidra/Debug/Debugger/ghidra_scripts (HeadlessAnalyzer)  
+INFO  HEADLESS: execution starts (HeadlessAnalyzer)  
+INFO  Opening existing project: /Users/alexscott/Projects/LEDctrl/analysis/ghidra/./proj/SigmaProj (HeadlessAnalyzer)  
+INFO  Opening project: /Users/alexscott/Projects/LEDctrl/analysis/ghidra/./proj/SigmaProj (HeadlessProject)  
+INFO  REPORT: Processing project file: /czJetFileII.dll (HeadlessAnalyzer)  
+INFO  REPORT: Execute script: DumpReadAPI.java  (HeadlessAnalyzer)  
+INFO  SCRIPT: /Users/alexscott/Projects/LEDctrl/analysis/ghidra/DumpReadAPI.java (HeadlessAnalyzer)  
+INFO  DumpReadAPI.java> 
+=================== czSystemUpTimeSec =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=10002400 body=[[10002400, 1000247b]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+/* __stdcall czSystemUpTimeSec,0 */
+
+undefined4 czSystemUpTimeSec(void)
+
+{
+  __time64_t _Var1;
+  double dVar2;
+  undefined4 local_10;
+  
+                    /* 0x2400  146  _czSystemUpTimeSec@0 */
+  _Var1 = CONCAT44(DAT_10062c14,DAT_10062c10);
+  if ((_DAT_10062c18 & 1) == 0) {
+    _DAT_10062c18 = _DAT_10062c18 | 1;
+    _Var1 = _time64((__time64_t *)0x0);
+  }
+  DAT_10062c14 = (undefined4)((ulonglong)_Var1 >> 0x20);
+  DAT_10062c10 = (undefined4)_Var1;
+  _Var1 = _time64((__time64_t *)0x0);
+  dVar2 = _difftime64(_Var1,CONCAT44(DAT_10062c14,DAT_10062c10));
+  local_10 = (undefined4)(longlong)ROUND(dVar2);
+  return local_10;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czReadPCBID =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=10017290 body=[[10017290, 1001735f]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* WARNING: Function: __alloca_probe replaced with injection: alloca_probe */
+/* __stdcall czReadPCBID,4 */
+
+void czReadPCBID(undefined4 *param_1)
+
+{
+  undefined4 uVar1;
+  undefined **local_125c;
+  undefined1 local_1258 [64];
+  int *local_1218;
+  int local_1214;
+  char local_120c;
+  uint local_8;
+  
+                    /* 0x17290  106  _czReadPCBID@4 */
+  local_8 = DAT_10062028 ^ (uint)&stack0xfffffffc;
+  FUN_1000f3e0(&local_125c);
+  local_125c = czReadLED::vftable;
+  if ((((local_1214 != 0) && (*(int *)(local_1214 + 4) == 1)) &&
+      ((local_120c == '\0' || (uVar1 = FUN_10002f60(local_1258), (char)uVar1 != '\0')))) &&
+     ((FUN_100190c0(param_1), local_120c != '\0' && (local_1218 != (int *)0x0)))) {
+    (**(code **)(*local_1218 + 0xc))();
+  }
+  local_125c = CBaseCMD::vftable;
+  if (*(code **)(local_1214 + 0x7c) != (code *)0x0) {
+    (**(code **)(local_1214 + 0x7c))(local_1214);
+  }
+  if (local_1218 != (int *)0x0) {
+    (**(code **)*local_1218)(1);
+  }
+  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czGetDateTime =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=10002120 body=[[10002120, 10002183]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* __stdcall czGetDateTime,4 */
+
+void czGetDateTime(WORD *param_1)
+
+{
+  _SYSTEMTIME local_1c;
+  uint local_c;
+  
+                    /* 0x2120  59  _czGetDateTime@4 */
+  local_c = DAT_10062028 ^ (uint)&stack0xfffffffc;
+  if (param_1 != (WORD *)0x0) {
+    GetLocalTime(&local_1c);
+    *param_1 = local_1c.wYear;
+    *(undefined1 *)(param_1 + 1) = (undefined1)local_1c.wMonth;
+    *(undefined1 *)((int)param_1 + 3) = (undefined1)local_1c.wDay;
+    *(undefined1 *)(param_1 + 2) = (undefined1)local_1c.wHour;
+    *(undefined1 *)((int)param_1 + 5) = (undefined1)local_1c.wMinute;
+    *(undefined1 *)(param_1 + 3) = (undefined1)local_1c.wSecond;
+    *(undefined1 *)((int)param_1 + 7) = (undefined1)local_1c.wDayOfWeek;
+  }
+  __security_check_cookie(local_c ^ (uint)&stack0xfffffffc);
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czReadStatusInfo =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=10009720 body=[[10009720, 10009c05]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+/* __stdcall czReadStatusInfo,24 */
+
+void czReadStatusInfo(char *param_1,undefined4 param_2,undefined4 param_3,undefined *param_4,
+                     float param_5,float param_6)
+
+{
+  uint uVar1;
+  char cVar2;
+  float fVar3;
+  float fVar4;
+  LPVOID lpTlsValue;
+  int iVar5;
+  char *pcVar6;
+  char *pcVar7;
+  size_t _Count;
+  ushort in_FPUControlWord;
+  char *_Source;
+  undefined1 auStack_39c [2];
+  ushort local_39a;
+  undefined1 local_398;
+  char local_397;
+  char local_396;
+  char local_394;
+  byte local_392;
+  int local_390;
+  code *local_38c;
+  char local_388;
+  char local_387;
+  char local_386;
+  byte local_385;
+  undefined1 local_348;
+  undefined1 local_347;
+  undefined2 local_344;
+  undefined2 local_342;
+  undefined2 local_340;
+  undefined2 local_33e;
+  undefined2 local_33c;
+  undefined2 local_33a;
+  undefined1 local_334;
+  int local_330 [2];
+  char local_328 [264];
+  char local_220 [264];
+  char local_118 [268];
+  uint local_c;
+  
+                    /* 0x9720  117  _czReadStatusInfo@24 */
+  local_c = DAT_10062028 ^ (uint)auStack_39c;
+  local_38c = (code *)param_4;
+  memset(&local_388,0,0x58);
+  lpTlsValue = TlsGetValue(DAT_10062c08);
+  if (lpTlsValue == (LPVOID)0x0) {
+    lpTlsValue = LocalAlloc(0x40,0x98);
+    if (lpTlsValue == (HLOCAL)0x0) {
+      __security_check_cookie(local_c ^ (uint)auStack_39c);
+      return;
+    }
+    TlsSetValue(DAT_10062c08,lpTlsValue);
+  }
+  local_390 = czReadCurrentState((undefined4 *)&local_398,&local_388,0x58);
+  if (local_390 == 0) {
+    if (local_388 == '\0') {
+      local_388 = local_397;
+    }
+    if (local_387 == '\0') {
+      local_387 = local_396;
+    }
+    local_334 = local_398;
+    if (((float)_DAT_1005d4f0 < param_5) && ((float)_DAT_1005d4f0 < param_6)) {
+      local_348 = 0x57;
+      fVar3 = param_5 - (float)_DAT_1005d4e8;
+      fVar4 = param_6 - (float)_DAT_1005d4e8;
+      if (0.0 <= fVar3) {
+        local_348 = 0x45;
+      }
+      local_347 = 0x53;
+      if (0.0 <= fVar4) {
+        local_347 = 0x4e;
+      }
+      if (fVar3 <= 0.0) {
+        fVar3 = fVar3 * (float)_DAT_1005d4e0;
+      }
+      if (fVar4 <= 0.0) {
+        fVar4 = fVar4 * (float)_DAT_1005d4e0;
+      }
+      local_330[0]._0_2_ = (undefined2)(int)ROUND(fVar3);
+      local_344 = (undefined2)local_330[0];
+      fVar3 = fVar3 - (float)((int)ROUND(fVar3) & 0xffff);
+      uVar1 = (uint)ROUND(fVar3 * (float)_DAT_1005d4d8);
+      local_330[0]._0_2_ = (undefined2)uVar1;
+      local_342 = (undefined2)local_330[0];
+      local_330[0]._0_2_ =
+           (undefined2)(int)ROUND((fVar3 - (float)((uVar1 & 0xffff) / 0x3c)) * (float)_PTR_1005d4d0)
+      ;
+      local_340 = (undefined2)local_330[0];
+      local_330[0]._0_2_ = (undefined2)(int)ROUND(fVar4);
+      local_33e = (undefined2)local_330[0];
+      fVar4 = fVar4 - (float)((int)ROUND(fVar4) & 0xffff);
+      uVar1 = (uint)ROUND(fVar4 * (float)_DAT_1005d4d8);
+      local_330[0]._0_2_ = (undefined2)uVar1;
+      local_33c = (undefined2)local_330[0];
+      local_330[0] = (int)ROUND((fVar4 - (float)((uVar1 & 0xffff) / 0x3c)) * (float)_PTR_1005d4d0);
+      local_33a = (undefined2)local_330[0];
+      local_39a = in_FPUControlWord;
+    }
+    local_39a = local_39a & 0xff00;
+    czReadStats(9,&local_39a,1);
+    if ((char)local_39a != '\0') {
+      local_334 = 0xf1;
+    }
+    if (local_386 == '\0') {
+      local_386 = local_394;
+    }
+    if (local_385 == 0) {
+      local_385 = local_392;
+    }
+    local_385 = local_385 % 0x65;
+    local_330[0] = 0;
+    local_330[1] = 0;
+    czGetBeacon(local_330);
+    memset(local_220,0,0x101);
+    memset(local_118,0,0x101);
+    memset(local_328,0,0x101);
+    iVar5 = czGetPlayingFileName(local_220,0x100);
+    if ((iVar5 == 0) && (*(int *)((int)lpTlsValue + 0x90) != 0)) {
+      pcVar6 = param_1;
+      do {
+        cVar2 = *pcVar6;
+        pcVar6 = pcVar6 + 1;
+      } while (cVar2 != '\0');
+      strncpy(local_328,param_1,(int)pcVar6 - (int)(param_1 + 1));
+      pcVar6 = param_1;
+      do {
+        cVar2 = *pcVar6;
+        pcVar6 = pcVar6 + 1;
+      } while (cVar2 != '\0');
+      strncpy(local_118,param_1,(int)pcVar6 - (int)(param_1 + 1));
+      pcVar6 = strrchr(local_220,0x5c);
+      if (pcVar6 == (char *)0x0) {
+        pcVar6 = strrchr(local_220,0x2f);
+        if (pcVar6 == (char *)0x0) {
+          pcVar6 = local_220;
+          do {
+            cVar2 = *pcVar6;
+            pcVar6 = pcVar6 + 1;
+          } while (cVar2 != '\0');
+          _Count = (int)pcVar6 - (int)(local_220 + 1);
+          _Source = local_220;
+        }
+        else {
+          _Source = pcVar6 + 1;
+          pcVar7 = _Source;
+          do {
+            cVar2 = *pcVar7;
+            pcVar7 = pcVar7 + 1;
+          } while (cVar2 != '\0');
+          _Count = (int)pcVar7 - (int)(pcVar6 + 2);
+        }
+      }
+      else {
+        _Source = pcVar6 + 1;
+        pcVar7 = _Source;
+        do {
+          cVar2 = *pcVar7;
+          pcVar7 = pcVar7 + 1;
+        } while (cVar2 != '\0');
+        _Count = (int)pcVar7 - (int)(pcVar6 + 2);
+      }
+      strncat(local_328,_Source,_Count);
+      strncat(local_118,"monitor.gif",0xc);
+      (**(code **)((int)lpTlsValue + 0x90))(lpTlsValue,local_328,local_118,0x14,1000);
+    }
+    (*local_38c)(param_2,&local_388,local_330,local_328);
+  }
+  __security_check_cookie(local_c ^ (uint)auStack_39c);
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czReadBrightInfoExt =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=100171c0 body=[[100171c0, 1001728f]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* WARNING: Function: __alloca_probe replaced with injection: alloca_probe */
+/* __stdcall czReadBrightInfoExt,4 */
+
+void czReadBrightInfoExt(void *param_1)
+
+{
+  undefined4 uVar1;
+  undefined **local_125c;
+  undefined1 local_1258 [64];
+  int *local_1218;
+  int local_1214;
+  char local_120c;
+  uint local_8;
+  
+                    /* 0x171c0  103  _czReadBrightInfoExt@4 */
+  local_8 = DAT_10062028 ^ (uint)&stack0xfffffffc;
+  FUN_1000f3e0(&local_125c);
+  local_125c = czReadLED::vftable;
+  if ((((local_1214 != 0) && (*(int *)(local_1214 + 4) == 1)) &&
+      ((local_120c == '\0' || (uVar1 = FUN_10002f60(local_1258), (char)uVar1 != '\0')))) &&
+     ((FUN_10019000(param_1), local_120c != '\0' && (local_1218 != (int *)0x0)))) {
+    (**(code **)(*local_1218 + 0xc))();
+  }
+  local_125c = CBaseCMD::vftable;
+  if (*(code **)(local_1214 + 0x7c) != (code *)0x0) {
+    (**(code **)(local_1214 + 0x7c))(local_1214);
+  }
+  if (local_1218 != (int *)0x0) {
+    (**(code **)*local_1218)(1);
+  }
+  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czUpdate3Info =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=10009c10 body=[[10009c10, 10009d08]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* __stdcall czUpdate3Info,8 */
+
+void czUpdate3Info(int param_1)
+
+{
+  byte bVar1;
+  int iVar2;
+  undefined1 auStack_17c [4];
+  char local_178;
+  char local_177;
+  byte local_175;
+  undefined4 local_120;
+  undefined4 local_11c;
+  undefined1 local_118 [268];
+  uint local_c;
+  
+                    /* 0x9c10  148  _czUpdate3Info@8 */
+  local_c = DAT_10062028 ^ (uint)auStack_17c;
+  memset(&local_178,0,0x58);
+  iVar2 = czReadCurrentState(&local_120,&local_178,0x58);
+  if (iVar2 == 0) {
+    if (local_178 == '\0') {
+      local_178 = local_120._1_1_;
+    }
+    if (local_177 == '\0') {
+      local_177 = local_120._2_1_;
+    }
+    bVar1 = local_175;
+    if (local_175 == 0) {
+      bVar1 = local_11c._2_1_;
+    }
+    local_120 = 0;
+    local_11c = 0;
+    czGetBeacon(&local_120);
+    memset(local_118,0,0x101);
+    czGetPlayingFileName(local_118,0x100);
+    *(char *)(param_1 + 0x236) = local_177;
+    *(byte *)(param_1 + 0x237) = bVar1 % 0x65;
+    *(char *)(param_1 + 0x235) = local_178;
+    *(undefined1 *)(param_1 + 0x238) = local_120._3_1_;
+  }
+  __security_check_cookie(local_c ^ (uint)auStack_17c);
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czReadSignLog =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=100087c0 body=[[100087c0, 10008a39] [10008a40, 10008c21]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* __stdcall czReadSignLog,16 */
+
+void czReadSignLog(undefined4 param_1,undefined4 param_2,int param_3,undefined *param_4)
+
+{
+  byte *****pppppbVar1;
+  int *piVar2;
+  int iVar3;
+  int iVar4;
+  size_t sVar5;
+  byte *pbVar6;
+  int local_e74;
+  int local_e70;
+  int local_e6c;
+  int local_e68;
+  code *local_e64;
+  int *local_e60;
+  int local_e5c;
+  int local_e58;
+  byte ****local_e54 [4];
+  undefined4 local_e44;
+  uint local_e40;
+  int local_e38;
+  undefined1 local_e34 [100];
+  undefined1 local_dd0 [52];
+  undefined1 local_d9c [200];
+  undefined1 local_cd4 [20];
+  int local_cc0;
+  int iStack_cbc;
+  int local_cb8;
+  int local_cb0;
+  int local_cac;
+  int local_ca8;
+  int local_ca4;
+  int local_ca0;
+  int local_c9c;
+  int local_c98;
+  int local_c94;
+  char local_c90 [128];
+  char local_c10;
+  char local_c0f;
+  byte local_810 [2052];
+  uint local_c;
+  
+                    /* 0x87c0  115  _czReadSignLog@16 */
+  local_c = DAT_10062028 ^ (uint)&local_e74;
+  local_e64 = (code *)param_4;
+  local_e74 = 0;
+  local_e6c = 0;
+  if (param_3 != 1) {
+    __security_check_cookie(local_c ^ (uint)&local_e74);
+    return;
+  }
+  local_e40 = 0xf;
+  local_e44 = 0;
+  local_e54[0] = (byte ****)((uint)local_e54[0] & 0xffffff00);
+  FUN_100028e0();
+  pppppbVar1 = (byte *****)local_e54[0];
+  if (local_e40 < 0x10) {
+    pppppbVar1 = local_e54;
+  }
+  piVar2 = (int *)FUN_100466e0((byte *)pppppbVar1,(undefined *)0x1,&local_e68,&local_e70,
+                               (undefined *)0x0);
+  local_e58 = local_e70;
+  local_e60 = piVar2;
+  if (piVar2 == (int *)0x0) {
+    if (0xf < local_e40) {
+      operator_delete(local_e54[0]);
+    }
+    __security_check_cookie(local_c ^ (uint)&local_e74);
+    return;
+  }
+  local_e5c = FUN_10053e50(piVar2,(uint *)0x0,0,(uint *)0x0);
+  memset(&local_c10,0,0x400);
+  memset(local_810,0,0x800);
+  memset(local_c90,0,0x80);
+  czPrintBuf(local_c90,0x80,"select count(*) from SysLog");
+  iVar3 = czReadDB(1,local_c90,&local_c10,0x400,local_810,0x800);
+  if (iVar3 == 0) {
+    sscanf((char *)local_810,"<%d>",&local_e74);
+    while (local_e74 != 0) {
+      memset(local_c90,0,0x80);
+      czPrintBuf(local_c90,0x80,
+                 "select Type,DateTime,Operate,Author,Result from SysLog limit 5 offset %d");
+      memset(&local_c10,0,0x400);
+      memset(local_810,0,0x800);
+      local_e68 = czReadDB(1,local_c90,&local_c10,0x400,local_810,0x800);
+      piVar2 = local_e60;
+      if ((local_e68 != 0) || (local_e70 = local_c0f * 0x100 + (int)local_c10, local_e70 == 0))
+      break;
+      iVar3 = 0;
+      pbVar6 = local_810;
+      if (0 < local_e70) {
+        do {
+          if (pbVar6 == (byte *)0x0) break;
+          memset(&local_e38,0,0x178);
+          iVar4 = FUN_10003090(&local_e60,pbVar6,(int)&local_cc0);
+          if (iVar4 != 0) break;
+          local_e38 = atoi((char *)(pbVar6 + local_cb8));
+          sVar5 = local_cac - local_cb0;
+          if (0x13 < sVar5) {
+            sVar5 = 0x14;
+          }
+          memcpy(local_cd4,pbVar6 + local_cb0,sVar5);
+          sVar5 = local_ca4 - local_ca8;
+          if (99 < sVar5) {
+            sVar5 = 100;
+          }
+          memcpy(local_e34,pbVar6 + local_ca8,sVar5);
+          sVar5 = local_c9c - local_ca0;
+          if (0x33 < sVar5) {
+            sVar5 = 0x34;
+          }
+          memcpy(local_dd0,pbVar6 + local_ca0,sVar5);
+          sVar5 = local_c94 - local_c98;
+          if (199 < sVar5) {
+            sVar5 = 200;
+          }
+          memcpy(local_d9c,pbVar6 + local_c98,sVar5);
+          (*local_e64)(param_2,&local_e38);
+          iVar3 = iVar3 + 1;
+          pbVar6 = pbVar6 + (iStack_cbc - local_cc0);
+        } while (iVar3 < local_e70);
+      }
+      if (local_e70 < local_e74) {
+        local_e74 = local_e74 - local_e70;
+      }
+      else {
+        local_e74 = 0;
+      }
+      local_e6c = local_e6c + 5;
+      piVar2 = local_e60;
+    }
+    (*(code *)PTR_FUN_10062004)(piVar2);
+    czPrintBuf(local_c90,0x80,"delete from SysLog");
+    czReadDB(1,local_c90,&local_c10,0x400,local_810,0x800);
+  }
+  if (0xf < local_e40) {
+    operator_delete(local_e54[0]);
+  }
+  __security_check_cookie(local_c ^ (uint)&local_e74);
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czReadEventLog =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=10009d10 body=[[10009d10, 10009f59] [10009f60, 1000a0b2]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* __stdcall czReadEventLog,16 */
+
+void czReadEventLog(undefined4 param_1,undefined4 param_2,undefined4 param_3,undefined *param_4)
+
+{
+  byte ****ppppbVar1;
+  int *piVar2;
+  int iVar3;
+  int iVar4;
+  size_t sVar5;
+  byte *pbVar6;
+  int local_d74;
+  int local_d70;
+  int local_d6c;
+  int local_d68;
+  code *local_d64;
+  int *local_d60;
+  int local_d5c;
+  int local_d58;
+  byte ***local_d54 [4];
+  undefined4 local_d44;
+  uint local_d40;
+  int local_d38;
+  int local_d34;
+  undefined1 local_d30 [20];
+  undefined1 local_d1c [100];
+  int local_cb8;
+  int iStack_cb4;
+  int local_cb0;
+  int local_ca8;
+  int local_ca4;
+  int local_ca0;
+  int local_c98;
+  int local_c94;
+  char local_c90 [128];
+  char local_c10;
+  char local_c0f;
+  byte local_810 [2052];
+  uint local_c;
+  
+                    /* 0x9d10  104  _czReadEventLog@16 */
+  local_c = DAT_10062028 ^ (uint)&local_d74;
+  local_d64 = (code *)param_4;
+  local_d74 = 0;
+  local_d6c = 0;
+  local_d40 = 0xf;
+  local_d44 = 0;
+  local_d54[0] = (byte ***)((uint)local_d54[0] & 0xffffff00);
+  FUN_100028e0();
+  ppppbVar1 = (byte ****)local_d54[0];
+  if (local_d40 < 0x10) {
+    ppppbVar1 = local_d54;
+  }
+  piVar2 = (int *)FUN_100466e0((byte *)ppppbVar1,(undefined *)0x1,&local_d68,&local_d70,
+                               (undefined *)0x0);
+  local_d58 = local_d70;
+  local_d60 = piVar2;
+  if (piVar2 == (int *)0x0) {
+    if (0xf < local_d40) {
+      operator_delete(local_d54[0]);
+    }
+    __security_check_cookie(local_c ^ (uint)&local_d74);
+    return;
+  }
+  local_d5c = FUN_10053e50(piVar2,(uint *)0x0,0,(uint *)0x0);
+  memset(&local_c10,0,0x400);
+  memset(local_810,0,0x800);
+  memset(local_c90,0,0x80);
+  czPrintBuf(local_c90,0x80,"select count(*) from EventLog");
+  iVar3 = czReadDB(1,local_c90,&local_c10,0x400,local_810,0x800);
+  if (iVar3 == 0) {
+    sscanf((char *)local_810,"<%d>",&local_d74);
+    while (local_d74 != 0) {
+      memset(local_c90,0,0x80);
+      czPrintBuf(local_c90,0x80,
+                 "select EventType,DateTime,Status,Note from EventLog limit 5 offset %d");
+      memset(&local_c10,0,0x400);
+      memset(local_810,0,0x800);
+      local_d68 = czReadDB(1,local_c90,&local_c10,0x400,local_810,0x800);
+      piVar2 = local_d60;
+      if ((local_d68 != 0) || (local_d70 = local_c0f * 0x100 + (int)local_c10, local_d70 == 0))
+      break;
+      iVar3 = 0;
+      pbVar6 = local_810;
+      if (0 < local_d70) {
+        do {
+          if (pbVar6 == (byte *)0x0) break;
+          memset(&local_d38,0,0x80);
+          iVar4 = FUN_10003090(&local_d60,pbVar6,(int)&local_cb8);
+          if (iVar4 != 0) break;
+          local_d38 = atoi((char *)(pbVar6 + local_cb0));
+          sVar5 = local_ca4 - local_ca8;
+          if (0x13 < sVar5) {
+            sVar5 = 0x14;
+          }
+          memcpy(local_d30,pbVar6 + local_ca8,sVar5);
+          local_d34 = atoi((char *)(pbVar6 + local_ca0));
+          sVar5 = local_c94 - local_c98;
+          if (99 < sVar5) {
+            sVar5 = 100;
+          }
+          memcpy(local_d1c,pbVar6 + local_c98,sVar5);
+          (*local_d64)(param_2,&local_d38);
+          iVar3 = iVar3 + 1;
+          pbVar6 = pbVar6 + (iStack_cb4 - local_cb8);
+        } while (iVar3 < local_d70);
+      }
+      if (local_d70 < local_d74) {
+        local_d74 = local_d74 - local_d70;
+      }
+      else {
+        local_d74 = 0;
+      }
+      local_d6c = local_d6c + 5;
+      piVar2 = local_d60;
+    }
+    (*(code *)PTR_FUN_10062004)(piVar2);
+  }
+  if (0xf < local_d40) {
+    operator_delete(local_d54[0]);
+  }
+  __security_check_cookie(local_c ^ (uint)&local_d74);
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czReadTempLog =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=10008c30 body=[[10008c30, 10008de9] [10008df0, 10008eb9] [10008ec0, 100090f1]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* __stdcall czReadTempLog,16 */
+
+void czReadTempLog(undefined4 param_1,undefined4 param_2,int param_3,undefined *param_4)
+
+{
+  byte *****pppppbVar1;
+  int *piVar2;
+  int iVar3;
+  size_t sVar4;
+  byte *pbVar5;
+  undefined1 auStack_e04 [4];
+  int local_e00;
+  int local_dfc;
+  int local_df8;
+  int local_df4;
+  int local_df0;
+  code *local_dec;
+  int *local_de8;
+  int local_de4;
+  int local_de0;
+  byte ****local_ddc [4];
+  undefined4 local_dcc;
+  uint local_dc8;
+  undefined1 local_dc0 [20];
+  undefined1 local_dac [20];
+  int local_d98;
+  int local_d94;
+  int local_d90;
+  int local_d8c;
+  int local_d88;
+  int local_d84;
+  int local_d80;
+  int local_d7c;
+  int local_d78;
+  int local_d70;
+  int iStack_d6c;
+  int local_d68;
+  int local_d64;
+  int local_d60;
+  int local_d5c;
+  int local_d58;
+  int local_d50;
+  int local_d48;
+  int local_d40;
+  int local_d38;
+  int local_d30;
+  int local_d28;
+  int local_d20;
+  int local_d18;
+  char local_d10 [256];
+  char local_c10;
+  char local_c0f;
+  byte local_810 [2052];
+  uint local_c;
+  
+                    /* 0x8c30  119  _czReadTempLog@16 */
+  local_c = DAT_10062028 ^ (uint)auStack_e04;
+  local_dec = (code *)param_4;
+  local_e00 = 0;
+  local_df8 = 0;
+  if (param_3 != 1) {
+    __security_check_cookie(local_c ^ (uint)auStack_e04);
+    return;
+  }
+  local_dc8 = 0xf;
+  local_dcc = 0;
+  local_ddc[0] = (byte ****)((uint)local_ddc[0] & 0xffffff00);
+  FUN_100028e0();
+  pppppbVar1 = (byte *****)local_ddc[0];
+  if (local_dc8 < 0x10) {
+    pppppbVar1 = local_ddc;
+  }
+  piVar2 = (int *)FUN_100466e0((byte *)pppppbVar1,(undefined *)0x1,&local_df0,&local_dfc,
+                               (undefined *)0x0);
+  local_de0 = local_dfc;
+  local_de8 = piVar2;
+  if (piVar2 == (int *)0x0) {
+    if (0xf < local_dc8) {
+      operator_delete(local_ddc[0]);
+    }
+    __security_check_cookie(local_c ^ (uint)auStack_e04);
+    return;
+  }
+  local_de4 = FUN_10053e50(piVar2,(uint *)0x0,0,(uint *)0x0);
+  memset(&local_c10,0,0x400);
+  memset(local_810,0,0x800);
+  memset(local_d10,0,0x100);
+  czPrintBuf(local_d10,0x100,"select count(*) from TempLog");
+  iVar3 = czReadDB(1,local_d10,&local_c10,0x400,local_810,0x800);
+  if (iVar3 == 0) {
+    sscanf((char *)local_810,"<%d>",&local_e00);
+    while (local_e00 != 0) {
+      memset(local_d10,0,0x100);
+      czPrintBuf(local_d10,0x100,
+                 "select BeginTime,EndTime,OutHightTemp,OutLowTemp,OutAvgTemp,InHightTemp,InLowTemp,InAvgTemp,BoxHightTemp,BoxLowTemp,BoxAvgTemp from TempLog limit 10 offset %d"
+                );
+      memset(&local_c10,0,0x400);
+      memset(local_810,0,0x800);
+      local_df0 = czReadDB(1,local_d10,&local_c10,0x400,local_810,0x800);
+      piVar2 = local_de8;
+      if ((local_df0 != 0) || (local_df4 = local_c0f * 0x100 + (int)local_c10, local_df4 == 0))
+      break;
+      pbVar5 = local_810;
+      local_dfc = 0;
+      if (0 < local_df4) {
+        do {
+          if (pbVar5 == (byte *)0x0) break;
+          memset(local_dc0,0,0x4c);
+          iVar3 = FUN_10003090(&local_de8,pbVar5,(int)&local_d70);
+          if (iVar3 != 0) break;
+          sVar4 = local_d64 - local_d68;
+          if (0x13 < sVar4) {
+            sVar4 = 0x14;
+          }
+          memcpy(local_dc0,pbVar5 + local_d68,sVar4);
+          sVar4 = local_d5c - local_d60;
+          if (0x13 < sVar4) {
+            sVar4 = 0x14;
+          }
+          memcpy(local_dac,pbVar5 + local_d60,sVar4);
+          local_d98 = atoi((char *)(pbVar5 + local_d58));
+          local_d94 = atoi((char *)(pbVar5 + local_d50));
+          local_d90 = atoi((char *)(pbVar5 + local_d48));
+          local_d8c = atoi((char *)(pbVar5 + local_d40));
+          local_d88 = atoi((char *)(pbVar5 + local_d38));
+          local_d84 = atoi((char *)(pbVar5 + local_d30));
+          local_d80 = atoi((char *)(pbVar5 + local_d28));
+          local_d7c = atoi((char *)(pbVar5 + local_d20));
+          local_d78 = atoi((char *)(pbVar5 + local_d18));
+          (*local_dec)(param_2,local_dc0);
+          pbVar5 = pbVar5 + (iStack_d6c - local_d70);
+          local_dfc = local_dfc + 1;
+        } while (local_dfc < local_df4);
+      }
+      if (local_df4 < local_e00) {
+        local_e00 = local_e00 - local_df4;
+      }
+      else {
+        local_e00 = 0;
+      }
+      local_df8 = local_df8 + 10;
+      piVar2 = local_de8;
+    }
+    (*(code *)PTR_FUN_10062004)(piVar2);
+    czPrintBuf(local_d10,0x100,"delete from TempLog");
+    czReadDB(1,local_d10,&local_c10,0x400,local_810,0x800);
+  }
+  if (0xf < local_dc8) {
+    operator_delete(local_ddc[0]);
+  }
+  __security_check_cookie(local_c ^ (uint)auStack_e04);
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czReadPlayLogExt =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=10006fa0 body=[[10006fa0, 10007229] [10007230, 100073de]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* __stdcall czReadPlayLogExt,16 */
+
+void czReadPlayLogExt(undefined4 param_1,undefined4 param_2,int param_3,undefined *param_4)
+
+{
+  byte *****pppppbVar1;
+  int *piVar2;
+  int iVar3;
+  size_t sVar4;
+  byte *pbVar5;
+  undefined1 auStack_f14 [4];
+  int local_f10;
+  int local_f0c;
+  int local_f08;
+  int local_f04;
+  int local_f00;
+  code *local_efc;
+  int *local_ef8;
+  int local_ef4;
+  int local_ef0;
+  byte ****local_eec [4];
+  undefined4 local_edc;
+  uint local_ed8;
+  int local_ed0;
+  int local_ecc;
+  int local_ec8;
+  undefined1 local_ec4 [256];
+  undefined1 local_dc4 [20];
+  undefined1 local_db0 [104];
+  int local_d48;
+  int iStack_d44;
+  int local_d40;
+  int local_d38;
+  int local_d34;
+  int local_d30;
+  int local_d2c;
+  int local_d28;
+  int local_d24;
+  int local_d20;
+  int local_d18;
+  char local_d10 [256];
+  char local_c10;
+  char local_c0f;
+  byte local_810 [2052];
+  uint local_c;
+  
+                    /* 0x6fa0  109  _czReadPlayLogExt@16 */
+  local_c = DAT_10062028 ^ (uint)auStack_f14;
+  local_efc = (code *)param_4;
+  local_f10 = 0;
+  local_f08 = 0;
+  if (param_3 != 1) {
+    __security_check_cookie(local_c ^ (uint)auStack_f14);
+    return;
+  }
+  local_ed8 = 0xf;
+  local_edc = 0;
+  local_eec[0] = (byte ****)((uint)local_eec[0] & 0xffffff00);
+  FUN_100028e0();
+  pppppbVar1 = (byte *****)local_eec[0];
+  if (local_ed8 < 0x10) {
+    pppppbVar1 = local_eec;
+  }
+  piVar2 = (int *)FUN_100466e0((byte *)pppppbVar1,(undefined *)0x1,&local_f00,&local_f0c,
+                               (undefined *)0x0);
+  local_ef0 = local_f0c;
+  local_ef8 = piVar2;
+  if (piVar2 == (int *)0x0) {
+    if (0xf < local_ed8) {
+      operator_delete(local_eec[0]);
+    }
+    __security_check_cookie(local_c ^ (uint)auStack_f14);
+    return;
+  }
+  local_ef4 = FUN_10053e50(piVar2,(uint *)0x0,0,(uint *)0x0);
+  memset(&local_c10,0,0x400);
+  memset(local_810,0,0x800);
+  memset(local_d10,0,0x100);
+  czPrintBuf(local_d10,0x100,"select count(*) from PlayLog");
+  iVar3 = czReadDB(1,local_d10,&local_c10,0x400,local_810,0x800);
+  if (iVar3 == 0) {
+    sscanf((char *)local_810,"<%d>",&local_f10);
+    while (local_f10 != 0) {
+      memset(local_d10,0,0x100);
+      czPrintBuf(local_d10,0x100,
+                 "select WinID,GroupName,FileName,Time,PlayTimes,TotalSeconds from PlayLog limit 10 offset %d"
+                );
+      memset(&local_c10,0,0x400);
+      memset(local_810,0,0x800);
+      local_f00 = czReadDB(1,local_d10,&local_c10,0x400,local_810,0x800);
+      piVar2 = local_ef8;
+      if ((local_f00 != 0) || (local_f04 = local_c0f * 0x100 + (int)local_c10, local_f04 == 0))
+      break;
+      pbVar5 = local_810;
+      local_f0c = 0;
+      if (0 < local_f04) {
+        do {
+          if (pbVar5 == (byte *)0x0) break;
+          memset(&local_ed0,0,0x184);
+          iVar3 = FUN_10003090(&local_ef8,pbVar5,(int)&local_d48);
+          if (iVar3 != 0) break;
+          local_ec8 = atoi((char *)(pbVar5 + local_d40));
+          sVar4 = local_d34 - local_d38;
+          if (99 < sVar4) {
+            sVar4 = 100;
+          }
+          memcpy(local_db0,pbVar5 + local_d38,sVar4);
+          sVar4 = local_d2c - local_d30;
+          if (0xff < sVar4) {
+            sVar4 = 0x100;
+          }
+          memcpy(local_ec4,pbVar5 + local_d30,sVar4);
+          sVar4 = local_d24 - local_d28;
+          if (0x13 < sVar4) {
+            sVar4 = 0x14;
+          }
+          memcpy(local_dc4,pbVar5 + local_d28,sVar4);
+          local_ed0 = atoi((char *)(pbVar5 + local_d20));
+          local_ecc = atoi((char *)(pbVar5 + local_d18));
+          (*local_efc)(param_2,&local_ed0);
+          local_f0c = local_f0c + 1;
+          pbVar5 = pbVar5 + (iStack_d44 - local_d48);
+        } while (local_f0c < local_f04);
+      }
+      if (local_f04 < local_f10) {
+        local_f10 = local_f10 - local_f04;
+      }
+      else {
+        local_f10 = 0;
+      }
+      local_f08 = local_f08 + 10;
+      piVar2 = local_ef8;
+    }
+    (*(code *)PTR_FUN_10062004)(piVar2);
+    czDelete("C:\\LOGFILE.LOG");
+    czDelete("F:\\LOGFILE.LOG");
+  }
+  if (0xf < local_ed8) {
+    operator_delete(local_eec[0]);
+  }
+  __security_check_cookie(local_c ^ (uint)auStack_f14);
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czReadSignWaringLog =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=1000a2e0 body=[[1000a2e0, 1000aa0e]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* __stdcall czReadSignWaringLog,12 */
+
+void czReadSignWaringLog(char *param_1,char *param_2,undefined *param_3)
+
+{
+  char cVar1;
+  FILE *_File;
+  size_t sVar2;
+  char *pcVar3;
+  ushort uVar4;
+  int iVar5;
+  uint local_1ec;
+  int local_1e8;
+  uint local_1e4;
+  int local_1e0;
+  code *local_1dc;
+  char *local_1d8;
+  undefined4 local_1d4;
+  undefined4 local_1d0;
+  uint local_1cc;
+  undefined4 local_1c8;
+  undefined4 local_1c4;
+  undefined4 local_1c0;
+  undefined4 local_1bc;
+  undefined4 local_1b8;
+  void *local_1b4;
+  undefined4 local_1a4;
+  uint local_1a0;
+  undefined4 local_198;
+  char local_194 [19];
+  undefined1 local_181;
+  undefined1 local_180 [100];
+  char local_11c [264];
+  ushort local_14;
+  undefined1 uStack_12;
+  byte bStack_11;
+  undefined4 local_10;
+  uint local_c;
+  
+                    /* 0xa2e0  116  _czReadSignWaringLog@12 */
+  local_c = DAT_10062028 ^ (uint)&local_1ec;
+  local_1d8 = param_2;
+  local_1dc = (code *)param_3;
+  local_1a0 = 0xf;
+  local_1a4 = 0;
+  local_1b4 = (void *)((uint)local_1b4 & 0xffffff00);
+  FUN_100028e0();
+  local_1e0 = czReadSpecPathFile("E:\\STATUS.SYS",param_1);
+  if (local_1e0 == 0) {
+    czDelete("E:\\STATUS.SYS");
+    local_1d4 = 0;
+    local_1d0 = 0;
+    local_1cc = 0;
+    local_1c8 = 0;
+    local_1c4 = 0;
+    local_1c0 = 0;
+    local_1bc = 0;
+    local_1b8 = 0;
+    _File = fopen(param_1,"rb");
+    if (_File == (FILE *)0x0) {
+      if (0xf < local_1a0) {
+        operator_delete(local_1b4);
+      }
+      __security_check_cookie(local_c ^ (uint)&local_1ec);
+      return;
+    }
+    sVar2 = fread(&local_1d4,0x20,1,_File);
+    if ((sVar2 == 0) || ((short)local_1d4 != 0x5453)) {
+      fclose(_File);
+      if (0xf < local_1a0) {
+        operator_delete(local_1b4);
+      }
+      __security_check_cookie(local_c ^ (uint)&local_1ec);
+      return;
+    }
+    fseek(_File,(local_1cc & 0xffff) * 8 + 0x20,0);
+    local_1ec = local_1cc & 0xffff;
+    iVar5 = 0;
+    local_1e8 = 0;
+    do {
+      local_14 = 0;
+      uStack_12 = 0;
+      bStack_11 = 0;
+      local_10 = 0;
+      sVar2 = fread(&local_14,8,1,_File);
+      if (sVar2 == 1) {
+        if ((char)local_14 == '\x05') {
+          local_1e4 = (uint)(ushort)((ushort)(byte)local_10 * 0x100 + (ushort)bStack_11);
+          break;
+        }
+        local_1ec = local_1ec + 1;
+      }
+      else {
+        fseek(_File,0x20,0);
+        local_1ec = 0;
+        iVar5 = iVar5 + 1;
+      }
+      if ((short)local_1ec == (short)local_1cc) goto LAB_1000a9a8;
+    } while ((ushort)iVar5 < 2);
+    if (((short)local_1ec == (short)local_1cc) || (uVar4 = (ushort)iVar5, 1 < uVar4)) {
+LAB_1000a9a8:
+      local_1e8 = iVar5;
+      fclose(_File);
+      FUN_10002580();
+      __security_check_cookie(local_c ^ (uint)&local_1ec);
+      return;
+    }
+    while (local_1e8 = iVar5, uVar4 < 2) {
+      if ((short)local_1ec == (short)local_1cc) break;
+      local_14 = 0;
+      uStack_12 = 0;
+      bStack_11 = 0;
+      local_10 = 0;
+      sVar2 = fread(&local_14,8,1,_File);
+      if (sVar2 == 0) {
+        fseek(_File,0x20,0);
+        local_1e8 = iVar5 + 1;
+        local_1ec = 0;
+        goto LAB_1000a636;
+      }
+      memset(&local_198,0,0x17c);
+      czPrintBuf(local_194,0x14,"%d-%02d-%02d %02d:%02d:%02d");
+      local_181 = 0;
+      pcVar3 = local_1d8;
+      do {
+        cVar1 = *pcVar3;
+        pcVar3 = pcVar3 + 1;
+      } while (cVar1 != '\0');
+      if ((uint)((int)pcVar3 - (int)(local_1d8 + 1)) < 0x65) {
+        pcVar3 = local_1d8;
+        do {
+          cVar1 = *pcVar3;
+          pcVar3 = pcVar3 + 1;
+        } while (cVar1 != '\0');
+        sVar2 = (int)pcVar3 - (int)(local_1d8 + 1);
+      }
+      else {
+        sVar2 = 100;
+      }
+      memcpy(local_180,local_1d8,sVar2);
+      switch(local_14 & 0xff) {
+      case 1:
+        pcVar3 = "Inside Tempturature Waring,Current=%d,Proect=%d";
+        goto LAB_1000a601;
+      case 2:
+        pcVar3 = "Outside Tempturature Waring,Current=%d,Proect=%d";
+LAB_1000a601:
+        local_198 = 3;
+LAB_1000a616:
+        czPrintBuf(local_11c,0x100,pcVar3);
+LAB_1000a61e:
+        local_1e0 = (*local_1dc)(&local_198);
+        break;
+      case 3:
+        local_198 = 2;
+        switch((CONCAT12(uStack_12,local_14) & 0xff00) >> 8) {
+        case 1:
+          pcVar3 = "Tile Temperature Waring, Address=%d";
+          break;
+        case 2:
+          pcVar3 = "Tile PowerI Waring, Address=%d";
+          break;
+        case 3:
+          pcVar3 = "Tile PowerII Waring, Address=%d";
+          break;
+        case 4:
+          pcVar3 = "Tile FAN Waring, Address=%d";
+          break;
+        case 5:
+          pcVar3 = "Tile PHY Waring, Address=%d";
+          break;
+        case 6:
+          pcVar3 = "Tile CABLE Waring, Address=%d";
+          break;
+        case 7:
+          pcVar3 = "Tile GAMMR Waring, Address=%d";
+          break;
+        case 8:
+          pcVar3 = "Tile CPU Waring, Address=%d";
+          break;
+        case 9:
+          pcVar3 = "Tile FPGA Waring, Address=%d";
+          break;
+        default:
+          goto switchD_1000a5e8_default;
+        }
+        czPrintBuf(local_11c,0x100,pcVar3);
+        goto LAB_1000a61e;
+      case 4:
+        local_198 = 2;
+        switch((CONCAT12(uStack_12,local_14) & 0xff00) >> 8) {
+        case 1:
+          pcVar3 = "(%d,%d) Red Pixel Bad";
+          break;
+        case 2:
+          pcVar3 = "(%d,%d) Green Pixel Bad";
+          break;
+        case 3:
+          pcVar3 = "(%d,%d) Blue Pixel Bad";
+          break;
+        case 4:
+          pcVar3 = "(%d,%d) Red Signal Bad";
+          break;
+        case 5:
+          pcVar3 = "(%d,%d) Green Signal Bad";
+          break;
+        case 6:
+          pcVar3 = "(%d,%d) Blue Signal Bad";
+          break;
+        default:
+          goto switchD_1000a5e8_default;
+        }
+        goto LAB_1000a616;
+      case 5:
+        local_1e4 = (uint)(ushort)((ushort)(byte)local_10 * 0x100 + (ushort)bStack_11);
+      }
+switchD_1000a5e8_default:
+      local_1ec = local_1ec + 1;
+LAB_1000a636:
+      iVar5 = local_1e8;
+      uVar4 = (ushort)local_1e8;
+    }
+    fclose(_File);
+  }
+  if (0xf < local_1a0) {
+    operator_delete(local_1b4);
+  }
+  __security_check_cookie(local_c ^ (uint)&local_1ec);
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czOSGetFileSize =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=100024c0 body=[[100024c0, 100024fb]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* __stdcall czOSGetFileSize,4 */
+
+long czOSGetFileSize(char *param_1)
+
+{
+  FILE *_File;
+  long lVar1;
+  
+                    /* 0x24c0  82  _czOSGetFileSize@4 */
+  _File = fopen(param_1,"rb");
+  fseek(_File,0,2);
+  lVar1 = ftell(_File);
+  fclose(_File);
+  return lVar1;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czGetDirLongFileEx =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=10011e10 body=[[10011e10, 10011ee6]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* WARNING: Function: __alloca_probe replaced with injection: alloca_probe */
+/* __stdcall czGetDirLongFileEx,8 */
+
+void czGetDirLongFileEx(char *param_1,char *param_2)
+
+{
+  undefined4 uVar1;
+  undefined **local_1264;
+  undefined1 local_1260 [64];
+  int *local_1220;
+  int local_121c;
+  char local_1214;
+  uint local_8;
+  
+                    /* 0x11e10  60  _czGetDirLongFileEx@8 */
+  local_8 = DAT_10062028 ^ (uint)&stack0xfffffffc;
+  FUN_1000f3e0(&local_1264);
+  local_1264 = czFileCtrlLED::vftable;
+  if ((((local_121c != 0) && (*(int *)(local_121c + 4) == 1)) &&
+      ((local_1214 == '\0' || (uVar1 = FUN_10002f60(local_1260), (char)uVar1 != '\0')))) &&
+     ((FUN_10012c30((int)&local_1264,param_1,param_2), local_1214 != '\0' &&
+      (local_1220 != (int *)0x0)))) {
+    (**(code **)(*local_1220 + 0xc))();
+  }
+  local_1264 = CBaseCMD::vftable;
+  if (*(code **)(local_121c + 0x7c) != (code *)0x0) {
+    (**(code **)(local_121c + 0x7c))(local_121c);
+  }
+  if (local_1220 != (int *)0x0) {
+    (**(code **)*local_1220)(1);
+  }
+  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czLicGetID =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=10013280 body=[[10013280, 10013353]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* WARNING: Function: __alloca_probe replaced with injection: alloca_probe */
+/* __stdcall czLicGetID,8 */
+
+void czLicGetID(undefined4 *param_1,uint param_2)
+
+{
+  undefined4 uVar1;
+  undefined **local_125c;
+  undefined1 local_1258 [64];
+  int *local_1218;
+  int local_1214;
+  char local_120c;
+  uint local_8;
+  
+                    /* 0x13280  63  _czLicGetID@8 */
+  local_8 = DAT_10062028 ^ (uint)&stack0xfffffffc;
+  FUN_1000f3e0(&local_125c);
+  local_125c = czLicLED::vftable;
+  if ((((local_1214 != 0) && (*(int *)(local_1214 + 4) == 1)) &&
+      ((local_120c == '\0' || (uVar1 = FUN_10002f60(local_1258), (char)uVar1 != '\0')))) &&
+     ((FUN_10013440(param_1,param_2), local_120c != '\0' && (local_1218 != (int *)0x0)))) {
+    (**(code **)(*local_1218 + 0xc))();
+  }
+  local_125c = CBaseCMD::vftable;
+  if (*(code **)(local_1214 + 0x7c) != (code *)0x0) {
+    (**(code **)(local_1214 + 0x7c))(local_1214);
+  }
+  if (local_1218 != (int *)0x0) {
+    (**(code **)*local_1218)(1);
+  }
+  __security_check_cookie(local_8 ^ (uint)&stack0xfffffffc);
+  return;
+}
+
+ (GhidraScript)  
+INFO  DumpReadAPI.java> 
+=================== czErrorDesc =================== (GhidraScript)  
+INFO  DumpReadAPI.java> addr=1001d110 body=[[1001d110, 1001d75c]] (GhidraScript)  
+INFO  DumpReadAPI.java> 
+/* __stdcall czErrorDesc,4 */
+
+char * czErrorDesc(uint param_1)
+
+{
+                    /* 0x1d110  32  _czErrorDesc@4 */
+  if (param_1 < 0x101) {
+    if (param_1 == 0x100) {
+switchD_1001d16a_caseD_101:
+      return "DLL Call Error";
+    }
+    switch(param_1) {
+    case 0:
+      return "OK";
+    case 1:
+      return "SNMP Read/Write Faild";
+    case 2:
+      return "Arguments Error";
+    case 3:
+      return "DLL NOT Init Error";
+    }
+  }
+  else if (param_1 < 0x201) {
+    if (param_1 == 0x200) {
+      return "DB Open Error";
+    }
+    switch(param_1) {
+    case 0x101:
+      goto switchD_1001d16a_caseD_101;
+    case 0x102:
+      return "File Format Error";
+    case 0x103:
+      return "Can\'t Modify Error";
+    case 0x104:
+      return "Task Not Exist Error";
+    case 0x105:
+      return "DLL NO THIS FUNCTION Error";
+    case 0x106:
+      return "Task Process Unkown Error";
+    case 0x107:
+      return "Sign not connected or NOT 3G connected";
+    }
+  }
+  else if (param_1 < 0x6602) {
+    if (param_1 == 0x6601) {
+      return "Invaid license!";
+    }
+    if (param_1 < 0x2102) {
+      if (param_1 == 0x2101) {
+        return "Data size exceeds 320K when writing a file!";
+      }
+      if (param_1 < 0xc01) {
+        if (param_1 == 0xc00) {
+          return "CtrlBoard Task In Buf!";
+        }
+        if (param_1 == 0x201) {
+          return "DB CMD EXECUTE Error";
+        }
+        if (param_1 == 0x202) {
+          return "DB Exception Error";
+        }
+      }
+      else if (param_1 < 0x1102) {
+        if (param_1 == 0x1101) {
+          return "Oversize when reading!";
+        }
+        switch(param_1) {
+        case 0xc01:
+          return "CtrlBoard Task Success!";
+        case 0xc02:
+          return "CtrlBoard Task Queue Error!";
+        case 0xc03:
+          return "CtrlBoard Task Processing!";
+        case 0xc04:
+          return "CtrlBoard Bus Error!";
+        case 0xc05:
+          return "CtrlBoard Retry Exceed!";
+        case 0xc06:
+          return "CtrlBoard Normal Error!";
+        case 0xc07:
+          return "CtrlBoard Task ID Error!";
+        case 0xc08:
+          return "CtrlBoard Brocast Error!";
+        case 0xc09:
+          return "CtrlBoard LDU Ctrl Error!";
+        case 0xc11:
+          return "CtrlBoard LDU Ctrl Addr Error!";
+        case 0xc12:
+          return "CtrlBoard TWI Error!";
+        case 0xc13:
+          return "CtrlBoard PixelPro Error!";
+        }
+      }
+      else if (param_1 < 0x1f03) {
+        if (param_1 == 0x1f02) {
+          return "Updating...";
+        }
+        if (param_1 == 0x1102) {
+          return "The Address Invalid!";
+        }
+        if (param_1 == 0x1f01) {
+          return "Update firmware program Failed!";
+        }
+      }
+      else {
+        if (param_1 == 0x1f03) {
+          return "No update operation!";
+        }
+        if (param_1 == 0x2000) {
+          return "Memory allocation Fail!";
+        }
+      }
+    }
+    else if (param_1 < 0x2902) {
+      if (param_1 == 0x2901) {
+        return "Data size exceeds 1024 bytes when writing an emergency message!";
+      }
+      switch(param_1) {
+      case 0x2102:
+        return "Not enough space!";
+      case 0x2103:
+        return "Not enough space in driver C !";
+      case 0x2104:
+        return "Not enough space in driver D !!";
+      case 0x2105:
+        return "Not enough space in driver E !";
+      case 0x2106:
+        return "Not enough space in driver F !";
+      case 0x2107:
+        return "Not enough space in driver G !";
+      }
+    }
+    else if (param_1 < 0x5001) {
+      if (param_1 != 0x5000) {
+        if (param_1 == 0x3a01) {
+          return "Not Support the Command!";
+        }
+        if (param_1 == 0x4b4f) {
+          return "Packet Process OK";
+        }
+      }
+    }
+    else if (param_1 < 0x5101) {
+      if (param_1 == 0x5100) {
+        return "Communication Error!";
+      }
+      switch(param_1) {
+      case 0x5001:
+        return "Open Com Error!";
+      case 0x5002:
+        return "TimeOut to Connenct for TCP!";
+      case 0x5003:
+        return "Failure in Operation!";
+      case 0x5004:
+        return "Inconsistent Synchronization code!";
+      case 0x5005:
+        return "Inconsistent Source Address!";
+      case 0x5006:
+        return "Inconsistent Destination Address!";
+      case 0x5007:
+        return "Inconsistent Pack ID!";
+      case 0x5008:
+        return "Inconsistent Major category!";
+      case 0x5009:
+        return "Inconsistent Minor category!";
+      case 0x5010:
+        return "Inconsistent Sum check!";
+      case 0x5011:
+        return "Operation Abort!";
+      case 0x5012:
+        return "Play List is not exists!";
+      case 0x5013:
+        return "Unexpected file format!";
+      }
+    }
+    else if (param_1 < 0x5202) {
+      if (param_1 == 0x5201) {
+        return "Time set unsuccessful!";
+      }
+      if (param_1 == 0x5101) {
+        return "Failed open PC file!";
+      }
+      if (param_1 == 0x5102) {
+        return "PC File is empty!";
+      }
+    }
+    else if (param_1 == 0x5245) {
+      return "Packet Process Error";
+    }
+  }
+  else if (param_1 < 0x9001) {
+    if (param_1 == 0x9000) {
+      return "Process OK";
+    }
+    if (param_1 < 0x7b02) {
+      if (param_1 == 0x7b01) {
+        return "Failure in opening a file!";
+      }
+      if (param_1 < 0x7302) {
+        if (param_1 == 0x7301) {
+          return "Failure in creating a folder!";
+        }
+        if (param_1 < 0x6704) {
+          if (param_1 == 0x6703) {
+            return 
+            "Current display file oversized and can not be read. Please use extended reading command!"
+            ;
+          }
+          if (param_1 == 0x6701) {
+            return "No current display file!";
+          }
+          if (param_1 == 0x6702) {
+            return "Failure in opening current display file!";
+          }
+        }
+        else if (param_1 == 0x7201) {
+          return "Format failure!";
+        }
+      }
+      else if (param_1 < 0x7502) {
+        if (param_1 == 0x7501) {
+          return "Failure in moving a file!";
+        }
+        if (param_1 == 0x7401) {
+          return "Failure in renaming a file!";
+        }
+        if (param_1 == 0x7402) {
+          return "Incorrect path in renaming!";
+        }
+      }
+      else if (param_1 == 0x7601) {
+        return "Failure in deleting a file!";
+      }
+    }
+    else if (param_1 < 0x8302) {
+      if (param_1 == 0x8301) {
+        return "Buffer 1 and Buffer 2 displaying. Buffer 3 ready to receive data!";
+      }
+      if (param_1 == 0x7d01) {
+        return "Failure in reading disk information";
+      }
+      if (param_1 == 0x7e01) {
+        return "The file not exist!";
+      }
+    }
+    else {
+      switch(param_1) {
+      case 0x8302:
+        return "Buffer 2 and Buffer 3 displaying. Buffer 1 ready to receive data!";
+      case 0x8303:
+        return "Buffer 3 and Buffer 2 displaying. Buffer 1 ready to receive data!";
+      case 0x8305:
+        return "System not in the unlimited connection display status!";
+      case 0x8306:
+        return "Receiving Buffer full!";
+      case 0x8307:
+        return "Incorrect data format!";
+      }
+    }
+  }
+  else if (param_1 < 0xaa02) {
+    if (param_1 == 0xaa01) {
+      return "The Key for Password is wrong!";
+    }
+    switch(param_1) {
+    case 0x9001:
+      return "Head error of com synchronization!";
+    case 0x9002:
+      return "Sum check error!";
+    case 0x9003:
+      return "Address error!";
+    case 0x9004:
+      return "Major category invalid!";
+    case 0x9005:
+      return "Minor category invalid!";
+    case 0x9006:
+      return "Incorrect data packet length!";
+    case 0x9008:
+      return "File does not exist!";
+    case 0x9009:
+      return "End of file!";
+    case 0x9010:
+      return "Failure in opening the file!";
+    case 0x9011:
+      return "Not support this command";
+    case 0x9012:
+      return "File write-in failure!";
+    case 0x9013:
+      return "The packet size is wrong!";
+    case 0x9014:
+      return "The Packet ID is wrong!";
+    case 0x9015:
+      return "Delete the File failed!";
+    case 0x9030:
+      return "Please login first";
+    case 0x9031:
+      return "Password incorrect!";
+    case 0x9032:
+      return "User name incorrect!";
+    case 0x9033:
+      return "Original password incorrect!";
+    case 0x9035:
+      return "The display is being used by others!";
+    case 0x9036:
+      return "User not exist or permission denied";
+    }
+  }
+  else if (param_1 < 0xc104) {
+    if (param_1 == 0xc103) {
+      return "Please Lock File First!";
+    }
+    if (param_1 < 0xb103) {
+      if (param_1 == 0xb102) {
+        return "HTTP Error!";
+      }
+      if (param_1 == 0xaa02) {
+        return "Data is available only when the display is starting up!";
+      }
+      if (param_1 == 0xb101) {
+        return "FTP Error!";
+      }
+    }
+    else if (param_1 == 0xc102) {
+      return "File Lock By Other User!";
+    }
+  }
+  else if (param_1 < 0xc341) {
+    if (param_1 == 0xc340) {
+      return "Add Task Error!";
+    }
+    if (param_1 == 0xc320) {
+      return "File Sync DB Error!";
+    }
+    if (param_1 == 0xc330) {
+      return "User Error or Password Error!";
+    }
+  }
+  else if (param_1 == 0xffff) {
+    return "CtrlBoard Task Queue Full Error!";
+  }
+  return "Unknow Error!";
+}
+
+ (GhidraScript)  
+INFO  REPORT: Save succeeded for processed file: /czJetFileII.dll (HeadlessAnalyzer)  
