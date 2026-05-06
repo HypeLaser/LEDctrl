@@ -476,6 +476,7 @@ final class RescueModel: ObservableObject {
                 allSteps.append("Style: \(canvasMode.label), \(canvasFont.label), \(canvasPalette.label), speed=\(canvasSpeed.label), hold=\(canvasHold)s, vertical=\(canvasVerticalAligns ? "center" : "off")")
                 let safeText = Self.sanitizeSignText(canvasText)
                 allSteps.append("Program: \(Self.stripZeroWidthMarkup(from: safeText).replacingOccurrences(of: "\n", with: " / "))")
+
                 allSteps.append(contentsOf: try client.sendText(
                     safeText,
                     font: canvasFont.sigmaFont,
@@ -3847,9 +3848,12 @@ final class RescueModel: ObservableObject {
     ) -> SigmaTextOptions {
         switch mode {
         case .fitted:
+            // Fitted mode must use Jump Out for both In and Out so all rows
+            // appear simultaneously on the display. Scrolling effects belong
+            // in Marquee mode.
             return SigmaTextOptions(
-                inEffectCode: inMode.sigmaCode,
-                outEffectCode: outMode.sigmaCode,
+                inEffectCode: SigmaEffect.jumpOutCode,
+                outEffectCode: SigmaEffect.jumpOutCode,
                 speedCode: speed.sigmaCode,
                 horizontalAlignCode: alignment.sigmaCode,
                 verticalAligns: verticalAligns,
@@ -3857,11 +3861,13 @@ final class RescueModel: ObservableObject {
                 wrapsText: true
             )
         case .marquee:
+            // Marquee mode: match Editor v3.99 capture exactly.
+            // Editor uses Random (0x2f) for both In/Out and align '1'.
             return SigmaTextOptions(
-                inEffectCode: UInt8(ascii: "1"),
-                outEffectCode: UInt8(ascii: "1"),
+                inEffectCode: UInt8(0x2f),
+                outEffectCode: UInt8(0x2f),
                 speedCode: speed.sigmaCode,
-                horizontalAlignCode: alignment.sigmaCode,
+                horizontalAlignCode: UInt8(ascii: "1"),
                 verticalAligns: verticalAligns,
                 holdSeconds: holdSeconds,
                 wrapsText: false

@@ -707,7 +707,7 @@ public enum SigmaFont: String, CaseIterable, Sendable {
         case .normal5:
             return 16
         case .normal7:
-            return 11
+            return 13
         case .normal14:
             return 5
         case .normal15, .normal16:
@@ -767,10 +767,14 @@ private func makeNmg(
     let formattedText = formatText(safeText, font: font, wrapsText: options.wrapsText)
     let rows = formattedText.split(separator: "\r", omittingEmptySubsequences: false).map(String.init)
     let isMultiRow = rows.count > 1
-    // Use 'b' mode for time tokens or multi-row (Editor uses 'b' for all multi-row)
-    let autoTypesetCode: UInt8 = (hasTimeTokens || isMultiRow) ? UInt8(ascii: "b") : UInt8(ascii: "a")
-    // 'b' mode uses 3-digit hold; 'a' mode uses 4-digit hold
-    let hold = (hasTimeTokens || isMultiRow) ? String(format: "%03d", options.holdSeconds) : String(format: "%04d", options.holdSeconds)
+    // Mode selection:
+    // 'a' = auto-typeset OFF, text scrolls as one continuous unit (Marquee)
+    // 'b' = auto-typeset ON, sign formats text into fitted pages (Fitted)
+    // Time tokens ALWAYS require 'b' mode for dynamic updates.
+    let useBMode = hasTimeTokens || options.wrapsText
+    let autoTypesetCode: UInt8 = useBMode ? UInt8(ascii: "b") : UInt8(ascii: "a")
+    // Vendor ALWAYS uses 4-digit hold regardless of mode.
+    let hold = String(format: "%04d", options.holdSeconds)
     let renderedText = renderMultiRowBytes(rows: rows, defaultFont: font, options: options, isMultiRow: isMultiRow)
 
     var header = Data([
@@ -778,9 +782,11 @@ private func makeNmg(
         0x02, 0x41, 0x0f, 0x18, 0x05, 0x31, 0x31, 0x30,
         0x30, 0x31, 0x1b, 0x30, autoTypesetCode
     ])
-    // Both 'a' and 'b' modes require initialization bytes 18 01 09
-    header.append(contentsOf: [0x18, 0x01, 0x09])
-    header.append(contentsOf: [0x08, 0x31, 0x0e, options.speedCode])
+    // 'b' mode requires initialization bytes 18 01 09; 'a' mode does not.
+    if useBMode {
+        header.append(contentsOf: [0x18, 0x01, 0x09])
+    }
+    header.append(contentsOf: [0x08, 0x31, 0x0e, UInt8(ascii: "2")])
     header.append(contentsOf: hold.utf8)
     header.append(contentsOf: [
         0x1f, editorFontCompat ? editorFontSelector(for: font) : nmgFontCode(for: font), 0x1e,
@@ -799,11 +805,10 @@ private func makeNmg(
     return header
 }
 
-/// Font code for NMG header. Vendor captures show Normal7 uses '0'.
+/// Font code for NMG header. Vendor captures show both Normal5 and Normal7 use '0'.
 private func nmgFontCode(for font: SigmaFont) -> UInt8 {
     switch font {
-    case .normal7: return UInt8(ascii: "0")
-    case .normal5: return UInt8(ascii: "9") // Normal5 is last in font list
+    case .normal5, .normal7: return UInt8(ascii: "0")
     default: return font.code
     }
 }
@@ -811,7 +816,10 @@ private func nmgFontCode(for font: SigmaFont) -> UInt8 {
 private func makeEditorNmg(text: String, font: SigmaFont, color: SigmaColor, options: SigmaTextOptions) -> Data {
     let safeText = sanitizeSigmaText(text)
     let hold = String(format: "%04d", options.holdSeconds)
-    let autoTypesetCode = options.wrapsText ? UInt8(ascii: "b") : UInt8(ascii: "a")
+    let hasTimeTokens = safeText.contains("{hour}") || safeText.contains("{minute}") ||
+                        safeText.contains("{second}") || safeText.contains("{hhmm24}") ||
+                        safeText.contains("{hhmm12}")
+    let autoTypesetCode = hasTimeTokens ? UInt8(ascii: "b") : UInt8(ascii: "a")
     let formattedText = formatText(safeText, font: font, wrapsText: options.wrapsText)
     let renderedText = renderMessageBytes(formattedText)
     let displayLength = UInt16(clamping: editorDisplayLength(formattedText))
@@ -832,7 +840,7 @@ private func makeEditorNmg(text: String, font: SigmaFont, color: SigmaColor, opt
     body.append(contentsOf: "NoteNmg file version:v3.99".utf8)
 
     let table = editorPostTextTableTemplate()
-    let tableStart = body.count + 16 + 102
+    let tableStart = body.count + 17 + 102
     let tableOffset = UInt16(clamping: tableStart - 18)
 
     var data = Data()
@@ -841,7 +849,7 @@ private func makeEditorNmg(text: String, font: SigmaFont, color: SigmaColor, opt
     data.append(contentsOf: le16(tableOffset))
     data.append(contentsOf: [0x00, 0x00])
     data.append(contentsOf: le16(displayLength))
-    data.append(contentsOf: [0x00, 0x00, 0x00, 0x00])
+    data.append(contentsOf: [0x00, 0x00, 0x00, 0x00, 0x00])
     data.append(body)
     if data.count < tableStart {
         data.append(contentsOf: repeatElement(UInt8(ascii: " "), count: tableStart - data.count))
@@ -851,13 +859,14 @@ private func makeEditorNmg(text: String, font: SigmaFont, color: SigmaColor, opt
 }
 
 private func editorFontSelector(for font: SigmaFont) -> UInt8 {
+    // Editor NMG uses size codes: 0x30='0' for Normal5, 0x31='1' for Normal7
     switch font {
     case .normal5:
         return UInt8(ascii: "0")
     case .normal7:
-        return UInt8(ascii: "3")
+        return UInt8(ascii: "1")
     default:
-        return font.code
+        return font.sizeCode
     }
 }
 
@@ -949,7 +958,18 @@ private func normalizeSigmaText(_ value: String) -> String {
 }
 
 private func formatText(_ text: String, font: SigmaFont, wrapsText: Bool) -> String {
+    // Check for explicit newlines first — if the user provided multiple rows,
+    // preserve them regardless of mode. The sign handles layout.
+    let hasExplicitNewlines = text.contains("\n") || text.contains("\r")
+    if hasExplicitNewlines {
+        return text
+            .replacingOccurrences(of: "\r\n", with: "\r")
+            .replacingOccurrences(of: "\n", with: "\r")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     if !wrapsText {
+        // Single line in Marquee mode — collapse everything to one line
         return text
             .replacingOccurrences(of: "\r\n", with: " ")
             .replacingOccurrences(of: "\r", with: " ")
@@ -957,37 +977,30 @@ private func formatText(_ text: String, font: SigmaFont, wrapsText: Bool) -> Str
             .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
+    // Fitted mode with a single long line (no explicit newlines):
+    // word-wrap to display width so the sign can auto-typeset into pages.
     let maxCharacters = font.maxCharactersPerLine
-    let requestedLines = text
-        .replacingOccurrences(of: "\r\n", with: "\n")
-        .replacingOccurrences(of: "\r", with: "\n")
-        .split(separator: "\n", omittingEmptySubsequences: false)
+    let words = text
+        .split(separator: " ", omittingEmptySubsequences: true)
         .map(String.init)
-
     var lines: [String] = []
-    for requestedLine in requestedLines {
-        let words = requestedLine
-            .split(separator: " ", omittingEmptySubsequences: true)
-            .map(String.init)
-        var current = ""
-        for word in words {
-            let displayWidth = messageDisplayWidth(word)
-            if current.isEmpty {
-                current = clipMessageWord(word, maxWidth: maxCharacters)
-            } else if messageDisplayWidth(current) + 1 + displayWidth <= maxCharacters {
-                current += " " + word
-            } else {
-                lines.append(current + " ")
-                current = clipMessageWord(word, maxWidth: maxCharacters)
-            }
-        }
-        if !current.isEmpty {
-            lines.append(current)
-        } else if lines.isEmpty || requestedLine.isEmpty {
-            lines.append("")
+    var current = ""
+    for word in words {
+        let displayWidth = messageDisplayWidth(word)
+        if current.isEmpty {
+            current = clipMessageWord(word, maxWidth: maxCharacters)
+        } else if messageDisplayWidth(current) + 1 + displayWidth <= maxCharacters {
+            current += " " + word
+        } else {
+            lines.append(current + " ")
+            current = clipMessageWord(word, maxWidth: maxCharacters)
         }
     }
-    return lines.prefix(7).joined(separator: "\r")
+    if !current.isEmpty {
+        lines.append(current)
+    }
+    // No .prefix(7) limit — let the sign paginate however many rows it needs.
+    return lines.joined(separator: "\r")
 }
 
 private func renderMessageBytes(_ text: String) -> Data {
@@ -1009,53 +1022,85 @@ private func renderMessageBytes(_ text: String) -> Data {
 }
 
 private func renderMultiRowBytes(rows: [String], defaultFont: SigmaFont, options: SigmaTextOptions? = nil, isMultiRow: Bool = false) -> Data {
+    guard let opts = options else {
+        // Fallback: plain rendering with no options context.
+        return renderFittedBytes(rows: rows, defaultFont: defaultFont)
+    }
+    return opts.wrapsText
+        ? renderFittedBytes(rows: rows, defaultFont: defaultFont)
+        : renderMarqueeBytes(rows: rows, defaultFont: defaultFont)
+}
+
+// MARK: - Fitted mode rendering
+// Shows all rows simultaneously on one page. Uses plain 0x0d separators
+// and 'b' auto-typeset mode so the sign paginates correctly.
+private func renderFittedBytes(rows: [String], defaultFont: SigmaFont) -> Data {
     var rendered = Data()
     for (rowIndex, rowText) in rows.enumerated() {
-        // Check if this is a countdown row
-        if let cdInfo = extractCountdownInfo(rowText) {
-            let prefix = encodeCountdownPrefix(
-                month: cdInfo.month, day: cdInfo.day, year: cdInfo.year,
-                hour: cdInfo.hour, minute: cdInfo.minute, second: cdInfo.second
-            )
-            if rowIndex > 0 {
-                // Countdown row separator: 0x0D 0x18 0x30 0x0A 0x33 <prefix>
-                rendered.append(contentsOf: [0x0d, 0x18, 0x30, 0x0a, 0x33])
-            } else {
-                // First countdown row prefix: 0x0A 0x33
-                rendered.append(contentsOf: [0x0a, 0x33])
-            }
-            rendered.append(contentsOf: prefix)
-            // Direction suffix
-            let dirCode = cdInfo.dir == "up" ? "00100000" : "00101000"
-            rendered.append(contentsOf: cdInfo.label.utf8)
-            rendered.append(contentsOf: dirCode.utf8)
-            // Render remaining text (tokens like %d, %h, %m, %s)
-            let remainingText = stripCountdownMarker(rowText)
-            rendered.append(renderMessageBytes(remainingText))
-            continue
-        }
-
         if rowIndex > 0 {
-            if isMultiRow, let opts = options {
-                // Editor multi-row separator format for simultaneous display
-                // Format: 0d 18 03 0b 40 <row_ascii> 0a 49 <in> 0a 4f <out>
-                rendered.append(contentsOf: [0x0d, 0x18, 0x03, 0x0b, 0x40])
-                rendered.append(UInt8(ascii: "0") + UInt8(rowIndex))
-                rendered.append(contentsOf: [0x0a, 0x49, opts.inEffectCode, 0x0a, 0x4f, opts.outEffectCode])
-            } else {
-                // Single-row or mid-scroll font change: 0x0D 0x0E followed by param and font override
-                rendered.append(contentsOf: [0x0d, 0x0e])
-                let param = String(format: "2%04d", (rowIndex - 1) * 2)
-                rendered.append(contentsOf: param.utf8)
-                let rowFont = detectRowFont(rowText, defaultFont: defaultFont)
-                rendered.append(contentsOf: [0x1a, rowFont.sizeCode])
-            }
+            rendered.append(0x0d)
         }
-        // Render row text, stripping the font token since we already emitted the override
-        let cleanedRow = stripLeadingFontToken(rowText)
+        var cleanedRow = stripTrailingMarkupTokens(rowText)
+        if rowIndex == 0 {
+            cleanedRow = stripLeadingColorToken(cleanedRow)
+        }
+        cleanedRow = stripLeadingFontToken(cleanedRow)
         rendered.append(renderMessageBytes(cleanedRow))
     }
     return rendered
+}
+
+// MARK: - Marquee mode rendering
+// Continuous scroll with gaps between rows.
+// The Editor v3.99 capture (editor-marquee-continuous-20260506-004922.pcap)
+// shows the separator between rows is plain 0x0D — nothing else.
+// Verified: 5 rows, all separated by single 0x0d bytes, mode 'a'.
+private func renderMarqueeBytes(rows: [String], defaultFont: SigmaFont) -> Data {
+    var rendered = Data()
+    for (rowIndex, rowText) in rows.enumerated() {
+        if rowIndex > 0 {
+            // Editor-correct separator: plain CR only.
+            rendered.append(0x0d)
+        }
+        var cleanedRow = stripTrailingMarkupTokens(rowText)
+        if rowIndex == 0 {
+            cleanedRow = stripLeadingColorToken(cleanedRow)
+        }
+        cleanedRow = stripLeadingFontToken(cleanedRow)
+        rendered.append(renderMessageBytes(cleanedRow))
+    }
+    return rendered
+}
+
+/// Strip trailing zero-width markup tokens (e.g. {red}, {font7}) that have no
+/// visible text after them. These are artifacts of canvas serialization.
+private func stripTrailingMarkupTokens(_ text: String) -> String {
+    var result = text
+    while true {
+        guard let openIndex = result.lastIndex(of: "{"),
+              openIndex == result.startIndex || result[result.index(before: openIndex)] != "\\" else { break }
+        let afterOpen = result.index(after: openIndex)
+        guard let closeIndex = result[afterOpen...].firstIndex(of: "}") else { break }
+        guard closeIndex == result.index(before: result.endIndex) else { break }
+        let token = String(result[afterOpen..<closeIndex]).lowercased()
+        guard sigmaMarkup[token] != nil else { break }
+        result = String(result[..<openIndex])
+    }
+    return result
+}
+
+/// Strip a leading colour token (e.g. {red}, {green}) from the start of a row.
+/// The NMG header already sets the global colour, so row 1 does not need an
+/// inline token at the very start of the text body.
+private func stripLeadingColorToken(_ text: String) -> String {
+    guard text.hasPrefix("{"),
+          let end = text.firstIndex(of: "}"),
+          end != text.endIndex else { return text }
+    let token = String(text[text.index(after: text.startIndex)..<end]).lowercased()
+    let colorTokens = Set(["red", "green", "orange", "yellow", "bands", "characters", "diagonal_down", "diagonal_up"])
+    guard colorTokens.contains(token) else { return text }
+    let afterEnd = text.index(after: end)
+    return String(text[afterEnd...])
 }
 
 private func extractCountdownInfo(_ text: String) -> (month: Int, day: Int, year: Int, hour: Int, minute: Int, second: Int, dir: String, label: String)? {
@@ -1278,8 +1323,10 @@ private func makeSequenceFile(entries: [SigmaSequenceEntry]) -> Data {
         0x01, 0x01, 0x01, 0x01
     ])
     for entry in entries {
-        data.append(contentsOf: [0xf8, 0x00])
+        // Vendor format: [length: 2 bytes] [flags: 2 bytes] [filename: 12 bytes]
+        // No 0xf8 0x00 prefix (that was from an incorrect guess).
         data.append(contentsOf: le16(UInt16(clamping: entry.length)))
+        data.append(contentsOf: [0x01, 0x01])
         data.append(contentsOf: fixedBytes(entry.filename, count: 12))
     }
     return data
