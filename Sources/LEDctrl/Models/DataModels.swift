@@ -46,6 +46,7 @@ struct MessageRow: Identifiable, Hashable {
     var outMode: SigmaEffect
     var speed: SigmaSpeed
     var pauseSeconds: Int
+    var useCustomEffects: Bool
 
     init(
         id: UUID = UUID(),
@@ -58,7 +59,8 @@ struct MessageRow: Identifiable, Hashable {
         inMode: SigmaEffect,
         outMode: SigmaEffect,
         speed: SigmaSpeed,
-        pauseSeconds: Int
+        pauseSeconds: Int,
+        useCustomEffects: Bool = false
     ) {
         self.id = id
         self.order = order
@@ -71,6 +73,30 @@ struct MessageRow: Identifiable, Hashable {
         self.outMode = outMode
         self.speed = speed
         self.pauseSeconds = pauseSeconds
+        self.useCustomEffects = useCustomEffects
+    }
+}
+
+/// Per-row Effects-mode override. `enabled = false` means the row uses the
+/// global In/Out from the canvas-level pickers. When `enabled = true`,
+/// `inMode` / `outMode` are emitted as inline effect-change bytes before
+/// that row in the wire output.
+struct RowEffectOverride: Identifiable, Hashable {
+    let id: UUID
+    var enabled: Bool
+    var inMode: SigmaEffect
+    var outMode: SigmaEffect
+
+    init(
+        id: UUID = UUID(),
+        enabled: Bool = false,
+        inMode: SigmaEffect = SigmaEffect.all[1],
+        outMode: SigmaEffect = SigmaEffect.all[1]
+    ) {
+        self.id = id
+        self.enabled = enabled
+        self.inMode = inMode
+        self.outMode = outMode
     }
 }
 

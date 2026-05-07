@@ -79,7 +79,10 @@ do {
         holdSeconds: holdSeconds,
         wrapsText: wrapsText
     )
-    let steps = try client.sendText(words.joined(separator: " "), font: font, color: color, options: options)
+    let messageText = words.joined(separator: " ")
+        .replacingOccurrences(of: "\\r", with: "\r")
+        .replacingOccurrences(of: "\\n", with: "\n")
+    let steps = try client.sendText(messageText, font: font, color: color, options: options)
     for step in steps {
         print(step)
     }

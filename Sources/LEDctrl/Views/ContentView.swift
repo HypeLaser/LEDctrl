@@ -627,14 +627,14 @@ struct MessagesView: View {
                                 Text(effect.name).tag(effect)
                             }
                         }
-                        .disabled(model.messageMode == .marquee)
+                        .disabled(model.messageMode != .slides)
 
                         Picker("Out", selection: $model.outMode) {
                             ForEach(SigmaEffect.all) { effect in
                                 Text(effect.name).tag(effect)
                             }
                         }
-                        .disabled(model.messageMode == .marquee)
+                        .disabled(model.messageMode != .slides)
 
                         HStack(alignment: .center, spacing: 10) {
                             Picker("Speed", selection: $model.speed) {
@@ -642,15 +642,38 @@ struct MessagesView: View {
                                     Text(speed.label).tag(speed)
                                 }
                             }
+                            .disabled(model.messageMode != .slides)
                             Stepper("Hold \(model.pauseSeconds)s", value: $model.pauseSeconds, in: 0...120)
                         }
 
-                        if model.messageMode == .marquee {
-                            Text("Marquee mode sends Move Left for both In and Out.")
+                        switch model.messageMode {
+                        case .marquee:
+                            Text("Marquee scrolls all rows continuously; In/Out/Speed unused.")
                                 .font(.system(.caption2, design: .monospaced))
                                 .foregroundStyle(.secondary)
+                        case .fitted:
+                            Text("Pages auto-paginate long content; In/Out/Speed unused.")
+                                .font(.system(.caption2, design: .monospaced))
+                                .foregroundStyle(.secondary)
+                        case .slides:
+                            EmptyView()
                         }
                     }
+                }
+
+                if model.messageMode == .slides {
+                    GroupBox("Per-Row Effects") {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Override the global In/Out for individual rows.")
+                                .font(.system(.caption2, design: .monospaced))
+                                .foregroundStyle(.secondary)
+                            ForEach(Array(model.rowEffects.enumerated()), id: \.element.id) { index, _ in
+                                rowEffectRow(index: index)
+                            }
+                        }
+                    }
+                    .onAppear { model.syncRowEffectsToCanvasLines() }
+                    .onChange(of: model.messageText) { model.syncRowEffectsToCanvasLines() }
                 }
 
                 VStack(alignment: .leading, spacing: 6) {
@@ -741,6 +764,65 @@ struct MessagesView: View {
     private func toolButton(_ title: String, action: @escaping () -> Void) -> some View {
         Button(title, action: action)
             .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private func rowEffectRow(index: Int) -> some View {
+        let enabledBinding = Binding<Bool>(
+            get: {
+                guard index < model.rowEffects.count else { return false }
+                return model.rowEffects[index].enabled
+            },
+            set: { newValue in
+                guard index < model.rowEffects.count else { return }
+                model.rowEffects[index].enabled = newValue
+            }
+        )
+        let inBinding = Binding<SigmaEffect>(
+            get: {
+                guard index < model.rowEffects.count else { return SigmaEffect.all[1] }
+                return model.rowEffects[index].inMode
+            },
+            set: { newValue in
+                guard index < model.rowEffects.count else { return }
+                model.rowEffects[index].inMode = newValue
+            }
+        )
+        let outBinding = Binding<SigmaEffect>(
+            get: {
+                guard index < model.rowEffects.count else { return SigmaEffect.all[1] }
+                return model.rowEffects[index].outMode
+            },
+            set: { newValue in
+                guard index < model.rowEffects.count else { return }
+                model.rowEffects[index].outMode = newValue
+            }
+        )
+
+        let total = model.rowEffects.count
+        let isEdge = (index == 0 || index == total - 1)
+
+        VStack(alignment: .leading, spacing: 4) {
+            Toggle("Row \(index + 1) override", isOn: enabledBinding)
+                .font(.system(.caption, design: .monospaced))
+            if enabledBinding.wrappedValue {
+                Picker("In", selection: inBinding) {
+                    ForEach(SigmaEffect.all) { effect in
+                        Text(effect.name).tag(effect)
+                    }
+                }
+                .controlSize(.small)
+                if isEdge {
+                    Picker("Out", selection: outBinding) {
+                        ForEach(SigmaEffect.all) { effect in
+                            Text(effect.name).tag(effect)
+                        }
+                    }
+                    .controlSize(.small)
+                }
+            }
+        }
+        .padding(.vertical, 2)
     }
 }
 

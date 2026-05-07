@@ -211,13 +211,23 @@ enum AppPalette: String, CaseIterable, Identifiable {
 enum MessageMode: String, CaseIterable, Identifiable, Sendable {
     case fitted
     case marquee
+    case slides
 
     var id: String { rawValue }
 
     var label: String {
         switch self {
-        case .fitted: return "Fitted"
+        case .fitted: return "Pages"
         case .marquee: return "Marquee"
+        case .slides: return "Effects"
+        }
+    }
+
+    var detail: String {
+        switch self {
+        case .fitted: return "Auto-paginate long content; no In/Out effects"
+        case .marquee: return "All rows joined into one continuous scroll"
+        case .slides: return "Each row is its own page with In/Out effects"
         }
     }
 }

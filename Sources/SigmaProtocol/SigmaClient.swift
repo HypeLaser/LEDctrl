@@ -993,13 +993,45 @@ public struct SigmaBinaryProgramEntry: Sendable {
 public struct SigmaTextOptions: Sendable {
     public static let `default` = SigmaTextOptions()
 
+    public enum RenderMode: Sendable {
+        /// All rows shown simultaneously on one fitted page (mode 'b'). Whole
+        /// page gets one In/Out effect.
+        case stack
+        /// All rows joined into one continuous scrolling line (mode 'a').
+        case marquee
+        /// Each row is its own page with per-row In/Out (mode 'a' +
+        /// 0x0d separators, vendor M1 wire format).
+        case slides
+    }
+
+    public struct RowEffect: Sendable, Hashable {
+        public let inEffectCode: UInt8?
+        public let outEffectCode: UInt8?
+        public init(inEffectCode: UInt8? = nil, outEffectCode: UInt8? = nil) {
+            self.inEffectCode = inEffectCode
+            self.outEffectCode = outEffectCode
+        }
+    }
+
     public var inEffectCode: UInt8
     public var outEffectCode: UInt8
     public var speedCode: UInt8
     public var horizontalAlignCode: UInt8
     public var verticalAligns: Bool
     public var holdSeconds: Int
-    public var wrapsText: Bool
+    public var renderMode: RenderMode
+
+    /// Effects-mode per-row override array. nil = use global In/Out for
+    /// every row. When set, length should match row count; nil entries fall
+    /// back to the global In/Out.
+    public var perRowEffects: [RowEffect?]?
+
+    /// Legacy boolean shim — true ⇔ Stack, false ⇔ Marquee. Slides uses
+    /// the new initializer.
+    public var wrapsText: Bool {
+        get { renderMode == .stack }
+        set { renderMode = newValue ? .stack : .marquee }
+    }
 
     public init(
         inEffectCode: UInt8 = UInt8(ascii: "0"),
@@ -1016,7 +1048,28 @@ public struct SigmaTextOptions: Sendable {
         self.horizontalAlignCode = horizontalAlignCode
         self.verticalAligns = verticalAligns
         self.holdSeconds = max(0, min(9999, holdSeconds))
-        self.wrapsText = wrapsText
+        self.renderMode = wrapsText ? .stack : .marquee
+        self.perRowEffects = nil
+    }
+
+    public init(
+        inEffectCode: UInt8,
+        outEffectCode: UInt8,
+        speedCode: UInt8,
+        horizontalAlignCode: UInt8 = UInt8(ascii: "0"),
+        verticalAligns: Bool = true,
+        holdSeconds: Int,
+        renderMode: RenderMode,
+        perRowEffects: [RowEffect?]? = nil
+    ) {
+        self.inEffectCode = inEffectCode
+        self.outEffectCode = outEffectCode
+        self.speedCode = speedCode
+        self.horizontalAlignCode = horizontalAlignCode
+        self.verticalAligns = verticalAligns
+        self.holdSeconds = max(0, min(9999, holdSeconds))
+        self.renderMode = renderMode
+        self.perRowEffects = perRowEffects
     }
 }
 
@@ -1110,18 +1163,15 @@ private func makeNmg(
     editorFontCompat: Bool
 ) -> Data {
     let safeText = sanitizeSigmaText(text)
-    // Detect time tokens to enable dynamic update mode ('b')
-    let hasTimeTokens = safeText.contains("{hour}") || safeText.contains("{minute}") ||
-                       safeText.contains("{second}") || safeText.contains("{hhmm24}") ||
-                       safeText.contains("{hhmm12}")
     let formattedText = formatText(safeText, font: font, wrapsText: options.wrapsText)
     let rows = formattedText.split(separator: "\r", omittingEmptySubsequences: false).map(String.init)
     let isMultiRow = rows.count > 1
     // Mode selection:
     // 'a' = auto-typeset OFF, text scrolls as one continuous unit (Marquee)
     // 'b' = auto-typeset ON, sign formats text into fitted pages (Fitted)
-    // Time tokens ALWAYS require 'b' mode for dynamic updates.
-    let useBMode = hasTimeTokens || options.wrapsText
+    // Caller controls mode via wrapsText. Time/countdown tokens render in
+    // either mode; sign refreshes them in place during the marquee scroll.
+    let useBMode = options.renderMode == .stack
     let autoTypesetCode: UInt8 = useBMode ? UInt8(ascii: "b") : UInt8(ascii: "a")
     // Vendor ALWAYS uses 4-digit hold regardless of mode.
     let hold = String(format: "%04d", options.holdSeconds)
@@ -1145,7 +1195,9 @@ private func makeNmg(
         0x30
     ])
     header.append(renderedText)
-    header.append(0x0d)
+    if renderedText.last != 0x0d {
+        header.append(0x0d)
+    }
     header.append(0x04)
     header.append(contentsOf: "NoteNmg file version:v3.99".utf8)
     if header.count < 195 {
@@ -1168,7 +1220,7 @@ private func makeEditorNmg(text: String, font: SigmaFont, color: SigmaColor, opt
     let hold = String(format: "%04d", options.holdSeconds)
     let hasTimeTokens = safeText.contains("{hour}") || safeText.contains("{minute}") ||
                         safeText.contains("{second}") || safeText.contains("{hhmm24}") ||
-                        safeText.contains("{hhmm12}")
+                        safeText.contains("{hhmm12}") || safeText.lowercased().contains("{cd:")
     let autoTypesetCode = hasTimeTokens ? UInt8(ascii: "b") : UInt8(ascii: "a")
     let formattedText = formatText(safeText, font: font, wrapsText: options.wrapsText)
     let renderedText = renderMessageBytes(formattedText)
@@ -1185,7 +1237,11 @@ private func makeEditorNmg(text: String, font: SigmaFont, color: SigmaColor, opt
         0x1c, color.code, 0x1d, 0x30, 0x1a, font.sizeCode, 0x07, 0x30
     ])
     body.append(renderedText)
-    body.append(0x0d)
+    // Avoid double 0x0d when last row ended with a self-terminating token
+    // (e.g. {cd:...}); duplicate 0x0d emits a blank trailing page.
+    if renderedText.last != 0x0d {
+        body.append(0x0d)
+    }
     body.append(0x04)
     body.append(contentsOf: "NoteNmg file version:v3.99".utf8)
 
@@ -1225,7 +1281,13 @@ private func editorDisplayLength(_ text: String) -> Int {
     var index = text.startIndex
     while index < text.endIndex {
         if text[index] == "{", let end = text[index...].firstIndex(of: "}") {
-            let token = String(text[text.index(after: index)..<end]).lowercased()
+            let inner = String(text[text.index(after: index)..<end])
+            if inner.lowercased().hasPrefix("cd:") {
+                length += countdownLabelDisplayWidth(inner)
+                index = text.index(after: end)
+                continue
+            }
+            let token = inner.lowercased()
             if sigmaMarkup[token] != nil {
                 length += tokenDisplayWidth[token] ?? 0
                 index = text.index(after: end)
@@ -1353,12 +1415,19 @@ private func formatText(_ text: String, font: SigmaFont, wrapsText: Bool) -> Str
     return lines.joined(separator: "\r")
 }
 
-private func renderMessageBytes(_ text: String) -> Data {
+func renderMessageBytes(_ text: String) -> Data {
     var rendered = Data()
     var index = text.startIndex
     while index < text.endIndex {
         if text[index] == "{", let end = text[index...].firstIndex(of: "}") {
-            let token = String(text[text.index(after: index)..<end]).lowercased()
+            let inner = String(text[text.index(after: index)..<end])
+            if inner.lowercased().hasPrefix("cd:"),
+               let bytes = renderCountdownMarker(inner) {
+                rendered.append(contentsOf: bytes)
+                index = text.index(after: end)
+                continue
+            }
+            let token = inner.lowercased()
             if let bytes = sigmaMarkup[token] {
                 rendered.append(contentsOf: bytes)
                 index = text.index(after: end)
@@ -1371,60 +1440,87 @@ private func renderMessageBytes(_ text: String) -> Data {
     return rendered
 }
 
+/// Approximate visible width of a `{cd:...}` marker once the sign has rendered
+/// the live counter — `%d/%h/%m/%s` placeholders each render as ~2 digits, the
+/// same width as the placeholder itself, so the raw label length is a
+/// reasonable proxy.
+func countdownLabelDisplayWidth(_ inner: String) -> Int {
+    guard inner.lowercased().hasPrefix("cd:") else { return 0 }
+    let body = String(inner.dropFirst(3))
+    let parts = body.split(separator: ":", omittingEmptySubsequences: false)
+    guard parts.count >= 8 else { return 0 }
+    var labelStart = 7
+    if parts.count >= 9,
+       let parsed = Double(parts[7]),
+       parsed >= 0.1, parsed <= 9.9 {
+        labelStart = 8
+    }
+    return parts[labelStart...].joined(separator: ":").count
+}
+
+/// Parse inline `{cd:M:D:Y:h:m:s:dir[:mult]:label}` marker and return
+/// fully-encoded countdown wire token bytes.
+///
+/// `dir` is `"up"` or `"down"`. Optional `mult` (e.g. `"1.5"`, `"2.0"`) speeds
+/// up the counter. `label` is a printf-style format string with `%d` (days),
+/// `%h` (hours), `%m` (minutes), `%s` (seconds) — sign firmware substitutes
+/// live values into the string.
+private func renderCountdownMarker(_ inner: String) -> [UInt8]? {
+    guard inner.lowercased().hasPrefix("cd:") else { return nil }
+    let body = String(inner.dropFirst(3))
+    let parts = body.split(separator: ":", omittingEmptySubsequences: false)
+    guard parts.count >= 8 else { return nil }
+    guard let month = Int(parts[0]),
+          let day = Int(parts[1]),
+          let year = Int(parts[2]),
+          let hour = Int(parts[3]),
+          let minute = Int(parts[4]),
+          let second = Int(parts[5]) else { return nil }
+    let dirStr = String(parts[6]).lowercased()
+    let countDown = (dirStr != "up")
+
+    var multiplier = 1.0
+    var labelStart = 7
+    if parts.count >= 9,
+       let parsed = Double(parts[7]),
+       parsed >= 0.1, parsed <= 9.9 {
+        multiplier = parsed
+        labelStart = 8
+    }
+    let label = parts[labelStart...].joined(separator: ":")
+
+    var bytes = encodeCountdownToken(
+        month: month, day: day, year: year,
+        hour: hour, minute: minute, second: second,
+        multiplier: multiplier,
+        countDown: countDown,
+        format: label
+    )
+    // Strip the token's trailing 0x0d. Row builder owns row separation;
+    // a mid-line 0x0d in marquee mode causes a page break + blank.
+    if bytes.last == 0x0d { bytes.removeLast() }
+    return bytes
+}
+
 private func renderMultiRowBytes(rows: [String], defaultFont: SigmaFont, options: SigmaTextOptions? = nil, isMultiRow: Bool = false) -> Data {
     guard let opts = options else {
-        // Fallback: plain rendering with no options context.
         return renderFittedBytes(rows: rows, defaultFont: defaultFont)
     }
-    return opts.wrapsText
-        ? renderFittedBytes(rows: rows, defaultFont: defaultFont)
-        : renderMarqueeBytes(rows: rows, defaultFont: defaultFont)
+    switch opts.renderMode {
+    case .stack:   return renderFittedBytes(rows: rows, defaultFont: defaultFont)
+    case .marquee: return renderMarqueeBytes(rows: rows, defaultFont: defaultFont)
+    case .slides:  return renderSlidesBytes(rows: rows, defaultFont: defaultFont, perRowEffects: opts.perRowEffects)
+    }
 }
 
-// MARK: - Fitted mode rendering
-// Shows all rows simultaneously on one page. Uses plain 0x0d separators
-// and 'b' auto-typeset mode so the sign paginates correctly.
-private func renderFittedBytes(rows: [String], defaultFont: SigmaFont) -> Data {
-    var rendered = Data()
-    for (rowIndex, rowText) in rows.enumerated() {
-        if rowIndex > 0 {
-            rendered.append(0x0d)
-        }
-        var cleanedRow = stripTrailingMarkupTokens(rowText)
-        if rowIndex == 0 {
-            cleanedRow = stripLeadingColorToken(cleanedRow)
-        }
-        cleanedRow = stripLeadingFontToken(cleanedRow)
-        rendered.append(renderMessageBytes(cleanedRow))
-    }
-    return rendered
-}
-
-// MARK: - Marquee mode rendering
-// Continuous scroll with gaps between rows.
-// The Editor v3.99 capture (editor-marquee-continuous-20260506-004922.pcap)
-// shows the separator between rows is plain 0x0D — nothing else.
-// Verified: 5 rows, all separated by single 0x0d bytes, mode 'a'.
-private func renderMarqueeBytes(rows: [String], defaultFont: SigmaFont) -> Data {
-    var rendered = Data()
-    for (rowIndex, rowText) in rows.enumerated() {
-        if rowIndex > 0 {
-            // Editor-correct separator: plain CR only.
-            rendered.append(0x0d)
-        }
-        var cleanedRow = stripTrailingMarkupTokens(rowText)
-        if rowIndex == 0 {
-            cleanedRow = stripLeadingColorToken(cleanedRow)
-        }
-        cleanedRow = stripLeadingFontToken(cleanedRow)
-        rendered.append(renderMessageBytes(cleanedRow))
-    }
-    return rendered
-}
+// Pages, Marquee, Effects renderers moved to:
+//   Sources/SigmaProtocol/Renderers/PagesRenderer.swift   (LOCKED)
+//   Sources/SigmaProtocol/Renderers/MarqueeRenderer.swift (LOCKED)
+//   Sources/SigmaProtocol/Renderers/EffectsRenderer.swift (active dev)
 
 /// Strip trailing zero-width markup tokens (e.g. {red}, {font7}) that have no
 /// visible text after them. These are artifacts of canvas serialization.
-private func stripTrailingMarkupTokens(_ text: String) -> String {
+func stripTrailingMarkupTokens(_ text: String) -> String {
     var result = text
     while true {
         guard let openIndex = result.lastIndex(of: "{"),
@@ -1434,6 +1530,9 @@ private func stripTrailingMarkupTokens(_ text: String) -> String {
         guard closeIndex == result.index(before: result.endIndex) else { break }
         let token = String(result[afterOpen..<closeIndex]).lowercased()
         guard sigmaMarkup[token] != nil else { break }
+        // Only strip zero-width tokens (colors, fonts, effects). Time/date
+        // tokens render visible digits and must survive end-of-row.
+        guard (tokenDisplayWidth[token] ?? 0) == 0 else { break }
         result = String(result[..<openIndex])
     }
     return result
@@ -1442,7 +1541,7 @@ private func stripTrailingMarkupTokens(_ text: String) -> String {
 /// Strip a leading colour token (e.g. {red}, {green}) from the start of a row.
 /// The NMG header already sets the global colour, so row 1 does not need an
 /// inline token at the very start of the text body.
-private func stripLeadingColorToken(_ text: String) -> String {
+func stripLeadingColorToken(_ text: String) -> String {
     guard text.hasPrefix("{"),
           let end = text.firstIndex(of: "}"),
           end != text.endIndex else { return text }
@@ -1451,24 +1550,6 @@ private func stripLeadingColorToken(_ text: String) -> String {
     guard colorTokens.contains(token) else { return text }
     let afterEnd = text.index(after: end)
     return String(text[afterEnd...])
-}
-
-private func extractCountdownInfo(_ text: String) -> (month: Int, day: Int, year: Int, hour: Int, minute: Int, second: Int, dir: String, label: String)? {
-    guard let start = text.firstIndex(of: "{"),
-          let end = text[start...].firstIndex(of: "}") else { return nil }
-    let token = String(text[start...end])
-    return parseCountdownMarker(token)
-}
-
-private func stripCountdownMarker(_ text: String) -> String {
-    guard let start = text.firstIndex(of: "{"),
-          let end = text[start...].firstIndex(of: "}") else { return text }
-    let token = String(text[start...end])
-    if parseCountdownMarker(token) != nil {
-        let afterEnd = text.index(after: end)
-        return String(text[afterEnd...])
-    }
-    return text
 }
 
 private func detectRowFont(_ text: String, defaultFont: SigmaFont) -> SigmaFont {
@@ -1485,7 +1566,7 @@ private func detectRowFont(_ text: String, defaultFont: SigmaFont) -> SigmaFont 
     return defaultFont
 }
 
-private func stripLeadingFontToken(_ text: String) -> String {
+func stripLeadingFontToken(_ text: String) -> String {
     // Strip only the first font token if it appears at the very beginning
     if text.hasPrefix("{font5}") {
         return String(text.dropFirst(7))
@@ -1496,12 +1577,18 @@ private func stripLeadingFontToken(_ text: String) -> String {
     return text
 }
 
-private func messageDisplayWidth(_ text: String) -> Int {
+func messageDisplayWidth(_ text: String) -> Int {
     var width = 0
     var index = text.startIndex
     while index < text.endIndex {
         if text[index] == "{", let end = text[index...].firstIndex(of: "}") {
-            let token = String(text[text.index(after: index)..<end]).lowercased()
+            let inner = String(text[text.index(after: index)..<end])
+            if inner.lowercased().hasPrefix("cd:") {
+                width += countdownLabelDisplayWidth(inner)
+                index = text.index(after: end)
+                continue
+            }
+            let token = inner.lowercased()
             if sigmaMarkup[token] != nil {
                 width += tokenDisplayWidth[token] ?? 2
                 index = text.index(after: end)
@@ -1520,7 +1607,16 @@ private func clipMessageWord(_ word: String, maxWidth: Int) -> String {
     var index = word.startIndex
     while index < word.endIndex && width < maxWidth {
         if word[index] == "{", let end = word[index...].firstIndex(of: "}") {
-            let token = String(word[word.index(after: index)..<end]).lowercased()
+            let inner = String(word[word.index(after: index)..<end])
+            if inner.lowercased().hasPrefix("cd:") {
+                let tokenWidth = countdownLabelDisplayWidth(inner)
+                if width + tokenWidth > maxWidth { break }
+                result += String(word[index...end])
+                width += tokenWidth
+                index = word.index(after: end)
+                continue
+            }
+            let token = inner.lowercased()
             if sigmaMarkup[token] != nil {
                 let tokenWidth = tokenDisplayWidth[token] ?? 2
                 if width + tokenWidth > maxWidth { break }
@@ -1538,41 +1634,64 @@ private func clipMessageWord(_ word: String, maxWidth: Int) -> String {
 }
 
 /// Encode a countdown target date/time into the vendor NMG prefix bytes.
-/// Reverse-engineered from Sigma Editor 3.99 wire captures (counter3/4/5.pcap).
+/// Reverse-engineered from Sigma Editor 3.99 wire captures (C20/C20b/C20c/C20d/C20e).
 ///
-/// Format: [dateByte, yearByte, byte4, timeByte]
-/// - dateByte  = month * 32 + day
-/// - yearByte  = 0x5c + 2 * (year - 2026)
-/// - byte4     = (minute % 8) * 32 + (second / 2)
-/// - timeByte  = hour * 8 + (minute / 10)
-private func encodeCountdownPrefix(month: Int, day: Int, year: Int, hour: Int, minute: Int = 0, second: Int = 0) -> [UInt8] {
-    let dateByte = UInt8(month * 32 + day)
-    let yearByte = UInt8(0x5c + 2 * (year - 2026))
-    let byte4 = UInt8((minute % 8) * 32 + (second / 2))
-    let timeByte = UInt8(hour * 8 + (minute / 10))
-    return [dateByte, yearByte, byte4, timeByte]
+/// Format = standard MS-DOS / FAT16 timestamp, 4 bytes little-endian, DATE word first then TIME word.
+///   FAT_DATE (16-bit LE) = (year - 1980) << 9 | month << 5 | day
+///   FAT_TIME (16-bit LE) = hour << 11 | minute << 5 | (second / 2)
+///
+/// Year range: 1980..2107 (7-bit year offset). Second resolution: 2 sec.
+public func encodeCountdownPrefix(month: Int, day: Int, year: Int, hour: Int, minute: Int = 0, second: Int = 0) -> [UInt8] {
+    let yearOffset = max(0, min(127, year - 1980))
+    let dateWord = UInt16(yearOffset) << 9 | UInt16(month & 0x0F) << 5 | UInt16(day & 0x1F)
+    let timeWord = UInt16(hour & 0x1F) << 11 | UInt16(minute & 0x3F) << 5 | UInt16((second / 2) & 0x1F)
+    return [
+        UInt8(dateWord & 0xFF),
+        UInt8((dateWord >> 8) & 0xFF),
+        UInt8(timeWord & 0xFF),
+        UInt8((timeWord >> 8) & 0xFF),
+    ]
 }
 
-/// Parse a countdown marker token of the form:
-///   {cd:M:D:Y:h:m:s:dir:label}
-/// e.g. {cd:6:15:2026:14:30:45:down:Time Remaining}
-private func parseCountdownMarker(_ text: String) -> (month: Int, day: Int, year: Int, hour: Int, minute: Int, second: Int, dir: String, label: String)? {
-    guard text.hasPrefix("{cd:") && text.hasSuffix("}") else { return nil }
-    let inner = String(text.dropFirst(4).dropLast())
-    let parts = inner.split(separator: ":", omittingEmptySubsequences: false)
-    guard parts.count >= 9 else { return nil }
-    guard let month = Int(parts[0]),
-          let day = Int(parts[1]),
-          let year = Int(parts[2]),
-          let hour = Int(parts[3]),
-          let minute = Int(parts[4]),
-          let second = Int(parts[5]) else { return nil }
-    let dir = String(parts[6])
-    let label = parts[7...].joined(separator: ":")
-    return (month, day, year, hour, minute, second, dir, label)
+/// Encode the 8-character ASCII flag chunk that follows the FAT timestamp.
+/// Layout: "00<mult2d><dir>000"
+///   pos 0,1   = "00" (reserved/pad)
+///   pos 2-3   = multiplier × 10, 2-digit zero-padded ("10" = 1.0, "15" = 1.5, "20" = 2.0)
+///   pos 4     = '1' = count down, '0' = count up
+///   pos 5-7   = "000" (reserved)
+public func encodeCountdownFlags(multiplier: Double, countDown: Bool) -> [UInt8] {
+    let multTimes10 = max(1, min(99, Int((multiplier * 10).rounded())))
+    let multStr = String(format: "%02d", multTimes10)
+    let dirChar = countDown ? "1" : "0"
+    let s = "00" + multStr + dirChar + "000"
+    return Array(s.utf8)
 }
 
-private let sigmaMarkup: [String: [UInt8]] = [
+/// Emit a full countdown/countup token suitable for embedding in an NMG body.
+/// Wire form: `0x18 0x16 0x0a 0x33 <FAT4> <flags8> <formatString> 0x0d`
+///
+/// `format` is a printf-style ASCII string with `%d` (days), `%h` (hours),
+/// `%m` (minutes), `%s` (seconds) placeholders. Sign firmware substitutes
+/// computed counter values into the string at render time.
+public func encodeCountdownToken(
+    month: Int, day: Int, year: Int,
+    hour: Int, minute: Int = 0, second: Int = 0,
+    multiplier: Double = 1.0,
+    countDown: Bool = true,
+    format: String = "%d%h%m%s"
+) -> [UInt8] {
+    var bytes: [UInt8] = [0x18, 0x16, 0x0a, 0x33]
+    bytes.append(contentsOf: encodeCountdownPrefix(
+        month: month, day: day, year: year,
+        hour: hour, minute: minute, second: second
+    ))
+    bytes.append(contentsOf: encodeCountdownFlags(multiplier: multiplier, countDown: countDown))
+    bytes.append(contentsOf: Array(format.utf8))
+    bytes.append(0x0d)
+    return bytes
+}
+
+let sigmaMarkup: [String: [UInt8]] = [
     "hour": [0x0b, 0x2c],
     "minute": [0x0b, 0x2d],
     "second": [0x0b, 0x2e],
@@ -1592,14 +1711,9 @@ private let sigmaMarkup: [String: [UInt8]] = [
     "font5": [0x1a, UInt8(ascii: "0")],
     "font7": [0x1a, UInt8(ascii: "1")],
     "blk": [0xdb],
-    // Counter/countdown tokens (sign firmware replaces these live)
-    "countdown_days": [0x25, UInt8(ascii: "d")],
-    "countdown_hours": [0x25, UInt8(ascii: "h")],
-    "countdown_minutes": [0x25, UInt8(ascii: "m")],
-    "countdown_seconds": [0x25, UInt8(ascii: "s")],
 ]
 
-private let tokenDisplayWidth: [String: Int] = [
+let tokenDisplayWidth: [String: Int] = [
     "hour": 2,
     "minute": 2,
     "second": 2,
@@ -1619,10 +1733,6 @@ private let tokenDisplayWidth: [String: Int] = [
     "font5": 0,
     "font7": 0,
     "blk": 0,
-    "countdown_days": 2,
-    "countdown_hours": 2,
-    "countdown_minutes": 2,
-    "countdown_seconds": 2,
 ]
 
 private struct SigmaSequenceEntry {

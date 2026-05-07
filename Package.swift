@@ -18,7 +18,8 @@ let package = Package(
         .executable(name: "LEDPixelSend", targets: ["LEDPixelSend"]),
         .executable(name: "LEDFirmwareDump", targets: ["LEDFirmwareDump"]),
         .executable(name: "LEDPngSequenceSend", targets: ["LEDPngSequenceSend"]),
-        .executable(name: "LEDSigmaQuery", targets: ["LEDSigmaQuery"])
+        .executable(name: "LEDSigmaQuery", targets: ["LEDSigmaQuery"]),
+        .executable(name: "CountdownVerify", targets: ["CountdownVerify"])
     ],
     targets: [
         .target(name: "SigmaProtocol"),
@@ -56,6 +57,10 @@ let package = Package(
         ),
         .executableTarget(
             name: "LEDSigmaQuery",
+            dependencies: ["SigmaProtocol"]
+        ),
+        .executableTarget(
+            name: "CountdownVerify",
             dependencies: ["SigmaProtocol"]
         )
     ]

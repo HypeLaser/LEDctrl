@@ -39,6 +39,9 @@ final class RescueModel: ObservableObject {
     @Published var canvasRowAlignments: [CanvasAlignment] = Array(repeating: .left, count: 7)
     @Published var messageMode = MessageMode.fitted
     @Published var messageRowsSeparate = false
+    /// Effects-mode per-row overrides. Length is kept in sync with canvas
+    /// line count by `syncRowEffectsToCanvasLines()`. nil = use global In/Out.
+    @Published var rowEffects: [RowEffectOverride] = []
 
     // MARK: - Countdown Builder
     @Published var countdownTargetDate = Date().addingTimeInterval(86400)
@@ -199,6 +202,39 @@ final class RescueModel: ObservableObject {
 
     var canvasLineCount: Int {
         max(1, messageText.components(separatedBy: .newlines).count)
+    }
+
+    /// Resize `rowEffects` to match the current canvas line count. Called
+    /// whenever the canvas text changes; preserves existing per-row settings
+    /// in place and appends defaults for new rows.
+    func syncRowEffectsToCanvasLines() {
+        let target = canvasLineCount
+        if rowEffects.count == target { return }
+        if rowEffects.count < target {
+            let inDefault = inMode
+            let outDefault = outMode
+            for _ in rowEffects.count..<target {
+                rowEffects.append(RowEffectOverride(inMode: inDefault, outMode: outDefault))
+            }
+        } else {
+            rowEffects.removeLast(rowEffects.count - target)
+        }
+    }
+
+    /// Build the wire-format per-row override array consumed by SigmaTextOptions
+    /// for Effects mode. Disabled rows pass nil so the renderer falls back to
+    /// the global In/Out from the NMG header. Middle rows (not first or last)
+    /// only emit an IN override; OUT for middle rows always falls back to global.
+    func wireRowEffects() -> [SigmaTextOptions.RowEffect?] {
+        let total = rowEffects.count
+        return rowEffects.enumerated().map { index, override in
+            guard override.enabled else { return nil }
+            let isEdge = (index == 0 || index == total - 1)
+            return SigmaTextOptions.RowEffect(
+                inEffectCode: override.inMode.sigmaCode,
+                outEffectCode: isEdge ? override.outMode.sigmaCode : nil
+            )
+        }
     }
 
     var activeCanvasAlignment: CanvasAlignment {
@@ -459,6 +495,11 @@ final class RescueModel: ObservableObject {
         let canvasVerticalAligns = verticalAligns
         let canvasAlignment = alignmentForCanvasRow(0)
         let useEditorFontCompat = senderProfile == .editorFont
+        syncRowEffectsToCanvasLines()
+        let canvasPerRowEffects: [SigmaTextOptions.RowEffect?]? =
+            (canvasMode == .slides && rowEffects.contains(where: { $0.enabled }))
+                ? wireRowEffects()
+                : nil
         guard !canvasLines.isEmpty else { return }
 
         isSending = true
@@ -488,7 +529,8 @@ final class RescueModel: ObservableObject {
                         speed: canvasSpeed,
                         holdSeconds: canvasHold,
                         verticalAligns: canvasVerticalAligns,
-                        alignment: canvasAlignment
+                        alignment: canvasAlignment,
+                        perRowEffects: canvasPerRowEffects
                     ),
                     editorFontCompat: useEditorFontCompat
                 ))
@@ -3844,13 +3886,13 @@ final class RescueModel: ObservableObject {
         speed: SigmaSpeed,
         holdSeconds: Int,
         verticalAligns: Bool,
-        alignment: CanvasAlignment = .left
+        alignment: CanvasAlignment = .left,
+        perRowEffects: [SigmaTextOptions.RowEffect?]? = nil
     ) -> SigmaTextOptions {
         switch mode {
         case .fitted:
-            // Fitted mode must use Jump Out for both In and Out so all rows
-            // appear simultaneously on the display. Scrolling effects belong
-            // in Marquee mode.
+            // Stack: all rows on one page. Jump Out so all rows appear
+            // simultaneously (no per-row scroll inside the page).
             return SigmaTextOptions(
                 inEffectCode: SigmaEffect.jumpOutCode,
                 outEffectCode: SigmaEffect.jumpOutCode,
@@ -3858,11 +3900,11 @@ final class RescueModel: ObservableObject {
                 horizontalAlignCode: alignment.sigmaCode,
                 verticalAligns: verticalAligns,
                 holdSeconds: holdSeconds,
-                wrapsText: true
+                renderMode: .stack
             )
         case .marquee:
-            // Marquee mode: match Editor v3.99 capture exactly.
-            // Editor uses Random (0x2f) for both In/Out and align '1'.
+            // Marquee: continuous scroll, all rows joined. Random in/out
+            // per Editor capture, align '1'.
             return SigmaTextOptions(
                 inEffectCode: UInt8(0x2f),
                 outEffectCode: UInt8(0x2f),
@@ -3870,7 +3912,19 @@ final class RescueModel: ObservableObject {
                 horizontalAlignCode: UInt8(ascii: "1"),
                 verticalAligns: verticalAligns,
                 holdSeconds: holdSeconds,
-                wrapsText: false
+                renderMode: .marquee
+            )
+        case .slides:
+            // Slides: each row = own page, user-chosen In/Out per row.
+            return SigmaTextOptions(
+                inEffectCode: inMode.sigmaCode,
+                outEffectCode: outMode.sigmaCode,
+                speedCode: speed.sigmaCode,
+                horizontalAlignCode: alignment.sigmaCode,
+                verticalAligns: verticalAligns,
+                holdSeconds: holdSeconds,
+                renderMode: .slides,
+                perRowEffects: perRowEffects
             )
         }
     }
